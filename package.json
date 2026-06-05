@@ -1,0 +1,15 @@
+{
+  "name": "deal-desk-immobiliare",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @deal-desk/web dev",
+    "build": "pnpm --filter @deal-desk/web build",
+    "lint": "pnpm --filter @deal-desk/web lint",
+    "typecheck": "pnpm --filter @deal-desk/web typecheck",
+    "test:analytics": "cd services/analytics && python -m pytest -q"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

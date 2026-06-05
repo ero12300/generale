@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  analytics:
+    build: ./services/analytics
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=info
+
+  intake:
+    build: ./services/intake
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./services/intake/app:/app/app
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - ANALYTICS_API_URL=http://analytics:8000
+      - INTAKE_API_URL=http://intake:8001
+    depends_on:
+      - analytics
+      - intake
