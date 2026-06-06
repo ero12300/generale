@@ -1,6 +1,6 @@
 "use client";
 
-import type { AnalysisResult } from "@deal-desk/types";
+import type { AnalysisResult, DealStrategy } from "@deal-desk/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency, formatPercent } from "@/lib/utils";
@@ -19,14 +19,23 @@ const signalLabel = {
 
 interface ScenarioPanelProps {
   analysis: AnalysisResult;
+  strategy?: DealStrategy;
+}
+
+function formatDscr(value: number | null | undefined, showRentalMetrics: boolean) {
+  if (!showRentalMetrics) return "n/d";
+  if (value == null) return "—";
+  return value.toFixed(2);
 }
 
 function ScenarioCard({
   title,
   scenario,
+  showRentalMetrics,
 }: {
   title: string;
   scenario: AnalysisResult["base_case"];
+  showRentalMetrics: boolean;
 }) {
   return (
     <Card>
@@ -45,10 +54,10 @@ function ScenarioCard({
         <Metric label="NPV" value={formatCurrency(scenario.npv)} />
         <Metric label="IRR" value={scenario.irr != null ? formatPercent(scenario.irr) : "—"} />
         <Metric label="LTV" value={scenario.ltv != null ? formatPercent(scenario.ltv) : "—"} />
-        <Metric label="DSCR" value={scenario.dscr?.toFixed(2) ?? "—"} />
+        <Metric label="DSCR" value={formatDscr(scenario.dscr, showRentalMetrics)} />
         <Metric
           label="Cash flow/mese"
-          value={formatCurrency(scenario.monthly_cash_flow)}
+          value={showRentalMetrics ? formatCurrency(scenario.monthly_cash_flow) : "n/d"}
         />
       </CardContent>
     </Card>
@@ -64,7 +73,10 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function ScenarioPanel({ analysis }: ScenarioPanelProps) {
+export function ScenarioPanel({ analysis, strategy }: ScenarioPanelProps) {
+  const showRentalMetrics =
+    strategy === "buy_renovate_rent" || strategy === "buy_hold_sell";
+
   return (
     <div className="space-y-4">
       <Card className="border-amber-600/30 bg-amber-600/5">
@@ -73,9 +85,9 @@ export function ScenarioPanel({ analysis }: ScenarioPanelProps) {
         </CardContent>
       </Card>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <ScenarioCard title="Base case" scenario={analysis.base_case} />
-        <ScenarioCard title="Prudent case" scenario={analysis.prudent_case} />
-        <ScenarioCard title="Stress case" scenario={analysis.stress_case} />
+        <ScenarioCard title="Base case" scenario={analysis.base_case} showRentalMetrics={showRentalMetrics} />
+        <ScenarioCard title="Prudent case" scenario={analysis.prudent_case} showRentalMetrics={showRentalMetrics} />
+        <ScenarioCard title="Stress case" scenario={analysis.stress_case} showRentalMetrics={showRentalMetrics} />
       </div>
       <p className="text-xs text-zinc-500">
         I calcoli fiscali usano parametri SRL configurabili (IRES/IRAP). Non costituiscono consulenza professionale.

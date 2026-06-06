@@ -3,6 +3,7 @@
 Tutti gli importi usano Decimal. Nessuna consulenza fiscale: parametri configurabili.
 """
 
+from dataclasses import dataclass
 from decimal import Decimal, ROUND_HALF_UP
 from typing import Any
 
@@ -19,6 +20,37 @@ TWOPLACES = Decimal("0.01")
 FOURPLACES = Decimal("0.0001")
 
 
+@dataclass(frozen=True)
+class ScenarioFactors:
+    """Fattori derivati da scenario_multiplier (1=base, 0.85=prudente, 1.25=stress)."""
+
+    discount_factor: Decimal
+    capex_factor: Decimal
+    sale_price_factor: Decimal
+
+
+def scenario_factors(multiplier: Decimal) -> ScenarioFactors:
+    if multiplier > Decimal("1"):
+        stress = Decimal("2") - multiplier
+        return ScenarioFactors(
+            discount_factor=stress,
+            capex_factor=multiplier,
+            sale_price_factor=stress,
+        )
+    if multiplier < Decimal("1"):
+        prudent = Decimal("2") - multiplier
+        return ScenarioFactors(
+            discount_factor=multiplier,
+            capex_factor=prudent,
+            sale_price_factor=multiplier,
+        )
+    return ScenarioFactors(
+        discount_factor=Decimal("1"),
+        capex_factor=Decimal("1"),
+        sale_price_factor=Decimal("1"),
+    )
+
+
 def _round_money(value: Decimal) -> Decimal:
     return value.quantize(TWOPLACES, rounding=ROUND_HALF_UP)
 
@@ -27,12 +59,14 @@ def _round_rate(value: Decimal) -> Decimal:
     return value.quantize(FOURPLACES, rounding=ROUND_HALF_UP)
 
 
+def adjusted_sale_price(expected_sale_price: Decimal, multiplier: Decimal) -> Decimal:
+    factors = scenario_factors(multiplier)
+    return _round_money(expected_sale_price * factors.sale_price_factor)
+
+
 def acquisition_price(request: AnalysisRequest) -> Decimal:
-    discount = request.acquisition.target_discount_pct * request.scenario_multiplier
-    if request.scenario_multiplier > Decimal("1"):
-        discount = request.acquisition.target_discount_pct * (
-            Decimal("2") - request.scenario_multiplier
-        )
+    factors = scenario_factors(request.scenario_multiplier)
+    discount = request.acquisition.target_discount_pct * factors.discount_factor
     price = request.acquisition.asking_price * (Decimal("1") - discount)
     return _round_money(max(price, Decimal("0")))
 
@@ -47,13 +81,10 @@ def notary_and_acquisition_costs(purchase_price: Decimal, request: AnalysisReque
 
 
 def renovation_total(request: AnalysisRequest) -> Decimal:
-  base = request.renovation.total_capex
-  if request.scenario_multiplier > Decimal("1"):
-      base = base * request.scenario_multiplier
-  elif request.scenario_multiplier < Decimal("1"):
-      base = base * (Decimal("2") - request.scenario_multiplier)
-  contingency = base * request.renovation.contingency_pct * request.scenario_multiplier
-  return _round_money(base + contingency)
+    factors = scenario_factors(request.scenario_multiplier)
+    base = request.renovation.total_capex * factors.capex_factor
+    contingency = base * request.renovation.contingency_pct
+    return _round_money(base + contingency)
 
 
 def total_project_cost(purchase: Decimal, acquisition_costs: Decimal, capex: Decimal) -> Decimal:
@@ -145,6 +176,7 @@ def compute_irr(cash_flows: list[Decimal], max_iterations: int = 100) -> Decimal
 
     low = Decimal("-0.99")
     high = Decimal("5")
+    mid = Decimal("0")
     for _ in range(max_iterations):
         mid = (low + high) / Decimal("2")
         npv = Decimal("0")
@@ -198,11 +230,10 @@ def build_cash_flows(
 
     if strategy in (DealStrategy.FIX_FLIP, DealStrategy.BUY_HOLD_SELL):
         exit_m = min(request.timeline.exit_month, months)
-        sale_price = request.sale.expected_sale_price
-        if request.scenario_multiplier < Decimal("1"):
-            sale_price = sale_price * request.scenario_multiplier
-        elif request.scenario_multiplier > Decimal("1"):
-            sale_price = sale_price * (Decimal("2") - request.scenario_multiplier)
+        sale_price = adjusted_sale_price(
+            request.sale.expected_sale_price,
+            request.scenario_multiplier,
+        )
         sale_costs = sale_price * request.sale.sale_costs_pct
         loan_payoff = request.financing.loan_amount
         flows[exit_m] += sale_price - sale_costs - loan_payoff
@@ -258,13 +289,14 @@ def run_scenario(request: AnalysisRequest) -> ScenarioResult:
     gross_margin: Decimal | None = None
     net_margin: Decimal | None = None
     if request.strategy in (DealStrategy.FIX_FLIP, DealStrategy.BUY_HOLD_SELL):
-        sale_price = request.sale.expected_sale_price
-        if request.scenario_multiplier < Decimal("1"):
-            sale_price = sale_price * request.scenario_multiplier
+        sale_price = adjusted_sale_price(
+            request.sale.expected_sale_price,
+            request.scenario_multiplier,
+        )
         gross_margin, net_margin = sale_margins(sale_price, total_cost, request)
 
-    net_rent = None
-    monthly_cf = None
+    net_rent: Decimal | None = None
+    monthly_cf: Decimal | None = None
     if request.strategy in (DealStrategy.BUY_RENOVATE_RENT, DealStrategy.BUY_HOLD_SELL):
         net_rent = annual_net_rental_income(request)
         debt = annual_debt_service(
@@ -279,7 +311,7 @@ def run_scenario(request: AnalysisRequest) -> ScenarioResult:
         request.financing.interest_rate_annual,
         request.financing.loan_term_years,
     )
-    dscr = compute_dscr(net_rent or Decimal("0"), debt_service)
+    dscr = compute_dscr(net_rent, debt_service) if net_rent is not None else None
 
     flows = build_cash_flows(request, purchase, acq_costs, capex, request.strategy)
     npv = compute_npv(flows, request.timeline.discount_rate_annual)

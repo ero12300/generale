@@ -12,6 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrency } from "@/lib/utils";
 
+type ActionKind = "analysis" | "offer" | "works";
+
 export default function DealDetailPage() {
   const params = useParams();
   const id = params.id as string;
@@ -22,74 +24,134 @@ export default function DealDetailPage() {
   const [workItems, setWorkItems] = useState<WorkItem[]>([]);
   const [offerText, setOfferText] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<ActionKind | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 
   const [discount, setDiscount] = useState(5);
   const [capex, setCapex] = useState(40000);
   const [exitMonths, setExitMonths] = useState(12);
+  const [monthlyRent, setMonthlyRent] = useState(0);
+
+  const isRentalStrategy =
+    deal?.strategy === "buy_renovate_rent" || deal?.strategy === "buy_hold_sell";
 
   const load = useCallback(async () => {
-    const res = await fetch(`/api/deals/${id}`);
-    const data = await res.json();
-    setDeal(data.deal);
-    setProperty(data.property);
-    setAnalysis(data.analysis);
-    setWorkItems(data.workItems ?? []);
-    setLoading(false);
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const res = await fetch(`/api/deals/${id}`);
+      if (!res.ok) {
+        setLoadError("Impossibile caricare il deal.");
+        setLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setDeal(data.deal);
+      setProperty(data.property);
+      setAnalysis(data.analysis);
+      setWorkItems(data.workItems ?? []);
+      if (data.property?.price_asked) {
+        setMonthlyRent(Math.round(data.property.price_asked * 0.004));
+      }
+    } catch {
+      setLoadError("Errore di rete durante il caricamento.");
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
 
   useEffect(() => {
     load();
   }, [load]);
 
+  async function runAction<T>(
+    kind: ActionKind,
+    url: string,
+    body: Record<string, unknown>,
+    onSuccess: (data: T) => void,
+    successMessage: string
+  ) {
+    setActionLoading(kind);
+    setActionError(null);
+    setActionSuccess(null);
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionError(data.error ?? "Operazione non riuscita. Verifica che il servizio analytics sia attivo.");
+        return;
+      }
+      onSuccess(data as T);
+      setActionSuccess(successMessage);
+    } catch {
+      setActionError("Errore di rete. Riprova tra qualche secondo.");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   async function runAnalysis() {
-    setActionLoading(true);
-    const res = await fetch(`/api/deals/${id}/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const asking = property?.price_asked ?? 200000;
+    await runAction<AnalysisResult>(
+      "analysis",
+      `/api/deals/${id}/analyze`,
+      {
         target_discount_pct: discount / 100,
         total_capex: capex,
         exit_month: exitMonths,
-        expected_sale_price: (property?.price_asked ?? 200000) * 1.35,
-      }),
-    });
-    const data = await res.json();
-    if (res.ok) setAnalysis(data);
-    setActionLoading(false);
+        expected_sale_price: asking * 1.35,
+        monthly_rent: isRentalStrategy ? monthlyRent : 0,
+      },
+      (data) => setAnalysis(data),
+      "Analisi scenari aggiornata."
+    );
   }
 
   async function generateOffer() {
-    setActionLoading(true);
     const offered = (property?.price_asked ?? 0) * (1 - discount / 100);
-    const res = await fetch(`/api/deals/${id}/offer`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ offered_price: offered }),
-    });
-    const data = await res.json();
-    if (res.ok) setOfferText(data.commercial_text);
-    setActionLoading(false);
+    await runAction(
+      "offer",
+      `/api/deals/${id}/offer`,
+      { offered_price: offered },
+      (data) => setOfferText(String((data as { commercial_text?: string }).commercial_text ?? "")),
+      "Bozza proposta generata."
+    );
   }
 
   async function generateWorkList() {
-    setActionLoading(true);
-    const res = await fetch(`/api/deals/${id}/work-list`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
-    });
-    const data = await res.json();
-    if (res.ok) setWorkItems(data.items);
-    setActionLoading(false);
+    await runAction(
+      "works",
+      `/api/deals/${id}/work-list`,
+      {},
+      (data) => setWorkItems(((data as { items?: WorkItem[] }).items) ?? []),
+      "Lista lavori generata."
+    );
   }
 
   if (loading) {
-    return <p className="text-zinc-400">Caricamento...</p>;
+    return (
+      <div className="space-y-4 animate-pulse" aria-live="polite" aria-busy="true">
+        <div className="h-8 w-64 bg-zinc-800 rounded" />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="h-64 bg-zinc-900 rounded-xl border border-zinc-800" />
+          <div className="xl:col-span-2 h-96 bg-zinc-900 rounded-xl border border-zinc-800" />
+        </div>
+      </div>
+    );
   }
 
-  if (!deal) {
-    return <p className="text-red-400">Deal non trovato</p>;
+  if (loadError || !deal) {
+    return (
+      <div role="alert" className="rounded-lg border border-red-900/50 bg-red-950/30 p-4 text-red-300">
+        {loadError ?? "Deal non trovato"}
+      </div>
+    );
   }
 
   return (
@@ -121,6 +183,19 @@ export default function DealDetailPage() {
           </div>
         )}
       </div>
+
+      {(actionError || actionSuccess) && (
+        <div
+          role="alert"
+          className={`rounded-lg border p-3 text-sm ${
+            actionError
+              ? "border-red-900/50 bg-red-950/30 text-red-300"
+              : "border-emerald-900/50 bg-emerald-950/30 text-emerald-300"
+          }`}
+        >
+          {actionError ?? actionSuccess}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <Card className="xl:col-span-1">
@@ -157,8 +232,9 @@ export default function DealDetailPage() {
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <Label>Sconto acquisto (%)</Label>
+                    <Label htmlFor="discount">Sconto acquisto (%)</Label>
                     <Input
+                      id="discount"
                       type="number"
                       value={discount}
                       onChange={(e) => setDiscount(Number(e.target.value))}
@@ -167,8 +243,9 @@ export default function DealDetailPage() {
                     />
                   </div>
                   <div>
-                    <Label>Capex ristrutturazione (€)</Label>
+                    <Label htmlFor="capex">Capex ristrutturazione (€)</Label>
                     <Input
+                      id="capex"
                       type="number"
                       value={capex}
                       onChange={(e) => setCapex(Number(e.target.value))}
@@ -176,8 +253,9 @@ export default function DealDetailPage() {
                     />
                   </div>
                   <div>
-                    <Label>Tempo exit (mesi)</Label>
+                    <Label htmlFor="exit">Tempo exit (mesi)</Label>
                     <Input
+                      id="exit"
                       type="number"
                       value={exitMonths}
                       onChange={(e) => setExitMonths(Number(e.target.value))}
@@ -185,17 +263,32 @@ export default function DealDetailPage() {
                       max={60}
                     />
                   </div>
+                  {isRentalStrategy && (
+                    <div className="md:col-span-3">
+                      <Label htmlFor="rent">Canone mensile stimato (€)</Label>
+                      <Input
+                        id="rent"
+                        type="number"
+                        value={monthlyRent}
+                        onChange={(e) => setMonthlyRent(Number(e.target.value))}
+                        min={0}
+                      />
+                      <p className="text-xs text-zinc-500 mt-1">
+                        Usato per calcolare DSCR e cash flow nelle strategie con locazione.
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
-              <Button onClick={runAnalysis} disabled={actionLoading}>
-                {actionLoading ? "Calcolo..." : "Esegui analisi scenari"}
+              <Button onClick={runAnalysis} disabled={actionLoading !== null}>
+                {actionLoading === "analysis" ? "Calcolo in corso..." : "Esegui analisi scenari"}
               </Button>
-              {analysis && <ScenarioPanel analysis={analysis} />}
+              {analysis && <ScenarioPanel analysis={analysis} strategy={deal.strategy} />}
             </TabsContent>
 
             <TabsContent value="offer" className="space-y-4">
-              <Button onClick={generateOffer} disabled={actionLoading}>
-                Genera bozza proposta acquisto
+              <Button onClick={generateOffer} disabled={actionLoading !== null}>
+                {actionLoading === "offer" ? "Generazione..." : "Genera bozza proposta acquisto"}
               </Button>
               {offerText && (
                 <Card>
@@ -212,20 +305,21 @@ export default function DealDetailPage() {
             </TabsContent>
 
             <TabsContent value="works" className="space-y-4">
-              <Button onClick={generateWorkList} disabled={actionLoading}>
-                Genera WBS cantiere
+              <Button onClick={generateWorkList} disabled={actionLoading !== null}>
+                {actionLoading === "works" ? "Generazione..." : "Genera WBS cantiere"}
               </Button>
               {workItems.length > 0 && (
                 <Card>
                   <CardContent className="p-0">
                     <table className="w-full text-sm">
+                      <caption className="sr-only">Lista lavori stimata per il cantiere</caption>
                       <thead>
                         <tr className="border-b border-zinc-800 text-zinc-500 text-xs">
-                          <th className="text-left p-3">Ambiente</th>
-                          <th className="text-left p-3">Descrizione</th>
-                          <th className="text-right p-3">Qtà</th>
-                          <th className="text-right p-3">Prezzo</th>
-                          <th className="text-center p-3">Permesso</th>
+                          <th scope="col" className="text-left p-3">Ambiente</th>
+                          <th scope="col" className="text-left p-3">Descrizione</th>
+                          <th scope="col" className="text-right p-3">Qtà</th>
+                          <th scope="col" className="text-right p-3">Prezzo</th>
+                          <th scope="col" className="text-center p-3">Permesso</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -237,8 +331,8 @@ export default function DealDetailPage() {
                             <td className="p-3 text-right">
                               {formatCurrency(item.quantity * item.unit_price)}
                             </td>
-                            <td className="p-3 text-center">
-                              {item.requires_permit ? "⚠️" : "—"}
+                            <td className="p-3 text-center" aria-label={item.requires_permit ? "Richiede permesso" : "Nessun permesso"}>
+                              {item.requires_permit ? "Sì" : "—"}
                             </td>
                           </tr>
                         ))}

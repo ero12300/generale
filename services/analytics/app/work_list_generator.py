@@ -52,7 +52,7 @@ def generate_work_list(req: WorkListRequest) -> WorkListResponse:
         WorkItemTemplate(
             room="Generale",
             category="electrical",
-            description="Rifacimento impianto eletrico a norma",
+            description="Rifacimento impianto elettrico a norma",
             unit="mq",
             quantity=sqm,
             unit_price=BASE_RATES["electrical"],

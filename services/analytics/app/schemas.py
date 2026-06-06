@@ -87,7 +87,8 @@ class AnalysisRequest(BaseModel):
     timeline: TimelineAssumptions = TimelineAssumptions()
     scenario_multiplier: Decimal = Field(
         default=Decimal("1"),
-        description="1=base, 0.85=prudent, 1.2=stress",
+        ge=Decimal("0"),
+        description="1=base, 0.85=prudent, 1.25=stress",
     )
 
 

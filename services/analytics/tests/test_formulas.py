@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from app.formulas import (
     acquisition_price,
+    adjusted_sale_price,
     annual_debt_service,
     compute_dscr,
     compute_ltv,
@@ -9,6 +10,7 @@ from app.formulas import (
     corporate_tax,
     run_full_analysis,
     run_scenario,
+    scenario_factors,
     total_project_cost,
 )
 from app.schemas import (
@@ -115,3 +117,29 @@ def test_rental_scenario():
     assert result.annual_net_rental_income is not None
     assert result.annual_net_rental_income > Decimal("0")
     assert result.monthly_cash_flow is not None
+    assert result.dscr is not None
+
+
+def test_fix_flip_dscr_not_applicable():
+    result = run_scenario(make_request())
+    assert result.dscr is None
+
+
+def test_stress_sale_price_adjustment():
+    base_price = Decimal("280000")
+    stress_price = adjusted_sale_price(base_price, Decimal("1.25"))
+    assert stress_price == Decimal("210000.00")
+
+
+def test_stress_margin_lower_than_base():
+    base = run_scenario(make_request(scenario_multiplier=Decimal("1")))
+    stress = run_scenario(make_request(scenario_multiplier=Decimal("1.25")))
+    assert stress.net_sale_margin is not None
+    assert base.net_sale_margin is not None
+    assert stress.net_sale_margin < base.net_sale_margin
+
+
+def test_scenario_factors_stress():
+    factors = scenario_factors(Decimal("1.25"))
+    assert factors.sale_price_factor == Decimal("0.75")
+    assert factors.capex_factor == Decimal("1.25")
