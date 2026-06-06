@@ -127,6 +127,15 @@ def sale_margins(
     return gross, net
 
 
+def scenario_sale_price(request: AnalysisRequest) -> Decimal:
+    sale_price = request.sale.expected_sale_price
+    if request.scenario_multiplier < Decimal("1"):
+        return sale_price * request.scenario_multiplier
+    if request.scenario_multiplier > Decimal("1"):
+        return sale_price * (Decimal("2") - request.scenario_multiplier)
+    return sale_price
+
+
 def compute_npv(
     cash_flows: list[Decimal],
     discount_rate_annual: Decimal,
@@ -198,11 +207,7 @@ def build_cash_flows(
 
     if strategy in (DealStrategy.FIX_FLIP, DealStrategy.BUY_HOLD_SELL):
         exit_m = min(request.timeline.exit_month, months)
-        sale_price = request.sale.expected_sale_price
-        if request.scenario_multiplier < Decimal("1"):
-            sale_price = sale_price * request.scenario_multiplier
-        elif request.scenario_multiplier > Decimal("1"):
-            sale_price = sale_price * (Decimal("2") - request.scenario_multiplier)
+        sale_price = scenario_sale_price(request)
         sale_costs = sale_price * request.sale.sale_costs_pct
         loan_payoff = request.financing.loan_amount
         flows[exit_m] += sale_price - sale_costs - loan_payoff
@@ -258,9 +263,7 @@ def run_scenario(request: AnalysisRequest) -> ScenarioResult:
     gross_margin: Decimal | None = None
     net_margin: Decimal | None = None
     if request.strategy in (DealStrategy.FIX_FLIP, DealStrategy.BUY_HOLD_SELL):
-        sale_price = request.sale.expected_sale_price
-        if request.scenario_multiplier < Decimal("1"):
-            sale_price = sale_price * request.scenario_multiplier
+        sale_price = scenario_sale_price(request)
         gross_margin, net_margin = sale_margins(sale_price, total_cost, request)
 
     net_rent = None

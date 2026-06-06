@@ -106,6 +106,14 @@ def test_run_full_analysis_three_scenarios():
     assert response.sensitivity_summary
 
 
+def test_stress_scenario_degrades_sale_margin():
+    response = run_full_analysis(make_request())
+
+    assert response.base_case.net_sale_margin is not None
+    assert response.stress_case.net_sale_margin == Decimal("-70250.00")
+    assert response.stress_case.net_sale_margin < response.base_case.net_sale_margin
+
+
 def test_rental_scenario():
     req = make_request(
         strategy=DealStrategy.BUY_RENOVATE_RENT,
