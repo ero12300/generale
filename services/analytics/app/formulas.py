@@ -130,10 +130,10 @@ def sale_margins(
 def scenario_sale_price(request: AnalysisRequest) -> Decimal:
     sale_price = request.sale.expected_sale_price
     if request.scenario_multiplier < Decimal("1"):
-        return sale_price * request.scenario_multiplier
-    if request.scenario_multiplier > Decimal("1"):
-        return sale_price * (Decimal("2") - request.scenario_multiplier)
-    return sale_price
+        sale_price = sale_price * request.scenario_multiplier
+    elif request.scenario_multiplier > Decimal("1"):
+        sale_price = sale_price * (Decimal("2") - request.scenario_multiplier)
+    return max(sale_price, Decimal("0"))
 
 
 def compute_npv(

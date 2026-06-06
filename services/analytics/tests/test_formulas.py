@@ -9,6 +9,7 @@ from app.formulas import (
     corporate_tax,
     run_full_analysis,
     run_scenario,
+    scenario_sale_price,
     total_project_cost,
 )
 from app.schemas import (
@@ -112,6 +113,12 @@ def test_stress_scenario_degrades_sale_margin():
     assert response.base_case.net_sale_margin is not None
     assert response.stress_case.net_sale_margin == Decimal("-70250.00")
     assert response.stress_case.net_sale_margin < response.base_case.net_sale_margin
+
+
+def test_sale_price_never_goes_negative_in_extreme_stress():
+    req = make_request(scenario_multiplier=Decimal("2.25"))
+
+    assert scenario_sale_price(req) == Decimal("0")
 
 
 def test_rental_scenario():
