@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { runAnalysis } from "@/lib/analytics-client";
 import { demoStore } from "@/lib/demo-store";
+import { analyzeSchema, parseBody } from "@/lib/validation";
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const body = await request.json();
+  const { data: body, error } = await parseBody(request, analyzeSchema);
+  if (error) return error;
   const deal = demoStore.getDeal(id);
   if (!deal) return NextResponse.json({ error: "Deal not found" }, { status: 404 });
 

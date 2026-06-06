@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
+import { intakeSchema, parseBody } from "@/lib/validation";
 
 const INTAKE_URL =
   process.env.INTAKE_API_URL ?? process.env.NEXT_PUBLIC_INTAKE_API_URL ?? "http://localhost:8001";
 
 export async function POST(request: Request) {
-  const { url } = await request.json();
-  if (!url || typeof url !== "string") {
-    return NextResponse.json({ error: "URL richiesto" }, { status: 400 });
-  }
+  const { data, error } = await parseBody(request, intakeSchema);
+  if (error) return error;
+  const { url } = data;
 
   try {
     const res = await fetch(`${INTAKE_URL}/v1/parse`, {

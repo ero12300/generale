@@ -10,6 +10,7 @@ from app.schemas import (
     AnalysisRequest,
     DealStrategy,
     ScenarioResult,
+    SellerType,
     SensitivitySignal,
     TaxRegime,
 )
@@ -37,23 +38,38 @@ def acquisition_price(request: AnalysisRequest) -> Decimal:
     return _round_money(max(price, Decimal("0")))
 
 
+def applies_vat_on_purchase(request: AnalysisRequest) -> bool:
+    """L'IVA sull'acquisto si applica solo se il venditore è un'impresa
+    e il regime fiscale selezionato è IVA. L'acquisto da privato è sempre
+    fuori campo IVA e sconta l'imposta di registro proporzionale.
+    """
+    return (
+        request.tax_profile.tax_regime == TaxRegime.VAT
+        and request.tax_profile.seller_type == SellerType.COMPANY
+    )
+
+
+def acquisition_transfer_tax(purchase_price: Decimal, request: AnalysisRequest) -> Decimal:
+    """Imposta dovuta sul trasferimento: IVA oppure imposta di registro."""
+    if applies_vat_on_purchase(request):
+        return _round_money(purchase_price * request.tax_profile.vat_rate)
+    return _round_money(purchase_price * request.tax_profile.registration_tax_rate)
+
+
 def notary_and_acquisition_costs(purchase_price: Decimal, request: AnalysisRequest) -> Decimal:
-    pct = request.acquisition.notary_and_fees_pct
-    if request.tax_profile.tax_regime == TaxRegime.REGISTRY:
-        reg_tax = purchase_price * request.tax_profile.registration_tax_rate
-        return _round_money(purchase_price * pct + reg_tax)
-    vat = purchase_price * request.tax_profile.vat_rate
-    return _round_money(purchase_price * pct + vat)
+    notary = purchase_price * request.acquisition.notary_and_fees_pct
+    transfer_tax = acquisition_transfer_tax(purchase_price, request)
+    return _round_money(notary + transfer_tax)
 
 
 def renovation_total(request: AnalysisRequest) -> Decimal:
-  base = request.renovation.total_capex
-  if request.scenario_multiplier > Decimal("1"):
-      base = base * request.scenario_multiplier
-  elif request.scenario_multiplier < Decimal("1"):
-      base = base * (Decimal("2") - request.scenario_multiplier)
-  contingency = base * request.renovation.contingency_pct * request.scenario_multiplier
-  return _round_money(base + contingency)
+    base = request.renovation.total_capex
+    if request.scenario_multiplier > Decimal("1"):
+        base = base * request.scenario_multiplier
+    elif request.scenario_multiplier < Decimal("1"):
+        base = base * (Decimal("2") - request.scenario_multiplier)
+    contingency = base * request.renovation.contingency_pct * request.scenario_multiplier
+    return _round_money(base + contingency)
 
 
 def total_project_cost(purchase: Decimal, acquisition_costs: Decimal, capex: Decimal) -> Decimal:
@@ -111,7 +127,9 @@ def annual_net_rental_income(request: AnalysisRequest) -> Decimal:
     vacancy = gross * request.rental.vacancy_rate
     maintenance = gross * request.rental.annual_maintenance_pct
     management = gross * request.rental.property_management_pct
-    net = gross - vacancy - maintenance - management
+    # Imposta di registro annuale sul contratto di locazione (regime ordinario SRL).
+    registration_tax = gross * request.tax_profile.rental_registration_rate
+    net = gross - vacancy - maintenance - management - registration_tax
     return _round_money(max(net, Decimal("0")))
 
 
@@ -290,6 +308,8 @@ def run_scenario(request: AnalysisRequest) -> ScenarioResult:
     assumptions: dict[str, Any] = {
         "purchase_price": str(purchase),
         "acquisition_costs": str(acq_costs),
+        "transfer_tax": str(acquisition_transfer_tax(purchase, request)),
+        "transfer_tax_type": "iva" if applies_vat_on_purchase(request) else "imposta_registro",
         "capex": str(capex),
         "total_cost": str(total_cost),
         "scenario_multiplier": str(request.scenario_multiplier),
