@@ -10,3 +10,18 @@ export async function PUT(
   const property = demoStore.upsertProperty(id, body);
   return NextResponse.json(property);
 }
+
+export async function POST(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // POST /api/deals/:id/property = conferma immobile (status: draft → confirmed)
+  const { id } = await params;
+  const property = demoStore.confirmProperty(id);
+  if (!property)
+    return NextResponse.json(
+      { error: "Property not found" },
+      { status: 404 },
+    );
+  return NextResponse.json(property);
+}

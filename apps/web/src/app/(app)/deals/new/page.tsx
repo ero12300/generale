@@ -29,6 +29,10 @@ export default function NewDealPage() {
         body: JSON.stringify({ url }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        setError(typeof data?.error === "string" ? data.error : "Errore durante l'estrazione.");
+        return;
+      }
       setParsed(data);
       if (!title && data.address) setTitle(String(data.address));
       else if (!title && data.page_title) setTitle(String(data.page_title).slice(0, 80));
@@ -116,10 +120,30 @@ export default function NewDealPage() {
           {parsed && (
             <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 text-sm space-y-1">
               <p className="text-zinc-400 text-xs uppercase">Dati estratti (bozza)</p>
-              {parsed.price_asked != null && <p>Prezzo: € {Number(parsed.price_asked).toLocaleString("it-IT")}</p>}
-              {parsed.surface_sqm != null && <p>Superficie: {String(parsed.surface_sqm)} m²</p>}
-              {parsed.rooms != null && <p>Locali: {String(parsed.rooms)}</p>}
-              {parsed.address != null && <p>Indirizzo: {String(parsed.address)}</p>}
+              {parsed.extraction_method === "manual_fallback" ? (
+                <p className="text-amber-300 text-xs">
+                  {(parsed.raw_fields as Record<string, string> | undefined)?.notice ??
+                    "Servizio intake non disponibile. Inserisci i dati manualmente."}
+                </p>
+              ) : (
+                <>
+                  {parsed.price_asked != null && (
+                    <p>Prezzo: € {Number(parsed.price_asked).toLocaleString("it-IT")}</p>
+                  )}
+                  {parsed.surface_sqm != null && (
+                    <p>Superficie: {String(parsed.surface_sqm)} m²</p>
+                  )}
+                  {parsed.rooms != null && <p>Locali: {String(parsed.rooms)}</p>}
+                  {parsed.address != null && <p>Indirizzo: {String(parsed.address)}</p>}
+                  {parsed.price_asked == null &&
+                    parsed.surface_sqm == null &&
+                    parsed.address == null && (
+                      <p className="text-amber-300 text-xs">
+                        Nessun campo estratto automaticamente. Inseriscili manualmente sotto.
+                      </p>
+                    )}
+                </>
+              )}
             </div>
           )}
 

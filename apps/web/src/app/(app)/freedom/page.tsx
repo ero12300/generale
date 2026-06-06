@@ -3,6 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { demoStore } from "@/lib/demo-store";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 
+// Ipotesi MVP: ogni nuovo deal in stage "rental" porta ~14.400€/anno netti
+// (cifra che corrisponde alla logica in demoStore.getFreedomSnapshot).
+const PASSIVE_INCOME_PER_DEAL = 14_400;
+
 export default function FreedomPage() {
   const snapshot = demoStore.getFreedomSnapshot();
   const coverage = snapshot.coverage_ratio;
@@ -10,6 +14,9 @@ export default function FreedomPage() {
     coverage >= 1 ? "Copertura raggiunta" : coverage >= 0.5 ? "In crescita" : "Da costruire";
   const coverageVariant =
     coverage >= 1 ? "success" : coverage >= 0.5 ? "warning" : "danger";
+
+  const gap = Math.max(snapshot.fixed_expenses - snapshot.passive_income, 0);
+  const dealsNeeded = gap > 0 ? Math.ceil(gap / PASSIVE_INCOME_PER_DEAL) : 0;
 
   const blocks = [
     {
@@ -61,10 +68,27 @@ export default function FreedomPage() {
           <Badge variant={coverageVariant as "success" | "warning" | "danger"}>
             {coverageLabel}
           </Badge>
+          <div
+            className="mx-auto mt-5 h-2 max-w-md overflow-hidden rounded-full bg-zinc-800"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(Math.min(coverage, 1) * 100)}
+            aria-label="Percentuale di copertura"
+          >
+            <div
+              className="h-full bg-amber-500 transition-all"
+              style={{ width: `${Math.min(coverage, 1) * 100}%` }}
+            />
+          </div>
           <p className="text-sm text-zinc-400 mt-4 max-w-md mx-auto">
             {coverage >= 1
               ? "Il reddito passivo copre le spese fisse. Ogni nuovo deal aumenta il margine di sicurezza."
-              : `Mancano circa ${formatCurrency(Math.max(snapshot.fixed_expenses - snapshot.passive_income, 0))} annui di reddito passivo per la copertura completa.`}
+              : `Mancano circa ${formatCurrency(gap)} annui di reddito passivo per la copertura completa${
+                  dealsNeeded > 0
+                    ? ` (~${dealsNeeded} deal in locazione da ${formatCurrency(PASSIVE_INCOME_PER_DEAL)}/anno)`
+                    : ""
+                }.`}
           </p>
         </CardContent>
       </Card>

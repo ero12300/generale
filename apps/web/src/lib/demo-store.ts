@@ -105,6 +105,27 @@ export const demoStore = {
     return deals[idx];
   },
 
+  deleteDeal(id: string): boolean {
+    const before = deals.length;
+    deals = deals.filter((d) => d.id !== id);
+    delete properties[id];
+    delete analyses[id];
+    delete workItems[id];
+    return deals.length < before;
+  },
+
+  confirmProperty(dealId: string): NormalizedProperty | undefined {
+    const existing = properties[dealId];
+    if (!existing) return undefined;
+    properties[dealId] = {
+      ...existing,
+      status: "confirmed",
+      confirmed_at: new Date().toISOString(),
+      confirmed_by: "demo-user",
+    };
+    return properties[dealId];
+  },
+
   getProperty(dealId: string): NormalizedProperty | undefined {
     return properties[dealId];
   },

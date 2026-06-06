@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { Archive, CheckCircle2, Copy, Trash2 } from "lucide-react";
 import type { AnalysisResult, Deal, NormalizedProperty, WorkItem } from "@deal-desk/types";
 import { ScenarioPanel } from "@/components/deals/scenario-panel";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +15,7 @@ import { formatCurrency } from "@/lib/utils";
 
 export default function DealDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
 
   const [deal, setDeal] = useState<Deal | null>(null);
@@ -23,10 +25,16 @@ export default function DealDetailPage() {
   const [offerText, setOfferText] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const [discount, setDiscount] = useState(5);
   const [capex, setCapex] = useState(40000);
   const [exitMonths, setExitMonths] = useState(12);
+
+  const showToast = useCallback((msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(null), 2500);
+  }, []);
 
   const load = useCallback(async () => {
     const res = await fetch(`/api/deals/${id}`);
@@ -84,6 +92,55 @@ export default function DealDetailPage() {
     setActionLoading(false);
   }
 
+  async function confirmProperty() {
+    setActionLoading(true);
+    const res = await fetch(`/api/deals/${id}/property`, { method: "POST" });
+    if (res.ok) {
+      const updated = await res.json();
+      setProperty(updated);
+      showToast("Immobile confermato");
+    }
+    setActionLoading(false);
+  }
+
+  async function archiveDeal() {
+    setActionLoading(true);
+    const res = await fetch(`/api/deals/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stage: "archived" }),
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setDeal(updated);
+      showToast("Deal archiviato");
+    }
+    setActionLoading(false);
+  }
+
+  async function deleteDeal() {
+    if (!confirm("Eliminare definitivamente questo deal? L'operazione è irreversibile.")) {
+      return;
+    }
+    setActionLoading(true);
+    const res = await fetch(`/api/deals/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      router.push("/deals");
+    } else {
+      setActionLoading(false);
+    }
+  }
+
+  async function copyOffer() {
+    if (!offerText) return;
+    try {
+      await navigator.clipboard.writeText(offerText);
+      showToast("Bozza copiata negli appunti");
+    } catch {
+      showToast("Impossibile copiare: usa la selezione manuale");
+    }
+  }
+
   if (loading) {
     return <p className="text-zinc-400">Caricamento...</p>;
   }
@@ -94,11 +151,24 @@ export default function DealDetailPage() {
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 rounded-lg border border-amber-600/50 bg-zinc-900 px-4 py-2 text-sm text-amber-200 shadow-lg"
+        >
+          {toast}
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="default">{deal.stage}</Badge>
             <Badge variant="secondary">{deal.strategy.replace(/_/g, " ")}</Badge>
+            {property?.status === "confirmed" && (
+              <Badge variant="success">Immobile confermato</Badge>
+            )}
           </div>
           <h1 className="text-2xl font-semibold">{deal.title}</h1>
           {deal.source_url && (
@@ -112,14 +182,50 @@ export default function DealDetailPage() {
             </a>
           )}
         </div>
-        {property?.price_asked && (
-          <div className="text-right">
-            <p className="text-xs text-zinc-500">Prezzo richiesto</p>
-            <p className="text-2xl font-semibold text-amber-400">
-              {formatCurrency(property.price_asked)}
-            </p>
+        <div className="flex flex-col items-end gap-3">
+          {property?.price_asked && (
+            <div className="text-right">
+              <p className="text-xs text-zinc-500">Prezzo richiesto</p>
+              <p className="text-2xl font-semibold text-amber-400">
+                {formatCurrency(property.price_asked)}
+              </p>
+            </div>
+          )}
+          <div className="flex flex-wrap gap-2 justify-end">
+            {property && property.status !== "confirmed" && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={confirmProperty}
+                disabled={actionLoading}
+              >
+                <CheckCircle2 className="h-4 w-4" aria-hidden />
+                Conferma immobile
+              </Button>
+            )}
+            {deal.stage !== "archived" && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={archiveDeal}
+                disabled={actionLoading}
+              >
+                <Archive className="h-4 w-4" aria-hidden />
+                Archivia
+              </Button>
+            )}
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={deleteDeal}
+              disabled={actionLoading}
+              aria-label="Elimina deal"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden />
+              Elimina
+            </Button>
           </div>
-        )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -194,9 +300,17 @@ export default function DealDetailPage() {
             </TabsContent>
 
             <TabsContent value="offer" className="space-y-4">
-              <Button onClick={generateOffer} disabled={actionLoading}>
-                Genera bozza proposta acquisto
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={generateOffer} disabled={actionLoading}>
+                  Genera bozza proposta acquisto
+                </Button>
+                {offerText && (
+                  <Button variant="secondary" onClick={copyOffer} disabled={actionLoading}>
+                    <Copy className="h-4 w-4" aria-hidden />
+                    Copia bozza
+                  </Button>
+                )}
+              </div>
               {offerText && (
                 <Card>
                   <CardContent className="p-4">

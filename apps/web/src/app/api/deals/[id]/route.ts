@@ -24,3 +24,13 @@ export async function PATCH(
   if (!deal) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(deal);
 }
+
+export async function DELETE(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const ok = demoStore.deleteDeal(id);
+  if (!ok) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json({ ok: true });
+}
