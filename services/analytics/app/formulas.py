@@ -28,11 +28,17 @@ def _round_rate(value: Decimal) -> Decimal:
 
 
 def acquisition_price(request: AnalysisRequest) -> Decimal:
-    discount = request.acquisition.target_discount_pct * request.scenario_multiplier
-    if request.scenario_multiplier > Decimal("1"):
-        discount = request.acquisition.target_discount_pct * (
-            Decimal("2") - request.scenario_multiplier
-        )
+    # Lo "scenario_multiplier" è una leva di stress: base=1, prudente<1, stress>1.
+    # Per il prezzo di acquisto vogliamo che entrambi gli scenari cautelativi
+    # riducano lo sconto effettivo (quindi alzino il prezzo pagato).
+    target = request.acquisition.target_discount_pct
+    if request.scenario_multiplier == Decimal("1"):
+        discount = target
+    else:
+        # Distanza dall'unità in valore assoluto: 0.85→0.15, 1.25→0.25.
+        # Più ci si allontana da "base", più lo sconto realizzabile cala.
+        stress_distance = abs(Decimal("1") - request.scenario_multiplier)
+        discount = target * max(Decimal("0"), Decimal("1") - stress_distance)
     price = request.acquisition.asking_price * (Decimal("1") - discount)
     return _round_money(max(price, Decimal("0")))
 
@@ -47,13 +53,16 @@ def notary_and_acquisition_costs(purchase_price: Decimal, request: AnalysisReque
 
 
 def renovation_total(request: AnalysisRequest) -> Decimal:
-  base = request.renovation.total_capex
-  if request.scenario_multiplier > Decimal("1"):
-      base = base * request.scenario_multiplier
-  elif request.scenario_multiplier < Decimal("1"):
-      base = base * (Decimal("2") - request.scenario_multiplier)
-  contingency = base * request.renovation.contingency_pct * request.scenario_multiplier
-  return _round_money(base + contingency)
+    # Sia prudent (<1) sia stress (>1) devono aumentare il capex stimato:
+    # prudent perché vogliamo essere cautelativi sui preventivi,
+    # stress perché simuliamo extra-costi imprevisti.
+    base = request.renovation.total_capex
+    stress_distance = abs(Decimal("1") - request.scenario_multiplier)
+    base_adjusted = base * (Decimal("1") + stress_distance)
+    # La contingency cresce di pari passo con lo stress, mai diminuisce.
+    contingency_multiplier = Decimal("1") + stress_distance
+    contingency = base_adjusted * request.renovation.contingency_pct * contingency_multiplier
+    return _round_money(base_adjusted + contingency)
 
 
 def total_project_cost(purchase: Decimal, acquisition_costs: Decimal, capex: Decimal) -> Decimal:
@@ -139,24 +148,40 @@ def compute_npv(
     return _round_money(npv)
 
 
-def compute_irr(cash_flows: list[Decimal], max_iterations: int = 100) -> Decimal | None:
-    if not cash_flows or cash_flows[0] >= 0:
+def compute_irr(cash_flows: list[Decimal], max_iterations: int = 200) -> Decimal | None:
+    """IRR mensile via bisezione, restituito come tasso *annuo nominale*.
+
+    Requisiti: almeno un flusso negativo (di solito il mese 0) e almeno uno
+    positivo, altrimenti l'IRR non è definito.
+    """
+    if not cash_flows:
+        return None
+    has_pos = any(cf > 0 for cf in cash_flows)
+    has_neg = any(cf < 0 for cf in cash_flows)
+    if not (has_pos and has_neg):
         return None
 
     low = Decimal("-0.99")
     high = Decimal("5")
+    tolerance = Decimal("0.5")  # NPV residuo in € accettato
+    last_mid = (low + high) / Decimal("2")
     for _ in range(max_iterations):
         mid = (low + high) / Decimal("2")
+        last_mid = mid
         npv = Decimal("0")
         for t, cf in enumerate(cash_flows):
             npv += cf / (Decimal("1") + mid) ** t
-        if abs(npv) < Decimal("0.01"):
+        if abs(npv) < tolerance:
             return _round_rate(mid * Decimal("12"))
         if npv > 0:
             low = mid
         else:
             high = mid
-    return _round_rate(mid * Decimal("12"))
+    # Non convergente entro le iterazioni: ritorniamo l'ultimo mid solo se
+    # l'intervallo è abbastanza stretto, altrimenti None.
+    if (high - low) < Decimal("0.0001"):
+        return _round_rate(last_mid * Decimal("12"))
+    return None
 
 
 def build_cash_flows(
@@ -166,46 +191,65 @@ def build_cash_flows(
     capex: Decimal,
     strategy: DealStrategy,
 ) -> list[Decimal]:
+    """Cash flow *equity* (vista azionista), per mese.
+
+    Convenzione: il finanziamento entra come proceeds al momento dell'acquisto
+    e viene rimborsato sia con quota interessi mensile sia con bullet alla
+    cessione. Il flusso al mese 0 è quindi solo l'equity contributo iniziale
+    (capitale proprio per coprire la parte non finanziata di acquisto + costi).
+    """
     months = max(request.timeline.exit_month, request.sale.holding_months, 12)
     flows: list[Decimal] = [Decimal("0")] * (months + 1)
 
-    equity_out = initial_capital(
-        total_project_cost(purchase, acquisition_costs, capex),
-        request.financing.loan_amount,
-    )
-    flows[0] = -equity_out
-    flows[request.timeline.acquisition_month] -= purchase + acquisition_costs
+    loan = request.financing.loan_amount
+    acq_month = max(0, min(request.timeline.acquisition_month, months))
 
-    reno_start = request.timeline.renovation_start_month
+    # Uscita gross al momento dell'acquisto (prezzo + costi notarili/imposte)
+    # compensata dai proceeds del mutuo: l'equity richiesto al closing è la
+    # differenza fra le due grandezze.
+    closing_outflow = purchase + acquisition_costs
+    flows[acq_month] -= closing_outflow
+    flows[acq_month] += loan
+
+    # Capex distribuito sui mesi di cantiere; finanziato interamente con equity
+    # (in MVP non modelliamo SAL parziali sul mutuo).
+    reno_start = max(acq_month, request.timeline.renovation_start_month)
     reno_months = max(request.renovation.duration_months, 1)
-    capex_monthly = capex / Decimal(reno_months)
-    for m in range(reno_start, min(reno_start + reno_months, months + 1)):
-        flows[m] -= capex_monthly
+    if reno_months > 0:
+        capex_monthly = capex / Decimal(reno_months)
+        for m in range(reno_start, min(reno_start + reno_months, months + 1)):
+            flows[m] -= capex_monthly
 
+    # Servizio del debito mensile (interessi + capitale) — uscita ricorrente
+    # dal mese di acquisizione (inclusivo del primo rateo) fino a exit/locazione.
     debt_monthly = annual_debt_service(
-        request.financing.loan_amount,
+        loan,
         request.financing.interest_rate_annual,
         request.financing.loan_term_years,
     ) / Decimal("12")
 
-    if strategy in (DealStrategy.BUY_RENOVATE_RENT, DealStrategy.BUY_HOLD_SELL):
-        net_rent = annual_net_rental_income(request) / Decimal("12")
-        for m in range(reno_start + reno_months, months + 1):
-            flows[m] += net_rent - debt_monthly
-    else:
-        for m in range(1, months + 1):
+    if strategy == DealStrategy.FIX_FLIP:
+        for m in range(acq_month + 1, months + 1):
             flows[m] -= debt_monthly
+    else:
+        # In buy-rent / buy-hold il rent inizia a fine cantiere, ma il debito
+        # decorre subito dal mutuo.
+        rental_start = reno_start + reno_months
+        net_rent = annual_net_rental_income(request) / Decimal("12")
+        for m in range(acq_month + 1, months + 1):
+            flows[m] -= debt_monthly
+            if m >= rental_start:
+                flows[m] += net_rent
 
+    # Cessione finale + estinzione mutuo (solo strategie con exit).
     if strategy in (DealStrategy.FIX_FLIP, DealStrategy.BUY_HOLD_SELL):
         exit_m = min(request.timeline.exit_month, months)
         sale_price = request.sale.expected_sale_price
-        if request.scenario_multiplier < Decimal("1"):
-            sale_price = sale_price * request.scenario_multiplier
-        elif request.scenario_multiplier > Decimal("1"):
-            sale_price = sale_price * (Decimal("2") - request.scenario_multiplier)
+        # Più stress / più prudent → meno upside sul prezzo di vendita.
+        stress_distance = abs(Decimal("1") - request.scenario_multiplier)
+        sale_price = sale_price * max(Decimal("0"), Decimal("1") - stress_distance)
         sale_costs = sale_price * request.sale.sale_costs_pct
-        loan_payoff = request.financing.loan_amount
-        flows[exit_m] += sale_price - sale_costs - loan_payoff
+        flows[exit_m] += sale_price - sale_costs - loan
 
     return [_round_money(f) for f in flows]
 
@@ -259,8 +303,8 @@ def run_scenario(request: AnalysisRequest) -> ScenarioResult:
     net_margin: Decimal | None = None
     if request.strategy in (DealStrategy.FIX_FLIP, DealStrategy.BUY_HOLD_SELL):
         sale_price = request.sale.expected_sale_price
-        if request.scenario_multiplier < Decimal("1"):
-            sale_price = sale_price * request.scenario_multiplier
+        stress_distance = abs(Decimal("1") - request.scenario_multiplier)
+        sale_price = sale_price * max(Decimal("0"), Decimal("1") - stress_distance)
         gross_margin, net_margin = sale_margins(sale_price, total_cost, request)
 
     net_rent = None
