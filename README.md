@@ -45,13 +45,52 @@ Apri [http://localhost:3000](http://localhost:3000)
 - [docs/mvp-backlog.md](./docs/mvp-backlog.md) — backlog tecnico
 - [AGENTS.md](./AGENTS.md) — regole per agenti AI
 
-## Supabase
+## Deploy produzione (automatico)
+
+### 1. Secrets richiesti
+
+Aggiungi nei **Cursor Cloud Agent secrets** (o in `.env.provision` locale):
+
+| Variabile | Dove ottenerla |
+|-----------|----------------|
+| `SUPABASE_ACCESS_TOKEN` | [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens) |
+| `VERCEL_TOKEN` | [vercel.com/account/settings/tokens](https://vercel.com/account/settings/tokens) |
+| `VERCEL_TEAM_ID` | `team_5SBu2hnGswyjDY2Ne8WVZ6fL` (team eros' projects) |
+
+Autentica anche **Supabase MCP** in Cursor (Settings → MCP → Supabase → Connect).
+
+### 2. Provisioning one-shot
+
+```bash
+pnpm provision
+```
+
+Lo script:
+- crea il progetto Supabase `deal-desk-immobiliare`
+- applica la migrazione SQL
+- crea/collega il progetto Vercel con env vars
+- avvia il deploy produzione
+
+### 3. Analytics (obbligatorio per il simulatore)
+
+Il motore Python non gira su Vercel. Deploy su Render:
+
+1. Connetti [Render MCP](https://dashboard.render.com/u/*/settings#api-keys) in Cursor
+2. Applica `render.yaml` dal dashboard Render → **New Blueprint**
+3. Imposta su Vercel `ANALYTICS_API_URL` = URL del servizio Render analytics
+
+### 4. CI/CD GitHub
+
+- `ci.yml` — test su ogni push
+- `deploy-vercel.yml` — deploy produzione (richiede secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`)
+
+## Supabase (manuale)
 
 Applica le migrazioni al tuo progetto Supabase:
 
 ```bash
 supabase db push
-# oppure esegui supabase/migrations/20250605000000_initial_schema.sql
+# oppure esegui supabase/migrations/20250605000000_initial_schema.sql nell'SQL Editor
 ```
 
 ## Test

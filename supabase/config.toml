@@ -1,6 +1,13 @@
 # Supabase local config — vedi https://supabase.com/docs/guides/cli
-project_id = "deal-desk-immobiliare"
+project_id = "fppdfqieorixaduolnzn"
 
 [db]
 port = 54322
 major_version = 15
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = [
+  "http://localhost:3000/auth/callback",
+  "https://deal-desk-immobiliare.vercel.app/auth/callback"
+]
