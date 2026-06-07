@@ -82,13 +82,26 @@ Le variabili `NEXT_PUBLIC_SUPABASE_*` sono già in `apps/web/vercel.json`.
 pnpm provision   # richiede SUPABASE_ACCESS_TOKEN + VERCEL_TOKEN
 ```
 
-### 4. Analytics (obbligatorio per il simulatore)
+### 4. Analytics su Render (simulatore finanziario)
 
 Il motore Python non gira su Vercel. Deploy su Render:
 
-1. Connetti [Render MCP](https://dashboard.render.com/u/*/settings#api-keys) in Cursor
-2. Applica `render.yaml` dal dashboard Render → **New Blueprint**
-3. Imposta su Vercel `ANALYTICS_API_URL` = URL del servizio Render analytics
+**Opzione A — Blueprint (consigliata, ~2 minuti)**
+
+1. [Dashboard Render](https://dashboard.render.com) → **New** → **Blueprint**
+2. Collega il repo `ero12300/generale` (branch `main`)
+3. Conferma `render.yaml` e clicca **Deploy Blueprint**
+4. Al termine copia l'URL del servizio `deal-desk-analytics` (es. `https://deal-desk-analytics-xxxx.onrender.com`)
+
+**Opzione B — Automatica con API key**
+
+```bash
+export RENDER_API_KEY=rnd_...   # da dashboard.render.com → Account Settings → API Keys
+export VERCEL_TOKEN=...         # opzionale: aggiorna ANALYTICS_API_URL su Vercel
+pnpm provision:render
+```
+
+Poi su Vercel imposta `ANALYTICS_API_URL` = URL Render (se non usi lo script).
 
 ### 5. CI/CD GitHub
 
