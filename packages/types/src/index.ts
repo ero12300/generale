@@ -150,6 +150,68 @@ export interface FreedomSnapshot {
   coverage_ratio: number;
 }
 
+export interface OfferLetter {
+  id: string;
+  deal_id: string;
+  organization_id: string;
+  version: number;
+  offered_price: number;
+  commercial_text: string;
+  legal_placeholders: Record<string, unknown>[];
+  status: "draft" | "sent" | "accepted" | "rejected";
+  created_at: string;
+}
+
+export interface AnalysisRun {
+  id: string;
+  deal_id: string;
+  organization_id: string;
+  version: number;
+  assumptions: Record<string, unknown>;
+  results: AnalysisResult;
+  created_at: string;
+}
+
+export interface OrganizationMember {
+  id: string;
+  organization_id: string;
+  user_id: string;
+  role: OrgRole;
+  created_at: string;
+}
+
+export interface AuthContext {
+  mode: "demo" | "supabase";
+  userId: string | null;
+  email: string | null;
+  organizationId: string;
+  organizationName: string;
+}
+
+export interface CreateDealInput {
+  title: string;
+  strategy?: DealStrategy;
+  source_url?: string | null;
+  stage?: DealStage;
+  notes?: string | null;
+}
+
+export interface UpdateDealPatch {
+  title?: string;
+  stage?: DealStage;
+  strategy?: DealStrategy;
+  notes?: string | null;
+  assigned_to?: string | null;
+}
+
+export interface DealDetail {
+  deal: Deal;
+  property: NormalizedProperty | null;
+  analysis: AnalysisResult | null;
+  workItems: WorkItem[];
+  offerLetter: OfferLetter | null;
+}
+
 export const DEAL_STAGES: { value: DealStage; label: string }[] = [
   { value: "lead", label: "Lead" },
   { value: "analysis", label: "Analisi" },

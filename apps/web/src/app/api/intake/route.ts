@@ -23,7 +23,8 @@ export async function POST(request: Request) {
         { status: 502 }
       );
     }
-    return NextResponse.json(await res.json());
+    const data = await res.json();
+    return NextResponse.json(data);
   } catch {
     return NextResponse.json({
       source_url: parsed.data.url,

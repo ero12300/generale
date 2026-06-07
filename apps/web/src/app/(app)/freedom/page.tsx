@@ -1,43 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { demoStore } from "@/lib/demo-store";
+import { FreedomEditor } from "@/components/freedom/freedom-editor";
+import { getDataRepository } from "@/lib/data";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 
-export default function FreedomPage() {
-  const snapshot = demoStore.getFreedomSnapshot();
+export default async function FreedomPage() {
+  const repo = await getDataRepository();
+  const snapshot = await repo.getFreedomSnapshot();
   const coverage = snapshot.coverage_ratio;
   const coverageLabel =
     coverage >= 1 ? "Copertura raggiunta" : coverage >= 0.5 ? "In crescita" : "Da costruire";
   const coverageVariant =
     coverage >= 1 ? "success" : coverage >= 0.5 ? "warning" : "danger";
-
-  const blocks = [
-    {
-      title: "Entrate attive",
-      value: formatCurrency(snapshot.active_income),
-      desc: "Reddito da attività operative / lavoro",
-    },
-    {
-      title: "Entrate passive",
-      value: formatCurrency(snapshot.passive_income),
-      desc: "Cash flow da immobili in locazione",
-    },
-    {
-      title: "Uscite fisse",
-      value: formatCurrency(snapshot.fixed_expenses),
-      desc: "Spese holding, SRL e personale collegato",
-    },
-    {
-      title: "Liquidità",
-      value: formatCurrency(snapshot.liquidity),
-      desc: "Cassa disponibile",
-    },
-    {
-      title: "Riserve",
-      value: formatCurrency(snapshot.reserves),
-      desc: "Fondo emergenza e opportunità",
-    },
-  ];
 
   return (
     <div className="space-y-8">
@@ -69,21 +43,7 @@ export default function FreedomPage() {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {blocks.map((block) => (
-          <Card key={block.title}>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-zinc-400 font-normal">
-                {block.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-2xl font-semibold">{block.value}</p>
-              <p className="text-xs text-zinc-500 mt-1">{block.desc}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <FreedomEditor initial={snapshot} />
 
       <Card>
         <CardHeader>
@@ -98,7 +58,7 @@ export default function FreedomPage() {
           </p>
           <p className="text-xs pt-2 border-t border-zinc-800">
             Nomenclatura proprietaria — non associata a marchi terzi. I dati sono configurabili
-            dalla dashboard patrimoniale della tua holding.
+            e salvati per la tua organizzazione.
           </p>
         </CardContent>
       </Card>

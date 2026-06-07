@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Building2,
   LayoutDashboard,
   LineChart,
+  LogOut,
   Sparkles,
   Workflow,
 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -17,8 +19,24 @@ const nav = [
   { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
 ];
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+interface AppShellProps {
+  children: React.ReactNode;
+  mode: "demo" | "supabase";
+  orgName: string;
+  email: string | null;
+}
+
+export function AppShell({ children, mode, orgName, email }: AppShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    if (mode === "demo") return;
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex">
@@ -28,7 +46,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Building2 className="h-6 w-6 text-amber-500" />
             <div>
               <p className="font-semibold text-sm tracking-wide">DEAL DESK</p>
-              <p className="text-xs text-zinc-500">Immobiliare SRL</p>
+              <p className="text-xs text-zinc-500 truncate max-w-[160px]">{orgName}</p>
             </div>
           </div>
         </div>
@@ -49,11 +67,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </nav>
-        <div className="p-4 border-t border-zinc-800">
-          <div className="flex items-center gap-2 text-xs text-zinc-500">
-            <Sparkles className="h-3 w-3" />
-            Modalità demo attiva
-          </div>
+        <div className="p-4 border-t border-zinc-800 space-y-2">
+          {mode === "demo" ? (
+            <div className="flex items-center gap-2 text-xs text-zinc-500">
+              <Sparkles className="h-3 w-3" />
+              Modalità demo attiva
+            </div>
+          ) : (
+            <>
+              {email && <p className="text-xs text-zinc-500 truncate">{email}</p>}
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 rounded px-1 py-1"
+              >
+                <LogOut className="h-3 w-3" aria-hidden />
+                Esci
+              </button>
+            </>
+          )}
         </div>
       </aside>
       <div className="flex-1 flex flex-col min-w-0">

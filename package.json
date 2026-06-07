@@ -6,7 +6,8 @@
     "build": "pnpm --filter @deal-desk/web build",
     "lint": "pnpm --filter @deal-desk/web lint",
     "typecheck": "pnpm --filter @deal-desk/web typecheck",
-    "test:analytics": "cd services/analytics && python -m pytest -q"
+    "test": "pnpm --filter @deal-desk/web test",
+    "test:analytics": "cd services/analytics && python3 -m pytest -q"
   },
   "engines": {
     "node": ">=20"

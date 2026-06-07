@@ -2,21 +2,24 @@ import Link from "next/link";
 import { ArrowRight, TrendingUp, Wallet, Building } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { demoStore } from "@/lib/demo-store";
+import { getDataRepository } from "@/lib/data";
 import { formatCurrency, formatPercent } from "@/lib/utils";
 
-export default function DashboardPage() {
-  const deals = demoStore.listDeals();
-  const freedom = demoStore.getFreedomSnapshot();
+export default async function DashboardPage() {
+  const repo = await getDataRepository();
+  const deals = await repo.listDeals();
+  const freedom = await repo.getFreedomSnapshot();
   const activeDeals = deals.filter((d) => d.stage !== "archived");
   const inAnalysis = deals.filter((d) => d.stage === "analysis").length;
+  const recent = deals.slice(0, 5);
+  const properties = await Promise.all(recent.map((d) => repo.getProperty(d.id)));
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
         <p className="text-zinc-400 text-sm mt-1">
-          Panoramica operativa — {demoStore.orgName}
+          Panoramica operativa — {repo.context.organizationName}
         </p>
       </div>
 
@@ -55,8 +58,8 @@ export default function DashboardPage() {
           </Link>
         </CardHeader>
         <CardContent className="space-y-3">
-          {deals.slice(0, 5).map((deal) => {
-            const prop = demoStore.getProperty(deal.id);
+          {recent.map((deal, index) => {
+            const prop = properties[index];
             return (
               <Link
                 key={deal.id}

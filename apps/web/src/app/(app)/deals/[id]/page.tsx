@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatCurrency } from "@/lib/utils";
 
-type ActionKind = "analysis" | "offer" | "works";
+type ActionKind = "analysis" | "offer" | "works" | "confirm";
 
 export default function DealDetailPage() {
   const params = useParams();
@@ -52,6 +52,9 @@ export default function DealDetailPage() {
       setProperty(data.property);
       setAnalysis(data.analysis);
       setWorkItems(data.workItems ?? []);
+      if (data.offerLetter?.commercial_text) {
+        setOfferText(data.offerLetter.commercial_text);
+      }
       if (data.property?.price_asked) {
         setMonthlyRent(Math.round(data.property.price_asked * 0.004));
       }
@@ -111,6 +114,26 @@ export default function DealDetailPage() {
       (data) => setAnalysis(data),
       "Analisi scenari aggiornata."
     );
+  }
+
+  async function confirmProperty() {
+    setActionLoading("confirm");
+    setActionError(null);
+    setActionSuccess(null);
+    try {
+      const res = await fetch(`/api/deals/${id}/property`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        setActionError(data.error ?? "Conferma non riuscita");
+        return;
+      }
+      setProperty(data);
+      setActionSuccess("Dati immobile confermati.");
+    } catch {
+      setActionError("Errore di rete durante la conferma.");
+    } finally {
+      setActionLoading(null);
+    }
   }
 
   async function generateOffer() {
@@ -199,8 +222,13 @@ export default function DealDetailPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <Card className="xl:col-span-1">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between gap-2">
             <CardTitle className="text-base">Dati immobile</CardTitle>
+            {property?.status === "confirmed" ? (
+              <Badge variant="success">Confermato</Badge>
+            ) : (
+              <Badge variant="warning">Bozza</Badge>
+            )}
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <Row label="Indirizzo" value={property?.address} />
@@ -213,6 +241,17 @@ export default function DealDetailPage() {
             <Row label="Spese condo." value={property?.condo_fees_monthly ? formatCurrency(property.condo_fees_monthly) + "/mese" : null} />
             {property?.description && (
               <p className="text-zinc-400 text-xs pt-2 border-t border-zinc-800">{property.description}</p>
+            )}
+            {property?.status !== "confirmed" && (
+              <Button
+                type="button"
+                variant="secondary"
+                className="w-full mt-3"
+                disabled={actionLoading !== null}
+                onClick={confirmProperty}
+              >
+                Conferma dati immobile
+              </Button>
             )}
           </CardContent>
         </Card>

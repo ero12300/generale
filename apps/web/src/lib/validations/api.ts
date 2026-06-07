@@ -1,6 +1,15 @@
 import { z } from "zod";
 
 const dealStrategySchema = z.enum(["fix_flip", "buy_renovate_rent", "buy_hold_sell"]);
+const dealStageSchema = z.enum([
+  "lead",
+  "analysis",
+  "offer",
+  "renovation",
+  "rental",
+  "exit",
+  "archived",
+]);
 
 export const createDealSchema = z.object({
   title: z.string().trim().min(1, "Titolo obbligatorio").max(200),
@@ -41,6 +50,26 @@ export const workListSchema = z.object({
   condition: z.string().max(100).optional(),
   include_kitchen: z.boolean().optional(),
   include_bathrooms: z.number().int().min(0).max(10).optional(),
+});
+
+export const updateDealSchema = z
+  .object({
+    title: z.string().trim().min(1).max(200).optional(),
+    stage: dealStageSchema.optional(),
+    strategy: dealStrategySchema.optional(),
+    notes: z.string().max(5000).nullable().optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "Nessun campo da aggiornare",
+  });
+
+export const freedomSnapshotSchema = z.object({
+  snapshot_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  active_income: z.number().min(0),
+  passive_income: z.number().min(0),
+  fixed_expenses: z.number().min(0),
+  liquidity: z.number().min(0),
+  reserves: z.number().min(0),
 });
 
 export const propertyUpdateSchema = z.object({
