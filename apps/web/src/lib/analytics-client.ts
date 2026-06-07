@@ -11,7 +11,7 @@ export type { AnalysisRequestPayload } from "./analytics-client.types";
 const configuredUrl =
   process.env.ANALYTICS_API_URL ?? process.env.NEXT_PUBLIC_ANALYTICS_API_URL ?? "";
 
-function useEmbeddedAnalytics(): boolean {
+function isEmbeddedAnalyticsEnabled(): boolean {
   if (!configuredUrl || configuredUrl === "embedded") return true;
   return false;
 }
@@ -46,7 +46,7 @@ function mapAnalysisResult(data: ReturnType<typeof runFullAnalysis>): AnalysisRe
 }
 
 export async function runAnalysis(payload: AnalysisRequestInput): Promise<AnalysisResult> {
-  if (useEmbeddedAnalytics()) {
+  if (isEmbeddedAnalyticsEnabled()) {
     return mapAnalysisResult(runFullAnalysis(payload));
   }
 
@@ -69,7 +69,7 @@ export async function runAnalysis(payload: AnalysisRequestInput): Promise<Analys
 }
 
 export async function generateOfferLetter(payload: Record<string, unknown>) {
-  if (useEmbeddedAnalytics()) {
+  if (isEmbeddedAnalyticsEnabled()) {
     return generateOfferLetterEmbedded(payload as Parameters<typeof generateOfferLetterEmbedded>[0]);
   }
 
@@ -83,7 +83,7 @@ export async function generateOfferLetter(payload: Record<string, unknown>) {
 }
 
 export async function generateWorkList(payload: Record<string, unknown>) {
-  if (useEmbeddedAnalytics()) {
+  if (isEmbeddedAnalyticsEnabled()) {
     return generateWorkListEmbedded(payload as Parameters<typeof generateWorkListEmbedded>[0]);
   }
 
