@@ -8,7 +8,8 @@
     "typecheck": "pnpm --filter @deal-desk/web typecheck",
     "test": "pnpm --filter @deal-desk/web test",
     "test:analytics": "cd services/analytics && python3 -m pytest -q",
-    "provision": "node scripts/provision-production.mjs"
+    "provision": "node scripts/provision-production.mjs",
+    "provision:render": "node scripts/provision-render.mjs"
   },
   "engines": {
     "node": ">=20"

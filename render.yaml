@@ -13,6 +13,6 @@ services:
     healthCheckPath: /health
     envVars:
       - key: ANALYTICS_ALLOWED_ORIGINS
-        sync: false
+        value: https://my-immobiliaregestionale.vercel.app,http://localhost:3000
       - key: LOG_LEVEL
         value: info
