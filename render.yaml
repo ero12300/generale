@@ -1,0 +1,18 @@
+# Blueprint Render — servizi backend Deal Desk (analytics obbligatorio per il simulatore)
+# Il frontend Next.js va su Vercel (vedi scripts/provision-production.mjs)
+
+services:
+  - type: web
+    name: deal-desk-analytics
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    dockerfilePath: ./services/analytics/Dockerfile
+    dockerContext: ./services/analytics
+    healthCheckPath: /health
+    envVars:
+      - key: ANALYTICS_ALLOWED_ORIGINS
+        sync: false
+      - key: LOG_LEVEL
+        value: info
