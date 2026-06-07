@@ -1,7 +1,7 @@
 # Esegui su Windows (PowerShell) per scaricare il progetto nella cartella desiderata
 # Tasto destro → "Esegui con PowerShell" oppure incolla in PowerShell
 
-$Dest = "C:\Users\Eros\Desktop\Programmi Pronti\PROGETTI CON CODEX - OPENAI\immobiliare archevision"
+$Dest = "C:\Users\Eros\Desktop\Programmi Pronti\PROGETTI CON CODEX - OPENAI\immobiliare archevision\App Gestione Immobiliare"
 $Repo = "https://github.com/ero12300/generale.git"
 
 New-Item -ItemType Directory -Force -Path $Dest | Out-Null
