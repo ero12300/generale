@@ -9,5 +9,5 @@ major_version = 15
 site_url = "http://localhost:3000"
 additional_redirect_urls = [
   "http://localhost:3000/auth/callback",
-  "https://deal-desk-immobiliare.vercel.app/auth/callback"
+  "https://my-immobiliaregestionale.vercel.app/auth/callback"
 ]
