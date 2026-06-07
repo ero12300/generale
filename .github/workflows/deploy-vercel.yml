@@ -1,8 +1,8 @@
 name: Deploy Vercel Production
 
+# Richiede secrets GitHub: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+# In alternativa importa il repo da Vercel Dashboard (deploy automatico su push a main)
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 env:

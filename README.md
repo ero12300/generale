@@ -59,19 +59,30 @@ Aggiungi nei **Cursor Cloud Agent secrets** (o in `.env.provision` locale):
 
 Autentica anche **Supabase MCP** in Cursor (Settings → MCP → Supabase → Connect).
 
-### 2. Provisioning one-shot
+### 2. Stato attuale (già configurato)
+
+| Risorsa | Stato |
+|---------|--------|
+| **Supabase** | Progetto `deal-desk-immobiliare` attivo — ref `fppdfqieorixaduolnzn` |
+| **Database** | Migrazione iniziale applicata (13 tabelle + RLS) |
+| **GitHub** | Branch `main` aggiornato con tutto il codice |
+| **Vercel** | Da importare (un click, vedi sotto) |
+
+**Import Vercel (1 click):** [Importa da GitHub](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fero12300%2Fgenerale&project-name=deal-desk-immobiliare&root-directory=apps%2Fweb&teamSlug=eros-projects-1943e19f)
+
+Dopo l'import, in **Supabase → Authentication → URL Configuration** imposta:
+- Site URL: `https://deal-desk-immobiliare.vercel.app`
+- Redirect URLs: `https://deal-desk-immobiliare.vercel.app/auth/callback`
+
+Le variabili `NEXT_PUBLIC_SUPABASE_*` sono già in `apps/web/vercel.json`.
+
+### 3. Provisioning automatico (alternativa)
 
 ```bash
-pnpm provision
+pnpm provision   # richiede SUPABASE_ACCESS_TOKEN + VERCEL_TOKEN
 ```
 
-Lo script:
-- crea il progetto Supabase `deal-desk-immobiliare`
-- applica la migrazione SQL
-- crea/collega il progetto Vercel con env vars
-- avvia il deploy produzione
-
-### 3. Analytics (obbligatorio per il simulatore)
+### 4. Analytics (obbligatorio per il simulatore)
 
 Il motore Python non gira su Vercel. Deploy su Render:
 
@@ -79,7 +90,7 @@ Il motore Python non gira su Vercel. Deploy su Render:
 2. Applica `render.yaml` dal dashboard Render → **New Blueprint**
 3. Imposta su Vercel `ANALYTICS_API_URL` = URL del servizio Render analytics
 
-### 4. CI/CD GitHub
+### 5. CI/CD GitHub
 
 - `ci.yml` — test su ogni push
 - `deploy-vercel.yml` — deploy produzione (richiede secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`)
