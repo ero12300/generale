@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const AUTH_PATHS = ["/login", "/signup", "/auth"];
+const PUBLIC_API_PATHS = ["/api/analytics/health"];
 
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -34,8 +35,9 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
   const isAuthPath = AUTH_PATHS.some((p) => pathname.startsWith(p));
+  const isPublicApiPath = PUBLIC_API_PATHS.some((p) => pathname.startsWith(p));
 
-  if (!user && !isAuthPath) {
+  if (!user && !isAuthPath && !isPublicApiPath) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
     }
