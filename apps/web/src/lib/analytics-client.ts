@@ -70,7 +70,9 @@ export async function runAnalysis(payload: AnalysisRequestInput): Promise<Analys
 
 export async function generateOfferLetter(payload: Record<string, unknown>) {
   if (isEmbeddedAnalyticsEnabled()) {
-    return generateOfferLetterEmbedded(payload as Parameters<typeof generateOfferLetterEmbedded>[0]);
+    return generateOfferLetterEmbedded(
+      payload as unknown as Parameters<typeof generateOfferLetterEmbedded>[0]
+    );
   }
 
   const res = await fetch(`${ANALYTICS_URL}/v1/offer-letter`, {
@@ -84,7 +86,9 @@ export async function generateOfferLetter(payload: Record<string, unknown>) {
 
 export async function generateWorkList(payload: Record<string, unknown>) {
   if (isEmbeddedAnalyticsEnabled()) {
-    return generateWorkListEmbedded(payload as Parameters<typeof generateWorkListEmbedded>[0]);
+    return generateWorkListEmbedded(
+      payload as unknown as Parameters<typeof generateWorkListEmbedded>[0]
+    );
   }
 
   const res = await fetch(`${ANALYTICS_URL}/v1/work-list`, {
