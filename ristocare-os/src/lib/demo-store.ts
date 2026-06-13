@@ -414,8 +414,6 @@ export function getLocationName(locationId: string): string {
 
 // ---- Mutations ----
 
-let ticketSeq = 4;
-
 export function createTicket(input: CreateTicketInput): Ticket {
   const data = store();
   const equipment = getEquipment(input.equipmentId);
@@ -423,7 +421,8 @@ export function createTicket(input: CreateTicketInput): Ticket {
     throw new Error("Attrezzatura non trovata");
   }
   const now = new Date().toISOString();
-  const code = `RC-2026-${String(ticketSeq++).padStart(3, "0")}`;
+  // Codice progressivo derivato dal numero di ticket nello store.
+  const code = `RC-2026-${String(data.tickets.length + 1).padStart(3, "0")}`;
   const event: TicketEvent = {
     id: genId("ev"),
     status: "nuovo",
