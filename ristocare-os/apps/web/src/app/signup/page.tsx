@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Shield } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,13 +42,16 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[#0c0f0e]">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden">
+      <div className="absolute inset-0 mesh-grid pointer-events-none opacity-60" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[400px] h-[250px] bg-emerald-500/10 rounded-full blur-[90px]" />
+
+      <Card className="relative w-full max-w-md glass-panel glow-emerald animate-fade-up">
         <CardHeader>
-          <div className="flex items-center gap-2 mb-2">
-            <Shield className="h-6 w-6 text-emerald-500" />
-            <CardTitle>Registrati su RistoCare OS</CardTitle>
-          </div>
+          <Link href="/" className="inline-block mb-4">
+            <Logo size="md" />
+          </Link>
+          <CardTitle className="font-display text-2xl">Registrati su RistoCare OS</CardTitle>
           <CardDescription>
             Crea il portale digitale del tuo locale. Al primo accesso configuriamo organizzazione e sede.
           </CardDescription>
@@ -61,16 +64,29 @@ export default function SignupPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password (min. 8 caratteri)</Label>
-              <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input
+                id="password"
+                type="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
+            {error && (
+              <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2" role="alert">
+                {error}
+              </p>
+            )}
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Registrazione..." : "Crea account"}
             </Button>
           </form>
           <p className="text-sm text-zinc-500 mt-4 text-center">
             Hai già un account?{" "}
-            <Link href="/login" className="text-emerald-400 hover:underline">Accedi</Link>
+            <Link href="/login" className="text-emerald-400 hover:underline">
+              Accedi
+            </Link>
           </p>
         </CardContent>
       </Card>

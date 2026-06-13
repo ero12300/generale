@@ -1,32 +1,47 @@
 import Link from "next/link";
-import { Shield, Wrench } from "lucide-react";
+import { Menu } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
+
+const navLinks = [
+  { href: "/pacchetti", label: "Pacchetti" },
+  { href: "/assistenza", label: "Assistenza" },
+  { href: "/referral", label: "Partner" },
+  { href: "/contatti", label: "Contatti" },
+];
 
 export function MarketingHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-800/80 bg-[#0c0f0e]/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-600/20 border border-emerald-600/30">
-            <Shield className="h-5 w-5 text-emerald-400" aria-hidden />
-          </div>
-          <div>
-            <p className="font-semibold tracking-tight text-zinc-100">RistoCare OS</p>
-            <p className="text-[10px] uppercase tracking-widest text-zinc-500">Emotive S.r.l.</p>
-          </div>
+    <header className="sticky top-0 z-50 border-b border-white/5 bg-[#080a09]/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between px-4 lg:px-6">
+        <Link href="/" className="group transition-opacity hover:opacity-90">
+          <Logo size="sm" />
         </Link>
-        <nav className="hidden md:flex items-center gap-6 text-sm text-zinc-400" aria-label="Navigazione sito">
-          <Link href="/pacchetti" className="hover:text-zinc-100 transition-colors">Pacchetti</Link>
-          <Link href="/assistenza" className="hover:text-zinc-100 transition-colors">Assistenza</Link>
-          <Link href="/referral" className="hover:text-zinc-100 transition-colors">Partner</Link>
-          <Link href="/contatti" className="hover:text-zinc-100 transition-colors">Contatti</Link>
+
+        <nav
+          className="hidden md:flex items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] px-2 py-1.5"
+          aria-label="Navigazione sito"
+        >
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-full px-4 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/5 hover:text-zinc-100"
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
+
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" asChild>
+          <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
             <Link href="/login">Accedi</Link>
           </Button>
-          <Button size="sm" asChild>
+          <Button size="sm" className="shadow-lg shadow-emerald-900/30" asChild>
             <Link href="/contatti?tipo=demo">Richiedi demo</Link>
+          </Button>
+          <Button variant="ghost" size="sm" className="md:hidden px-2" aria-label="Menu">
+            <Menu className="h-5 w-5" />
           </Button>
         </div>
       </div>
@@ -36,34 +51,33 @@ export function MarketingHeader() {
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-zinc-800 bg-zinc-950">
-      <div className="mx-auto max-w-6xl px-4 py-12 grid md:grid-cols-3 gap-8">
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Wrench className="h-5 w-5 text-emerald-500" aria-hidden />
-            <span className="font-semibold">RistoCare OS</span>
-          </div>
-          <p className="text-sm text-zinc-500 leading-relaxed">
+    <footer className="border-t border-white/5 bg-[#060807]">
+      <div className="mx-auto max-w-6xl px-4 lg:px-6 py-16 grid md:grid-cols-4 gap-10">
+        <div className="md:col-span-2">
+          <Logo size="md" />
+          <p className="mt-5 text-sm text-zinc-500 leading-relaxed max-w-sm">
             Il sistema operativo per gestire attrezzature, manutenzioni e assistenza del tuo locale food.
-            Brand dedicato di Emotive S.r.l.
+            Meno caos in cucina, più controllo sul parco macchine.
           </p>
         </div>
         <div>
-          <p className="font-medium text-sm mb-3 text-zinc-300">Servizi</p>
-          <ul className="space-y-2 text-sm text-zinc-500">
-            <li><Link href="/pacchetti" className="hover:text-zinc-300">Pacchetti SaaS</Link></li>
-            <li><Link href="/assistenza" className="hover:text-zinc-300">Centrale operativa</Link></li>
-            <li><Link href="/referral" className="hover:text-zinc-300">Programma referral</Link></li>
+          <p className="font-medium text-sm mb-4 text-zinc-300">Servizi</p>
+          <ul className="space-y-3 text-sm text-zinc-500">
+            <li><Link href="/pacchetti" className="hover:text-emerald-400 transition-colors">Pacchetti SaaS</Link></li>
+            <li><Link href="/assistenza" className="hover:text-emerald-400 transition-colors">Centrale operativa</Link></li>
+            <li><Link href="/referral" className="hover:text-emerald-400 transition-colors">Programma referral</Link></li>
           </ul>
         </div>
         <div>
-          <p className="font-medium text-sm mb-3 text-zinc-300">Contatti</p>
+          <p className="font-medium text-sm mb-4 text-zinc-300">Contatti</p>
           <p className="text-sm text-zinc-500">Messina e provincia</p>
-          <p className="text-sm text-zinc-500 mt-1">info@ristocare.it</p>
+          <a href="mailto:info@ristocare.it" className="text-sm text-emerald-400/80 hover:text-emerald-400 mt-2 block">
+            info@ristocare.it
+          </a>
         </div>
       </div>
-      <div className="border-t border-zinc-800 py-4 text-center text-xs text-zinc-600">
-        © {new Date().getFullYear()} RistoCare OS — Emotive S.r.l. Tutti i diritti riservati.
+      <div className="border-t border-white/5 py-5 text-center text-xs text-zinc-600">
+        © {new Date().getFullYear()} RistoCare OS — Emotive S.r.l.
       </div>
     </footer>
   );

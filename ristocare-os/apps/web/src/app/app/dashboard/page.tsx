@@ -33,21 +33,23 @@ export default async function CustomerDashboardPage() {
     >
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Dashboard</h1>
-          <p className="text-zinc-400 text-sm mt-1">Panoramica del tuo locale</p>
+          <h1 className="font-display text-2xl md:text-3xl font-semibold text-zinc-100">Dashboard</h1>
+          <p className="text-zinc-500 text-sm mt-1">Panoramica del tuo locale</p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cards.map(({ label, value, icon: Icon, href }) => (
             <Link key={label} href={href}>
-              <Card className="hover:border-emerald-600/30 transition-colors">
+              <Card className="hover:border-emerald-500/25 hover:from-emerald-500/[0.06] transition-all duration-300 h-full">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-zinc-500">{label}</p>
-                      <p className="text-3xl font-bold text-zinc-100 mt-1">{value}</p>
+                      <p className="font-display text-3xl font-semibold text-zinc-100 mt-1">{value}</p>
                     </div>
-                    <Icon className="h-8 w-8 text-emerald-600/50" />
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/15">
+                      <Icon className="h-5 w-5 text-emerald-400/80" />
+                    </div>
                   </div>
                 </CardContent>
               </Card>

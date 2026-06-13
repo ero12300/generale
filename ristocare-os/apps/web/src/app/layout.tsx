@@ -1,9 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Outfit } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -13,11 +22,15 @@ export const metadata: Metadata = {
   description:
     "Gestisci garanzie, manuali, matricole, ticket, manutenzioni, ricambi e interventi tecnici del tuo locale food da un unico portale.",
   manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/logo-mark.png", type: "image/png" }],
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: { capable: true, title: "RistoCare OS" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#16a34a",
+  themeColor: "#15803d",
   width: "device-width",
   initialScale: 1,
 };
@@ -25,7 +38,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${outfit.variable} ${fraunces.variable} antialiased bg-ambient`}>
         {children}
       </body>
     </html>

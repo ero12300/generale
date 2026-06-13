@@ -8,12 +8,13 @@ import {
   LayoutDashboard,
   LogOut,
   Package,
-  Shield,
+  Plus,
   Sparkles,
   Ticket,
   Users,
   Wrench,
 } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
@@ -52,7 +53,7 @@ interface PortalShellProps {
   email?: string | null;
 }
 
-export function PortalShell({ children, variant, title, subtitle, mode, email }: PortalShellProps) {
+export function PortalShell({ children, variant, subtitle, mode, email }: PortalShellProps) {
   const pathname = usePathname();
   const nav =
     variant === "admin"
@@ -63,69 +64,72 @@ export function PortalShell({ children, variant, title, subtitle, mode, email }:
           ? referralNav
           : customerNav;
 
-  const accent = variant === "admin" ? "amber" : "emerald";
+  const isAdmin = variant === "admin";
 
   return (
-    <div className="min-h-screen bg-[#0c0f0e] text-zinc-100 flex">
-      <aside className="w-64 border-r border-zinc-800 bg-zinc-900/40 hidden md:flex flex-col">
-        <div className="p-6 border-b border-zinc-800">
-          <div className="flex items-center gap-2">
-            <Shield className={cn("h-6 w-6", accent === "amber" ? "text-amber-500" : "text-emerald-500")} />
-            <div>
-              <p className="font-semibold text-sm tracking-wide">{title}</p>
-              <p className="text-xs text-zinc-500 truncate max-w-[160px]">{subtitle}</p>
-            </div>
-          </div>
+    <div className="min-h-screen text-zinc-100 flex bg-[#080a09]">
+      <aside className="w-[17rem] border-r border-white/5 bg-[#060807]/90 hidden md:flex flex-col">
+        <div className="p-5 border-b border-white/5">
+          <Link href={isAdmin ? "/admin/dashboard" : "/app/dashboard"}>
+            <Logo size="sm" variant={isAdmin ? "admin" : "default"} />
+          </Link>
+          <p className="mt-4 text-xs text-zinc-500 truncate">{subtitle}</p>
         </div>
-        <nav className="flex-1 p-4 space-y-1" aria-label="Navigazione portale">
-          {nav.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                pathname.startsWith(href)
-                  ? accent === "amber"
-                    ? "bg-amber-600/15 text-amber-300"
-                    : "bg-emerald-600/15 text-emerald-300"
-                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
-              )}
-            >
-              <Icon className="h-4 w-4" aria-hidden />
-              {label}
-            </Link>
-          ))}
+
+        <nav className="flex-1 p-3 space-y-1" aria-label="Navigazione portale">
+          {nav.map(({ href, label, icon: Icon }) => {
+            const active = pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+                  active
+                    ? isAdmin
+                      ? "bg-amber-500/10 text-amber-200 border border-amber-500/20"
+                      : "bg-emerald-500/10 text-emerald-200 border border-emerald-500/20"
+                    : "text-zinc-400 hover:bg-white/5 hover:text-zinc-100 border border-transparent"
+                )}
+              >
+                <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                {label}
+              </Link>
+            );
+          })}
         </nav>
-        <div className="p-4 border-t border-zinc-800 space-y-2">
+
+        <div className="p-4 border-t border-white/5 space-y-3">
           {mode === "demo" && (
-            <div className="flex items-center gap-2 text-xs text-zinc-500">
-              <Sparkles className="h-3 w-3" />
+            <div className="flex items-center gap-2 text-xs text-amber-400/80 bg-amber-500/10 rounded-lg px-3 py-2 border border-amber-500/15">
+              <Sparkles className="h-3.5 w-3.5" />
               Modalità demo
             </div>
           )}
-          {email && <p className="text-xs text-zinc-500 truncate">{email}</p>}
+          {email && <p className="text-xs text-zinc-500 truncate px-1">{email}</p>}
           <Link
             href="/login"
-            className="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-200"
+            className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 px-1 transition-colors"
           >
-            <LogOut className="h-3 w-3" />
+            <LogOut className="h-3.5 w-3.5" />
             Cambia accesso
           </Link>
         </div>
       </aside>
+
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-14 border-b border-zinc-800 flex items-center px-4 md:px-8">
-          <div className="md:hidden flex items-center gap-2">
-            <Shield className="h-5 w-5 text-emerald-500" />
-            <span className="font-semibold text-sm">{title}</span>
+        <header className="h-16 border-b border-white/5 flex items-center px-4 md:px-8 bg-[#080a09]/80 backdrop-blur-md sticky top-0 z-40">
+          <div className="md:hidden">
+            <Logo size="sm" showWordmark={false} />
           </div>
           <div className="flex-1" />
           {variant === "customer" && (
             <Link
               href="/app/tickets/new"
-              className="text-sm bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg"
+              className="inline-flex items-center gap-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/30 transition-colors"
             >
-              + Apri ticket
+              <Plus className="h-4 w-4" />
+              Apri ticket
             </Link>
           )}
         </header>
