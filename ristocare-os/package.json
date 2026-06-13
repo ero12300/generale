@@ -6,7 +6,8 @@
     "build": "pnpm --filter @ristocare/web build",
     "lint": "pnpm --filter @ristocare/web lint",
     "typecheck": "pnpm --filter @ristocare/web typecheck",
-    "test": "pnpm --filter @ristocare/web test"
+    "test": "pnpm --filter @ristocare/web test",
+    "provision": "node scripts/provision.mjs"
   },
   "engines": {
     "node": ">=20"

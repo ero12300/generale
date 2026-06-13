@@ -1,7 +1,7 @@
-import { referralFormSchema } from "@/lib/validations/api";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { getRepository } from "@/lib/auth/session";
 import { mapReferral } from "@/lib/data/mappers";
+import { referralFormSchema } from "@/lib/validations/api";
 import { jsonError, jsonOk } from "@/lib/api-response";
 
 export async function GET() {
@@ -25,11 +25,11 @@ export async function POST(request: Request) {
     reward_status: "pending" as const,
   };
 
-  const admin = createAdminClient();
-  if (admin) {
-    const { data, error } = await admin.from("referrals").insert(payload).select("*").single();
+  const supabase = await createClient();
+  if (supabase) {
+    const { data, error } = await supabase.from("referrals").insert(payload).select("*").single();
+    if (!error && data) return jsonOk(mapReferral(data), 201);
     if (error) return jsonError(error.message, 500);
-    return jsonOk(mapReferral(data), 201);
   }
 
   const repo = await getRepository();
