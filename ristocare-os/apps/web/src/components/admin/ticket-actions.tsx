@@ -6,6 +6,7 @@ import type { Technician, TicketStatus } from "@ristocare/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface AdminTicketActionsProps {
@@ -80,7 +81,11 @@ export function AdminTicketActions({ ticketId, technicians, draftQuoteId }: Admi
 
   return (
     <div className="space-y-4">
-      {message && <p className="text-sm text-amber-400">{message}</p>}
+      {message && (
+        <p className="text-sm text-amber-400 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-2">
+          {message}
+        </p>
+      )}
 
       <Card>
         <CardHeader><CardTitle className="text-base">Assegna tecnico</CardTitle></CardHeader>
@@ -88,11 +93,11 @@ export function AdminTicketActions({ ticketId, technicians, draftQuoteId }: Admi
           <form action={assignTechnician} className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="technician_id">Tecnico</Label>
-              <select id="technician_id" name="technician_id" required className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 text-sm text-zinc-100">
+              <Select id="technician_id" name="technician_id" required>
                 {technicians.map((t) => (
                   <option key={t.id} value={t.id}>{t.name} — {t.city}</option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div className="space-y-2">
               <Label htmlFor="internal_price">Prezzo interno (€)</Label>

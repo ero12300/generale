@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/textarea";
 
 interface DocumentUploadProps {
   equipmentId: string;
@@ -33,23 +35,22 @@ export function DocumentUpload({ equipmentId }: DocumentUploadProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 border-t border-zinc-800 pt-4 mt-4">
-      <p className="text-sm font-medium text-zinc-300">Carica documento</p>
-      <div className="grid sm:grid-cols-2 gap-3">
+    <form onSubmit={handleSubmit} className="space-y-4 border-t border-white/5 pt-4 mt-4">
+      <p className="text-sm font-medium text-zinc-300 flex items-center gap-2">
+        <Upload className="h-4 w-4 text-emerald-400/80" />
+        Carica documento
+      </p>
+      <div className="grid sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="document_type">Tipo</Label>
-          <select
-            id="document_type"
-            name="document_type"
-            className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 text-sm text-zinc-100"
-          >
+          <Select id="document_type" name="document_type">
             <option value="manual">Manuale</option>
             <option value="invoice">Fattura</option>
             <option value="photo">Foto</option>
             <option value="label_photo">Foto etichetta</option>
             <option value="certificate">Certificato</option>
             <option value="other">Altro</option>
-          </select>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="file">File</Label>
@@ -59,7 +60,7 @@ export function DocumentUpload({ equipmentId }: DocumentUploadProps) {
             type="file"
             required
             accept=".pdf,image/*"
-            className="block w-full text-sm text-zinc-400 file:mr-3 file:rounded file:border-0 file:bg-emerald-600 file:px-3 file:py-2 file:text-white"
+            className="block w-full text-sm text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:px-3 file:py-2 file:text-white file:text-sm file:font-medium hover:file:bg-emerald-500 transition-colors"
           />
         </div>
       </div>

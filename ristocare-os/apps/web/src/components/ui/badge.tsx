@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 const variants = {
-  default: "bg-zinc-800 text-zinc-200",
+  default: "bg-white/5 text-zinc-300 border border-white/10",
   success: "bg-emerald-600/20 text-emerald-300 border border-emerald-600/30",
   warning: "bg-amber-600/20 text-amber-300 border border-amber-600/30",
   danger: "bg-red-600/20 text-red-300 border border-red-600/30",

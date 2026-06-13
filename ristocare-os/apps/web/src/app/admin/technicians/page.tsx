@@ -1,5 +1,6 @@
 import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { PortalPageHeader } from "@/components/portal/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { EQUIPMENT_CATEGORY_LABELS } from "@ristocare/types";
@@ -14,24 +15,27 @@ export default async function TechniciansPage() {
   return (
     <PortalShell variant="admin" title="RistoCare Admin" subtitle="Tecnici" mode={session.mode} email={session.email}>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-zinc-100">Rete tecnici (interna)</h1>
-        <p className="text-sm text-zinc-500">Ranking e dati visibili solo agli operatori RistoCare.</p>
+        <PortalPageHeader
+          title="Rete tecnici"
+          description="Ranking e dati visibili solo agli operatori RistoCare."
+          variant="admin"
+        />
         <div className="grid md:grid-cols-2 gap-4">
           {technicians.map((t) => (
-            <Card key={t.id}>
+            <Card key={t.id} className="hover:border-amber-500/20 transition-colors">
               <CardHeader>
-                <CardTitle className="text-base flex justify-between">
-                  {t.name}
+                <CardTitle className="text-base flex justify-between items-center gap-2">
+                  <span>{t.name}</span>
                   <Badge variant="success">★ {t.rating_internal}</Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-zinc-400 space-y-2">
-                <p>{t.company_name}</p>
-                <p>{t.phone} · {t.city} ({t.province})</p>
-                <p className="text-zinc-500">
-                  {t.categories.map((c) => EQUIPMENT_CATEGORY_LABELS[c]).join(", ")}
+              <CardContent className="text-sm text-zinc-500 space-y-2">
+                <p className="text-zinc-400">{t.company_name}</p>
+                <p>
+                  {t.phone} · {t.city} ({t.province})
                 </p>
-                {t.notes_internal && <p className="text-xs text-zinc-600 italic">{t.notes_internal}</p>}
+                <p className="text-xs">{t.categories.map((c) => EQUIPMENT_CATEGORY_LABELS[c]).join(", ")}</p>
+                {t.notes_internal && <p className="text-xs text-zinc-600 italic border-t border-white/5 pt-2">{t.notes_internal}</p>}
               </CardContent>
             </Card>
           ))}

@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { PLAN_LABELS, PLAN_PRICES } from "@ristocare/types";
 import { formatCurrency } from "@/lib/utils";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
+import { MarketingPageShell } from "@/components/marketing/page-shell";
 
 const features = [
   {
@@ -54,7 +55,7 @@ const stats = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <MarketingPageShell>
       <MarketingHeader />
 
       <section className="relative overflow-hidden">
@@ -285,6 +286,6 @@ export default function HomePage() {
       </section>
 
       <MarketingFooter />
-    </div>
+    </MarketingPageShell>
   );
 }

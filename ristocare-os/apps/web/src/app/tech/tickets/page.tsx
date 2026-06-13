@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { EmptyState, PortalPageHeader } from "@/components/portal/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
 import { formatDate } from "@/lib/utils";
@@ -16,15 +17,17 @@ export default async function TechTicketsPage() {
   return (
     <PortalShell variant="technician" title="Portale tecnico" subtitle="Ticket assegnati" mode={session.mode} email={session.email}>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-zinc-100">I miei ticket</h1>
-        <p className="text-sm text-zinc-500">Solo ticket assegnati da RistoCare OS. I prezzi cliente non sono visibili.</p>
+        <PortalPageHeader
+          title="I miei ticket"
+          description="Solo ticket assegnati da RistoCare OS. I prezzi cliente non sono visibili."
+        />
         {tickets.length === 0 ? (
-          <Card><CardContent className="py-12 text-center text-zinc-500">Nessun ticket assegnato.</CardContent></Card>
+          <EmptyState title="Nessun ticket assegnato" description="I nuovi interventi compariranno qui quando RistoCare ti assegnerà un ticket." />
         ) : (
           <div className="space-y-3">
             {tickets.map((t) => (
               <Link key={t.id} href={`/tech/tickets/${t.id}`}>
-                <Card className="hover:border-emerald-600/30 transition-colors">
+                <Card className="hover:border-emerald-500/25 transition-all duration-300">
                   <CardContent className="py-4 flex justify-between gap-4">
                     <div>
                       <p className="font-medium text-zinc-200">{t.title}</p>

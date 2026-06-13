@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { PortalPageHeader } from "@/components/portal/page-header";
 import { AdminTicketActions } from "@/components/admin/ticket-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
@@ -35,19 +35,19 @@ export default async function AdminTicketDetailPage({
   return (
     <PortalShell variant="admin" title="RistoCare Admin" subtitle="Dettaglio ticket" mode={session.mode} email={session.email}>
       <div className="max-w-4xl space-y-6">
-        <div>
-          <Link href="/admin/tickets" className="text-sm text-zinc-500 hover:text-zinc-300">← Ticket</Link>
-          <div className="flex flex-wrap items-start justify-between gap-4 mt-2">
-            <div>
-              <h1 className="text-2xl font-bold text-zinc-100">{ticket.title}</h1>
-              <p className="text-sm text-zinc-500">{org?.name} · {formatDate(ticket.created_at)}</p>
-            </div>
+        <PortalPageHeader
+          variant="admin"
+          backHref="/admin/tickets"
+          backLabel="Ticket"
+          title={ticket.title}
+          description={`${org?.name ?? "—"} · ${formatDate(ticket.created_at)}`}
+          action={
             <div className="flex gap-2">
               <UrgencyBadge urgency={ticket.urgency} />
               <TicketStatusBadge status={ticket.status} />
             </div>
-          </div>
-        </div>
+          }
+        />
 
         <div className="grid md:grid-cols-2 gap-6">
           <Card>
@@ -71,7 +71,7 @@ export default async function AdminTicketDetailPage({
         </div>
 
         {ticket.internal_notes && (
-          <Card className="border-amber-600/20">
+          <Card className="border-amber-500/20 from-amber-500/[0.04]">
             <CardHeader><CardTitle className="text-base">Note interne</CardTitle></CardHeader>
             <CardContent className="text-sm text-zinc-400">{ticket.internal_notes}</CardContent>
           </Card>
@@ -88,9 +88,9 @@ export default async function AdminTicketDetailPage({
             <CardHeader><CardTitle className="text-base">Richieste tecnico (vista interna)</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {requestsWithTech.map(({ request: r, tech }) => (
-                <div key={r.id} className="text-sm border-b border-zinc-800 pb-3 last:border-0">
+                <div key={r.id} className="text-sm border-b border-white/5 pb-3 last:border-0 last:pb-0">
                   <p className="text-zinc-200">{tech?.name} — {formatCurrency(r.internal_price ?? 0)} interno</p>
-                  <p className="text-zinc-500">{r.availability} · {r.response_status}</p>
+                  <p className="text-zinc-500 mt-0.5">{r.availability} · {r.response_status}</p>
                 </div>
               ))}
             </CardContent>
@@ -102,7 +102,7 @@ export default async function AdminTicketDetailPage({
             <CardHeader><CardTitle className="text-base">Preventivi</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {quotes.map((q) => (
-                <div key={q.id} className="flex justify-between text-sm">
+                <div key={q.id} className="flex justify-between text-sm rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2">
                   <span className="text-zinc-400">
                     Cliente: {formatCurrency(q.customer_price)} · Margine: {formatCurrency(q.margin)}
                   </span>

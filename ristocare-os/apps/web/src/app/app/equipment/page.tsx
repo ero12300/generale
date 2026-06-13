@@ -2,6 +2,7 @@ import Link from "next/link";
 import { QrCode } from "lucide-react";
 import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { PortalPageHeader } from "@/components/portal/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EQUIPMENT_CATEGORY_LABELS } from "@ristocare/types";
 import { WarrantyBadge } from "@/components/shared/status-badges";
@@ -24,28 +25,27 @@ export default async function EquipmentListPage() {
       email={session.email}
     >
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Attrezzature</h1>
-          <p className="text-zinc-400 text-sm mt-1">{items.length} macchine censite</p>
-        </div>
+        <PortalPageHeader title="Attrezzature" description={`${items.length} macchine censite`} />
 
         <div className="grid md:grid-cols-2 gap-4">
           {items.map((eq) => (
             <Link key={eq.id} href={`/app/equipment/${eq.id}`}>
-              <Card className="hover:border-emerald-600/30 transition-colors h-full">
+              <Card className="hover:border-emerald-500/25 hover:from-emerald-500/[0.04] transition-all duration-300 h-full">
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between gap-2">
                     <CardTitle className="text-base">{eq.name}</CardTitle>
                     <WarrantyBadge status={eq.warranty_status} />
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-2 text-sm text-zinc-400">
-                  <p>{EQUIPMENT_CATEGORY_LABELS[eq.category]} · {eq.brand} {eq.model}</p>
+                <CardContent className="space-y-2 text-sm text-zinc-500">
+                  <p>
+                    {EQUIPMENT_CATEGORY_LABELS[eq.category]} · {eq.brand} {eq.model}
+                  </p>
                   <p>Matricola: {eq.serial_number ?? "—"}</p>
                   <p>Area: {eq.area ?? "—"}</p>
                   {eq.warranty_end && <p>Garanzia fino: {formatDate(eq.warranty_end)}</p>}
-                  <div className="flex items-center gap-1 text-emerald-500 text-xs pt-2">
-                    <QrCode className="h-3 w-3" />
+                  <div className="flex items-center gap-1.5 text-emerald-400/80 text-xs pt-2">
+                    <QrCode className="h-3.5 w-3.5" />
                     QR disponibile
                   </div>
                 </CardContent>

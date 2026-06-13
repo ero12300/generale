@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { PortalPageHeader } from "@/components/portal/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
 import { formatDate, formatCurrency } from "@/lib/utils";
@@ -31,17 +32,18 @@ export default async function TicketDetailPage({
       email={session.email}
     >
       <div className="max-w-3xl space-y-6">
-        <div>
-          <Link href="/app/tickets" className="text-sm text-zinc-500 hover:text-zinc-300">← Ticket</Link>
-          <div className="flex flex-wrap items-start justify-between gap-4 mt-2">
-            <h1 className="text-2xl font-bold text-zinc-100">{ticket.title}</h1>
+        <PortalPageHeader
+          backHref="/app/tickets"
+          backLabel="Ticket"
+          title={ticket.title}
+          description={`Aperto il ${formatDate(ticket.created_at)}`}
+          action={
             <div className="flex gap-2">
               <UrgencyBadge urgency={ticket.urgency} />
               <TicketStatusBadge status={ticket.status} />
             </div>
-          </div>
-          <p className="text-sm text-zinc-500 mt-1">Aperto il {formatDate(ticket.created_at)}</p>
-        </div>
+          }
+        />
 
         <Card>
           <CardHeader>
@@ -53,7 +55,7 @@ export default async function TicketDetailPage({
             {equipment && (
               <p className="text-sm text-zinc-500 mt-4">
                 Attrezzatura:{" "}
-                <Link href={`/app/equipment/${equipment.id}`} className="text-emerald-400 hover:underline">
+                <Link href={`/app/equipment/${equipment.id}`} className="text-emerald-400 hover:text-emerald-300 transition-colors">
                   {equipment.name}
                 </Link>
               </p>
@@ -62,12 +64,12 @@ export default async function TicketDetailPage({
         </Card>
 
         {quotes.filter((q) => q.status === "sent").map((q) => (
-          <Card key={q.id} className="border-amber-600/30">
+          <Card key={q.id} className="border-amber-500/20 from-amber-500/[0.04]">
             <CardHeader>
               <CardTitle className="text-base">Preventivo RistoCare</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-zinc-100">{formatCurrency(q.customer_price)}</p>
+              <p className="font-display text-3xl font-semibold text-zinc-100">{formatCurrency(q.customer_price)}</p>
               <p className="text-sm text-zinc-500 mt-1">Valido fino al {formatDate(q.valid_until)}</p>
               <p className="text-xs text-zinc-600 mt-4">
                 Per accettare il preventivo contatta la centrale operativa RistoCare.

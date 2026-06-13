@@ -5,7 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, Textarea } from "@/components/ui/textarea";
 
 export function ContactForm() {
   const searchParams = useSearchParams();
@@ -43,19 +44,23 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <p className="text-emerald-400 font-medium text-lg mb-2">Richiesta inviata</p>
-          <p className="text-zinc-400 text-sm">Ti contatteremo al più presto.</p>
+      <Card className="glass-panel glow-emerald">
+        <CardContent className="py-16 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/25">
+            <span className="text-2xl">✓</span>
+          </div>
+          <p className="font-display text-xl text-emerald-300">Richiesta inviata</p>
+          <p className="text-zinc-500 text-sm mt-2">Ti contatteremo al più presto.</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card>
+    <Card className="glass-panel">
       <CardHeader>
-        <CardTitle>Contattaci</CardTitle>
+        <CardTitle className="font-display text-xl">Contattaci</CardTitle>
+        <CardDescription>Compila il modulo e ti rispondiamo entro 24 ore lavorative.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -81,31 +86,29 @@ export function ContactForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="request_type">Tipo richiesta</Label>
-            <select
-              id="request_type"
-              name="request_type"
-              defaultValue={defaultType}
-              className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 text-sm text-zinc-100"
-            >
+            <Select id="request_type" name="request_type" defaultValue={defaultType}>
               <option value="demo">Richiesta demo</option>
               <option value="quote">Richiesta preventivo</option>
               <option value="census">Censimento locale</option>
               <option value="technician">Diventa tecnico partner</option>
               <option value="referral">Diventa partner referral</option>
-            </select>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="message">Messaggio *</Label>
-            <textarea
+            <Textarea
               id="message"
               name="message"
               required
               rows={4}
-              className="flex w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500"
               placeholder="Descrivi il tuo locale e cosa ti serve..."
             />
           </div>
-          {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
+          {error && (
+            <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2" role="alert">
+              {error}
+            </p>
+          )}
           <Button type="submit" disabled={status === "loading"} className="w-full">
             {status === "loading" ? "Invio in corso..." : "Invia richiesta"}
           </Button>

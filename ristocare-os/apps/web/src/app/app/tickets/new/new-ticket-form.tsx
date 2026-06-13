@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { PortalPageHeader } from "@/components/portal/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, Textarea } from "@/components/ui/textarea";
 
 export default function NewTicketForm() {
   const router = useRouter();
@@ -43,11 +44,12 @@ export default function NewTicketForm() {
   return (
     <PortalShell variant="customer" title="RistoCare OS" subtitle="Nuovo ticket" mode="demo">
       <div className="max-w-xl space-y-6">
-        <div>
-          <Link href="/app/tickets" className="text-sm text-zinc-500 hover:text-zinc-300">← Ticket</Link>
-          <h1 className="text-2xl font-bold text-zinc-100 mt-2">Apri ticket</h1>
-          <p className="text-zinc-400 text-sm">Descrivi il problema. La centrale RistoCare gestirà la richiesta.</p>
-        </div>
+        <PortalPageHeader
+          title="Apri ticket"
+          description="Descrivi il problema. La centrale RistoCare gestirà la richiesta."
+          backHref="/app/tickets"
+          backLabel="Ticket"
+        />
 
         <Card>
           <CardHeader>
@@ -62,30 +64,28 @@ export default function NewTicketForm() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Descrizione *</Label>
-                <textarea
+                <Textarea
                   id="description"
                   name="description"
                   required
                   rows={5}
                   placeholder="Descrivi il problema, da quando accade, se la macchina è ferma..."
-                  className="flex w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="urgency">Urgenza</Label>
-                <select
-                  id="urgency"
-                  name="urgency"
-                  defaultValue="medium"
-                  className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 text-sm text-zinc-100"
-                >
+                <Select id="urgency" name="urgency" defaultValue="medium">
                   <option value="low">Bassa</option>
                   <option value="medium">Media</option>
                   <option value="high">Alta</option>
                   <option value="critical">Critica — fermo servizio</option>
-                </select>
+                </Select>
               </div>
-              {error && <p className="text-sm text-red-400" role="alert">{error}</p>}
+              {error && (
+                <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2" role="alert">
+                  {error}
+                </p>
+              )}
               <Button type="submit" disabled={status === "loading"} className="w-full">
                 {status === "loading" ? "Invio..." : "Invia ticket a RistoCare"}
               </Button>

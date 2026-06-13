@@ -1,5 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 
@@ -11,6 +14,8 @@ const navLinks = [
 ];
 
 export function MarketingHeader() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/5 bg-[#080a09]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between px-4 lg:px-6">
@@ -37,14 +42,44 @@ export function MarketingHeader() {
           <Button variant="ghost" size="sm" className="hidden sm:inline-flex" asChild>
             <Link href="/login">Accedi</Link>
           </Button>
-          <Button size="sm" className="shadow-lg shadow-emerald-900/30" asChild>
+          <Button size="sm" className="hidden sm:inline-flex shadow-lg shadow-emerald-900/30" asChild>
             <Link href="/contatti?tipo=demo">Richiedi demo</Link>
           </Button>
-          <Button variant="ghost" size="sm" className="md:hidden px-2" aria-label="Menu">
-            <Menu className="h-5 w-5" />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden px-2"
+            aria-label={mobileOpen ? "Chiudi menu" : "Apri menu"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
+
+      {mobileOpen && (
+        <nav className="md:hidden border-t border-white/5 bg-[#060807]/95 px-4 py-4 space-y-1" aria-label="Menu mobile">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className="block rounded-xl px-4 py-3 text-sm text-zinc-300 hover:bg-white/5"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="pt-3 flex flex-col gap-2 border-t border-white/5 mt-2">
+            <Button variant="secondary" asChild>
+              <Link href="/login" onClick={() => setMobileOpen(false)}>Accedi</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/contatti?tipo=demo" onClick={() => setMobileOpen(false)}>Richiedi demo</Link>
+            </Button>
+          </div>
+        </nav>
+      )}
     </header>
   );
 }

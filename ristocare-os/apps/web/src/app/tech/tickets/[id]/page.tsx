@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
+import { PortalPageHeader } from "@/components/portal/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge } from "@/components/shared/status-badges";
 
@@ -24,22 +24,23 @@ export default async function TechTicketDetailPage({
   return (
     <PortalShell variant="technician" title="Portale tecnico" subtitle="Dettaglio" mode={session.mode} email={session.email}>
       <div className="max-w-2xl space-y-6">
-        <Link href="/tech/tickets" className="text-sm text-zinc-500 hover:text-zinc-300">← Ticket</Link>
-        <div className="flex justify-between items-start">
-          <h1 className="text-2xl font-bold text-zinc-100">{ticket.title}</h1>
-          <TicketStatusBadge status={ticket.status} />
-        </div>
+        <PortalPageHeader
+          backHref="/tech/tickets"
+          backLabel="Ticket"
+          title={ticket.title}
+          action={<TicketStatusBadge status={ticket.status} />}
+        />
 
         <Card>
           <CardHeader><CardTitle className="text-base">Problema</CardTitle></CardHeader>
-          <CardContent className="text-sm text-zinc-300">{ticket.description}</CardContent>
+          <CardContent className="text-sm text-zinc-300 leading-relaxed">{ticket.description}</CardContent>
         </Card>
 
         {equipment && (
           <Card>
             <CardHeader><CardTitle className="text-base">Macchina</CardTitle></CardHeader>
             <CardContent className="text-sm text-zinc-300">
-              <p>{equipment.name}</p>
+              <p className="font-medium text-zinc-200">{equipment.name}</p>
               <p className="text-zinc-500 mt-1">Matricola: {equipment.serial_number}</p>
               <p className="text-zinc-500">Area: {equipment.area}</p>
             </CardContent>
@@ -51,8 +52,8 @@ export default async function TechTicketDetailPage({
             <CardHeader><CardTitle className="text-base">La tua risposta</CardTitle></CardHeader>
             <CardContent className="text-sm text-zinc-400">
               <p>Disponibilità: {r.availability}</p>
-              <p>Stato: {r.response_status}</p>
-              {r.notes && <p className="mt-2">{r.notes}</p>}
+              <p className="mt-1">Stato: {r.response_status}</p>
+              {r.notes && <p className="mt-2 text-zinc-300">{r.notes}</p>}
             </CardContent>
           </Card>
         ))}
