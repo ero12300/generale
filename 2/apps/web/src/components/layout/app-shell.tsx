@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/brand/logo";
 import type { LucideIcon } from "lucide-react";
 
 export interface NavItem {
@@ -22,7 +23,6 @@ interface ShellProps {
 
 export function AppShell({
   children,
-  brand,
   subtitle,
   nav,
   accent = "emerald",
@@ -30,44 +30,60 @@ export function AppShell({
 }: ShellProps) {
   const pathname = usePathname();
   const accentMap = {
-    emerald: { active: "bg-emerald-600/15 text-emerald-300", icon: "text-emerald-500" },
-    amber: { active: "bg-amber-600/15 text-amber-300", icon: "text-amber-500" },
-    blue: { active: "bg-blue-600/15 text-blue-300", icon: "text-blue-500" },
+    emerald: {
+      active: "bg-emerald-500/10 text-emerald-300 border border-emerald-500/20",
+      icon: "text-emerald-400",
+      dot: "bg-emerald-400",
+    },
+    amber: {
+      active: "bg-amber-500/10 text-amber-300 border border-amber-500/20",
+      icon: "text-amber-400",
+      dot: "bg-amber-400",
+    },
+    blue: {
+      active: "bg-blue-500/10 text-blue-300 border border-blue-500/20",
+      icon: "text-blue-400",
+      dot: "bg-blue-400",
+    },
   };
   const a = accentMap[accent];
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex">
-      <aside className="w-64 border-r border-zinc-800 bg-zinc-900/50 hidden md:flex flex-col shrink-0">
-        <div className="p-6 border-b border-zinc-800">
-          <p className={cn("font-bold text-sm tracking-wider", a.icon)}>{brand}</p>
-          <p className="text-xs text-zinc-500 truncate mt-1">{subtitle}</p>
+    <div className="min-h-screen bg-mesh text-zinc-100 flex">
+      <aside className="w-[17rem] border-r border-[var(--border-subtle)] glass-panel hidden md:flex flex-col shrink-0">
+        <div className="p-5 border-b border-[var(--border-subtle)]">
+          <Logo size="sm" href="/app/dashboard" />
+          <p className="text-xs text-zinc-500 truncate mt-3 pl-1">{subtitle}</p>
         </div>
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto" aria-label="Navigazione">
-          {nav.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                pathname === href || pathname.startsWith(href + "/")
-                  ? a.active
-                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
-              )}
-            >
-              <Icon className="h-4 w-4" aria-hidden />
-              {label}
-            </Link>
-          ))}
+        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto" aria-label="Navigazione">
+          {nav.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href || pathname.startsWith(href + "/");
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
+                  active
+                    ? a.active
+                    : "text-zinc-400 hover:bg-white/5 hover:text-zinc-100 border border-transparent"
+                )}
+              >
+                <Icon className={cn("h-4 w-4 shrink-0", active ? a.icon : "")} aria-hidden />
+                {label}
+              </Link>
+            );
+          })}
         </nav>
         {demo && (
-          <div className="p-4 border-t border-zinc-800 text-xs text-zinc-500">
-            Modalità demo — dati pizzeria Messina
+          <div className="m-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/15 text-xs text-amber-200/70">
+            <span className={cn("inline-block w-1.5 h-1.5 rounded-full mr-2", a.dot)} />
+            Demo attiva — Pizzeria Messina
           </div>
         )}
       </aside>
       <div className="flex-1 flex flex-col min-w-0">
-        <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>
+        <main className="flex-1 p-4 md:p-8 lg:p-10 overflow-auto">{children}</main>
       </div>
     </div>
   );

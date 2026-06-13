@@ -4,8 +4,8 @@
   "description": "Il cruscotto economico del ristoratore",
   "start_url": "/app/dashboard",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#059669",
+  "background_color": "#0a0c0f",
+  "theme_color": "#10b981",
   "orientation": "portrait-primary",
   "icons": [
     {
