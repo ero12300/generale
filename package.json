@@ -3,10 +3,15 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @deal-desk/web dev",
+    "dev:ristocare": "pnpm --filter @ristocare/os dev",
     "build": "pnpm --filter @deal-desk/web build",
+    "build:ristocare": "pnpm --filter @ristocare/os build",
     "lint": "pnpm --filter @deal-desk/web lint",
+    "lint:ristocare": "pnpm --filter @ristocare/os lint",
     "typecheck": "pnpm --filter @deal-desk/web typecheck",
+    "typecheck:ristocare": "pnpm --filter @ristocare/os typecheck",
     "test": "pnpm --filter @deal-desk/web test",
+    "test:ristocare": "pnpm --filter @ristocare/os test",
     "test:analytics": "cd services/analytics && python3 -m pytest -q",
     "provision": "node scripts/provision-production.mjs",
     "provision:render": "node scripts/provision-render.mjs"

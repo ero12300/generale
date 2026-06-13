@@ -19,6 +19,11 @@ Piattaforma operativa per analisi e gestione di investimenti immobiliari in SRL.
 - Playwright (intake URL singolo)
 - PostGIS + pgvector (schema migrato)
 
+## Programmi nel monorepo
+
+- `apps/web` — Deal Desk Immobiliare
+- `apps/ristocare-os` — RistoCare OS, landing/MVP Ho.Re.Ca. da documento strategico
+
 ## Avvio rapido
 
 ```bash
@@ -31,6 +36,9 @@ cp .env.example .env
 
 # Terminale 1 — frontend
 pnpm dev
+
+# Terminale 1b — RistoCare OS su porta 3001
+pnpm dev:ristocare
 
 # Terminale 2 — analytics
 cd services/analytics && uvicorn app.main:app --reload --port 8000
