@@ -17,13 +17,14 @@ export default async function ImpostazioniPage() {
       const { data: sub } = await supabase
         .schema("profit")
         .from("subscriptions")
-        .select("status, plans(name, tier)")
+        .select("status, plan:plans(name, tier)")
         .eq("organization_id", auth.organizationId)
         .maybeSingle();
       if (sub) {
         subscriptionStatus = sub.status;
-        const plans = sub.plans as { name: string; tier: string } | null;
-        planName = plans?.name ?? planName;
+        const plan = sub.plan as { name: string; tier: string } | { name: string; tier: string }[] | null;
+        const planRow = Array.isArray(plan) ? plan[0] : plan;
+        planName = planRow?.name ?? planName;
       }
     }
   }
