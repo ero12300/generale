@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  /* Palette brand: nero/antracite, bianco, verde profitto, oro leggero, grigio caldo */
+  --background: #0a0a0b;
+  --foreground: #fafafa;
+  --profit: #10b981; /* verde profitto */
+  --gold: #fbbf24; /* oro leggero */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--profit);
+  outline-offset: 2px;
+}
+
+.brand-grid {
+  background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 0
+    );
+  background-size: 32px 32px;
+}

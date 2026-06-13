@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="RistoProfit OS">
+  <rect width="512" height="512" rx="112" fill="#0a0a0b"/>
+  <rect x="40" y="40" width="432" height="432" rx="88" fill="#18181b" stroke="#27272a" stroke-width="4"/>
+  <path d="M120 360 L120 250 L200 300 L290 180 L392 240" fill="none" stroke="#10b981" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="392" cy="240" r="22" fill="#fbbf24"/>
+  <text x="256" y="430" font-family="Geist, system-ui, sans-serif" font-size="120" font-weight="700" fill="#fafafa" text-anchor="middle">RP</text>
+</svg>
