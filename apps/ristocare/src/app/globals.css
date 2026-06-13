@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #16181d;
+  --color-ink-soft: #23262e;
+  --color-paper: #f7f6f3;
+  --color-warmgray: #8c8a84;
+  --color-tech: #1f7a5c;
+  --color-tech-soft: #e3f1ea;
+  --color-gold: #b9985a;
+  --color-gold-soft: #f4ecdd;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-feature-settings: "ss01";
+}
