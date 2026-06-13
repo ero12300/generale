@@ -24,7 +24,7 @@ export default function ReportPage() {
             <div className="flex justify-between"><span className="text-zinc-400">Costo personale</span><span>{formatEuro(report.estimated_staff_cost_cents)}</span></div>
             <div className="flex justify-between border-t border-[var(--border-subtle)] pt-3">
               <span className="text-zinc-400">Margine lordo stimato</span>
-              <span className="text-emerald-400 font-medium">{formatEuro(report.estimated_gross_margin_cents)}</span>
+              <span className="text-emerald-700 font-medium">{formatEuro(report.estimated_gross_margin_cents)}</span>
             </div>
           </div>
           <div className="mt-6 space-y-2 text-sm">
@@ -34,7 +34,7 @@ export default function ReportPage() {
           </div>
           <div className="mt-6">
             <p className="text-sm font-medium mb-2">Azioni consigliate</p>
-            <ol className="list-decimal list-inside text-sm text-zinc-300 space-y-1.5">
+            <ol className="list-decimal list-inside text-sm text-stone-700 space-y-1.5">
               {report.recommended_actions.map((a) => (
                 <li key={a}>{a}</li>
               ))}

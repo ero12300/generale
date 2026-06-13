@@ -27,7 +27,7 @@ export default function SalesDashboardPage() {
           <ol className="mt-4 text-sm space-y-3 text-zinc-300">
             <li className="flex justify-between border-b border-[var(--border-subtle)] pb-2">
               <span>1. Marco Venditore</span>
-              <span className="text-emerald-400">645 € MRR</span>
+              <span className="text-emerald-700">645 € MRR</span>
             </li>
             <li className="flex justify-between border-b border-[var(--border-subtle)] pb-2">
               <span>2. Sara Commerciale</span>

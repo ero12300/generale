@@ -11,7 +11,7 @@ const navLinks = [
 
 export function MarketingHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border-subtle)] glass-panel">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] glass-panel">
       <div className="max-w-6xl mx-auto px-4 h-[4.25rem] flex items-center justify-between">
         <Logo size="md" />
         <nav
@@ -22,7 +22,7 @@ export function MarketingHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="px-3 py-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/5 transition-colors"
+              className="px-3 py-2 rounded-lg text-stone-600 hover:text-stone-900 hover:bg-stone-100/80 transition-colors"
             >
               {link.label}
             </Link>
@@ -32,7 +32,7 @@ export function MarketingHeader() {
           <Button variant="ghost" size="sm" asChild>
             <Link href="/login">Accedi</Link>
           </Button>
-          <Button size="sm" className="shadow-lg shadow-emerald-900/20" asChild>
+          <Button size="sm" asChild>
             <Link href="/demo">Richiedi demo</Link>
           </Button>
         </div>
@@ -43,31 +43,31 @@ export function MarketingHeader() {
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-[var(--border-subtle)] mt-24">
-      <div className="gold-line max-w-6xl mx-auto opacity-50" />
+    <footer className="border-t border-[var(--border)] mt-24 bg-white/50">
+      <div className="gold-line max-w-6xl mx-auto opacity-60" />
       <div className="max-w-6xl mx-auto px-4 py-14 grid md:grid-cols-4 gap-10 text-sm">
         <div className="md:col-span-2">
           <Logo size="sm" href="/" />
-          <p className="mt-4 text-zinc-400 max-w-sm leading-relaxed">
+          <p className="mt-4 text-stone-600 max-w-sm leading-relaxed">
             Il cruscotto economico per ristoratori che vogliono sapere dove guadagnano
             e dove perdono margine — ogni giorno.
           </p>
-          <p className="mt-4 text-zinc-500 text-xs">Emotive S.r.l. · Messina e provincia</p>
+          <p className="mt-4 text-stone-500 text-xs">Emotive S.r.l. · Messina e provincia</p>
         </div>
         <div>
-          <p className="text-zinc-200 font-medium mb-3">Prodotto</p>
-          <ul className="space-y-2 text-zinc-500">
-            <li><Link href="/come-funziona" className="hover:text-emerald-400 transition-colors">Come funziona</Link></li>
-            <li><Link href="/prezzi" className="hover:text-emerald-400 transition-colors">Prezzi</Link></li>
-            <li><Link href="/contatti" className="hover:text-emerald-400 transition-colors">Contatti</Link></li>
+          <p className="text-stone-900 font-medium mb-3">Prodotto</p>
+          <ul className="space-y-2 text-stone-600">
+            <li><Link href="/come-funziona" className="hover:text-emerald-700 transition-colors">Come funziona</Link></li>
+            <li><Link href="/prezzi" className="hover:text-emerald-700 transition-colors">Prezzi</Link></li>
+            <li><Link href="/contatti" className="hover:text-emerald-700 transition-colors">Contatti</Link></li>
           </ul>
         </div>
         <div>
-          <p className="text-zinc-200 font-medium mb-3">Suite Emotive</p>
-          <ul className="space-y-2 text-zinc-500">
-            <li className="text-emerald-400/80">RistoProfit OS</li>
+          <p className="text-stone-900 font-medium mb-3">Suite Emotive</p>
+          <ul className="space-y-2 text-stone-600">
+            <li className="text-emerald-700 font-medium">RistoProfit OS</li>
             <li>RistoCare OS</li>
-            <li className="text-zinc-600">RistoSuite OS — in arrivo</li>
+            <li className="text-stone-400">RistoSuite OS — in arrivo</li>
           </ul>
         </div>
       </div>

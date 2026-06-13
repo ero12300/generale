@@ -41,7 +41,7 @@ export function InvoiceUpload({ initial }: { initial?: InvoiceRow[] }) {
 
   return (
     <div className="space-y-6">
-      <Card className="border-dashed border-2 border-emerald-500/20 bg-emerald-500/5" glow>
+      <Card className="border-dashed border-2 border-emerald-300/60 bg-emerald-50/50" glow>
         <CardHeader className="text-center py-8">
           <Upload className="h-10 w-10 text-emerald-500/60 mx-auto mb-4" aria-hidden />
           <CardTitle>Carica fattura PDF o foto</CardTitle>
@@ -64,7 +64,7 @@ export function InvoiceUpload({ initial }: { initial?: InvoiceRow[] }) {
             </Button>
           </label>
           {success && (
-            <p className="text-sm text-emerald-400 mt-4 flex items-center justify-center gap-2">
+            <p className="text-sm text-emerald-700 mt-4 flex items-center justify-center gap-2">
               <CheckCircle className="h-4 w-4" /> Fattura caricata
             </p>
           )}
@@ -82,9 +82,9 @@ export function InvoiceUpload({ initial }: { initial?: InvoiceRow[] }) {
             <CardTitle>Fatture caricate</CardTitle>
             <ul className="mt-4 space-y-2 text-sm">
               {invoices.map((inv) => (
-                <li key={inv.id} className="flex justify-between text-zinc-400">
+                <li key={inv.id} className="flex justify-between text-stone-600">
                   <span className="truncate max-w-[60%]">{inv.document_path ?? "—"}</span>
-                  <span className="text-amber-400">{inv.status}</span>
+                  <span className="text-amber-700">{inv.status}</span>
                 </li>
               ))}
             </ul>

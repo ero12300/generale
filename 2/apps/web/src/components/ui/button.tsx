@@ -9,14 +9,14 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-b from-emerald-500 to-emerald-600 text-white hover:from-emerald-400 hover:to-emerald-500 shadow-md shadow-emerald-950/30",
+          "bg-gradient-to-b from-emerald-600 to-emerald-700 text-white hover:from-emerald-500 hover:to-emerald-600 shadow-md shadow-emerald-900/15",
         secondary:
-          "bg-[var(--card-elevated)] text-zinc-100 border border-[var(--border)] hover:border-emerald-500/30 hover:bg-zinc-800/80",
+          "bg-white text-stone-800 border border-[var(--border)] hover:border-emerald-500/40 hover:bg-emerald-50/50 shadow-sm",
         outline:
-          "border border-[var(--border)] bg-transparent text-zinc-200 hover:bg-white/5 hover:border-zinc-600",
-        ghost: "text-zinc-400 hover:text-zinc-100 hover:bg-white/5",
+          "border border-[var(--border)] bg-white text-stone-700 hover:bg-stone-50 hover:border-stone-300",
+        ghost: "text-stone-600 hover:text-stone-900 hover:bg-stone-100/80",
         gold:
-          "bg-gradient-to-b from-amber-500 to-amber-600 text-zinc-950 hover:from-amber-400 hover:to-amber-500 shadow-md shadow-amber-950/20",
+          "bg-gradient-to-b from-amber-500 to-amber-600 text-white hover:from-amber-400 hover:to-amber-500 shadow-md shadow-amber-900/15",
       },
       size: {
         default: "h-10 px-5 py-2",

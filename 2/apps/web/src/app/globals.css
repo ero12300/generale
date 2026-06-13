@@ -1,18 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0c0f;
-  --foreground: #f4f4f5;
-  --card: #12151a;
-  --card-elevated: #181c24;
-  --border: #2a303c;
-  --border-subtle: #1e2430;
-  --primary: #10b981;
-  --primary-dim: #059669;
-  --gold: #c9a227;
-  --gold-soft: #e8c468;
-  --muted: #94a3b8;
-  --glow: rgba(16, 185, 129, 0.15);
+  --background: #f6f4ef;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --card-elevated: #ffffff;
+  --border: #e4e0d8;
+  --border-subtle: #ebe8e1;
+  --primary: #059669;
+  --primary-dim: #047857;
+  --gold: #b8860b;
+  --gold-soft: #d4a017;
+  --muted: #78716c;
+  --muted-foreground: #57534e;
+  --heading: #1c1917;
+  --glow: rgba(5, 150, 105, 0.12);
+  --shadow-soft: 0 1px 3px rgba(28, 25, 23, 0.06), 0 8px 24px rgba(28, 25, 23, 0.04);
 }
 
 @theme inline {
@@ -37,31 +40,40 @@ body {
   font-family: var(--font-fraunces), Georgia, serif;
 }
 
-/* Sfondo premium con griglia sottile */
+.text-heading {
+  color: var(--heading);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+/* Sfondo chiaro caldo con alone verde delicato */
 .bg-mesh {
   background-color: var(--background);
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, var(--glow), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(201, 162, 39, 0.06), transparent),
-    linear-gradient(to bottom, transparent, var(--background)),
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 64px 64px, 64px 64px;
+    radial-gradient(ellipse 90% 55% at 50% -15%, var(--glow), transparent 55%),
+    radial-gradient(ellipse 50% 35% at 100% 0%, rgba(212, 160, 23, 0.07), transparent),
+    radial-gradient(ellipse 40% 30% at 0% 100%, rgba(5, 150, 105, 0.05), transparent),
+    linear-gradient(rgba(28, 25, 23, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 25, 23, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
 }
 
 .glass-panel {
-  background: linear-gradient(135deg, rgba(24, 28, 36, 0.9), rgba(18, 21, 26, 0.85));
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-soft);
 }
 
 .gold-line {
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--gold-soft), transparent);
   height: 1px;
 }
 
 .text-gradient-profit {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 45%, #c9a227 100%);
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #b8860b 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

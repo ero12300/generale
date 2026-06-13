@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export default function PrezziPage() {
   return (
-    <div className="min-h-screen bg-mesh text-zinc-100">
+    <div className="min-h-screen bg-mesh">
       <MarketingHeader />
       <main className="max-w-5xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-14 animate-fade-up">

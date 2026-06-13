@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 
 export default function ContattiPage() {
   return (
-    <div className="min-h-screen bg-mesh text-zinc-100">
+    <div className="min-h-screen bg-mesh">
       <MarketingHeader />
       <main className="max-w-lg mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-10 animate-fade-up">

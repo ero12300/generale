@@ -22,12 +22,12 @@ export default function RicettePage() {
           <Card key={fc.recipe_id} glow>
             <CardHeader>
               <CardTitle>
-                <Link href={`/app/ricette/${fc.recipe_id}`} className="hover:text-emerald-400 transition-colors">
+                <Link href={`/app/ricette/${fc.recipe_id}`} className="hover:text-emerald-700 transition-colors">
                   {fc.recipe_name}
                 </Link>
               </CardTitle>
               <p className="text-xs text-zinc-500 mt-2">{fc.suggestion}</p>
-              <p className="text-sm text-emerald-400 mt-2 font-medium">
+              <p className="text-sm text-emerald-700 mt-2 font-medium">
                 Prezzo ideale: {formatEuro(fc.ideal_recommended_price_cents)}
               </p>
             </CardHeader>

@@ -36,7 +36,7 @@ export default function PartnerLeadPage() {
               <div className="text-right">
                 <Badge>{statusLabels[l.status] ?? l.status}</Badge>
                 {l.reward_cents ? (
-                  <p className="text-sm text-emerald-400 mt-2 font-medium">
+                  <p className="text-sm text-emerald-700 mt-2 font-medium">
                     {formatEuro(l.reward_cents)}
                   </p>
                 ) : null}

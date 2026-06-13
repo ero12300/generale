@@ -12,7 +12,7 @@ const steps = [
 
 export default function ComeFunzionaPage() {
   return (
-    <div className="min-h-screen bg-mesh text-zinc-100">
+    <div className="min-h-screen bg-mesh">
       <MarketingHeader />
       <main className="max-w-4xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-14 animate-fade-up">

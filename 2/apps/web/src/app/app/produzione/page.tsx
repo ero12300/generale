@@ -14,7 +14,7 @@ export default function ProduzionePage() {
           <CardTitle>Suggerimento sabato</CardTitle>
           <p className="text-sm text-zinc-400 mt-3 leading-relaxed">
             Sabato scorso hai venduto 48 brioche. Per questo sabato produzione consigliata:{" "}
-            <span className="text-emerald-400 font-semibold">55 brioche</span>.
+            <span className="text-emerald-700 font-semibold">55 brioche</span>.
           </p>
           <p className="text-xs text-zinc-500 mt-4">
             Basato su storico vendite, giorno settimana e stagionalità.

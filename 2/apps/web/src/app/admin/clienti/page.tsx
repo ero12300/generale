@@ -24,7 +24,7 @@ export default function AdminClientiPage() {
                 <CardTitle>{c.name}</CardTitle>
                 <p className="text-xs text-zinc-500 mt-1">{c.city} · {c.plan}</p>
               </div>
-              <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-medium text-emerald-700 bg-emerald-500/10 px-2.5 py-1 rounded-full">
                 {c.status}
               </span>
             </CardHeader>

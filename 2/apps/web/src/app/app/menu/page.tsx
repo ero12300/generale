@@ -41,7 +41,7 @@ export default function MenuPage() {
                 <span>Vendite: {item.sales_count}</span>
                 <span>Food cost: {item.food_cost_percent}%</span>
               </div>
-              <p className="text-sm text-zinc-300 mt-2 leading-relaxed">{item.action}</p>
+              <p className="text-sm text-stone-700 mt-2 leading-relaxed">{item.action}</p>
             </CardHeader>
           </Card>
         ))}

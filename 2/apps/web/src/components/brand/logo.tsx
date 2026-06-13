@@ -29,10 +29,10 @@ export function Logo({ size = "md", showText = true, href = "/", className }: Lo
       />
       {showText && (
         <span className="flex flex-col leading-none">
-          <span className={cn("font-display font-semibold tracking-tight text-zinc-50", s.text)}>
+          <span className={cn("font-display font-semibold tracking-tight text-stone-900", s.text)}>
             RistoProfit
           </span>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-400/90 font-medium mt-0.5">
+          <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-700 font-medium mt-0.5">
             OS
           </span>
         </span>

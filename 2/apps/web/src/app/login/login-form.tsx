@@ -63,8 +63,8 @@ export function LoginForm() {
                 onClick={() => router.push(a.href)}
                 className={`w-full text-left rounded-lg border px-4 py-3 transition-colors ${
                   defaultArea === a.key
-                    ? "border-emerald-500/50 bg-emerald-500/10"
-                    : "border-zinc-700 hover:bg-zinc-800"
+                    ? "border-emerald-400 bg-emerald-50"
+                    : "border-[var(--border)] hover:bg-stone-50"
                 }`}
               >
                 <p className="font-medium text-sm">{a.label}</p>
@@ -78,7 +78,7 @@ export function LoginForm() {
           {supabaseReady && (
             <button
               type="button"
-              className="w-full text-xs text-emerald-400 mt-4 hover:underline"
+              className="w-full text-xs text-emerald-700 mt-4 hover:underline"
               onClick={() => setShowDemo(false)}
             >
               Ho un account — accedi con email
@@ -130,13 +130,13 @@ export function LoginForm() {
         </form>
         <p className="text-sm text-zinc-500 mt-4 text-center">
           Non hai un account?{" "}
-          <Link href="/signup" className="text-emerald-400 hover:underline">
+          <Link href="/signup" className="text-emerald-700 hover:underline">
             Registrati
           </Link>
         </p>
         <button
           type="button"
-          className="w-full text-xs text-zinc-500 mt-2 hover:text-zinc-300"
+          className="w-full text-xs text-stone-500 mt-2 hover:text-stone-800"
           onClick={() => setShowDemo(true)}
         >
           Oppure prova la demo senza account

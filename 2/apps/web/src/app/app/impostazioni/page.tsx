@@ -42,7 +42,7 @@ export default async function ImpostazioniPage() {
           <CardTitle>Organizzazione</CardTitle>
           <p className="text-sm text-zinc-400 mt-2">{orgName}</p>
           <p className="text-sm text-zinc-500">{demoStore.locationName}</p>
-          <p className="text-sm text-emerald-400 mt-3 font-medium">
+          <p className="text-sm text-emerald-700 mt-3 font-medium">
             Piano {planName} · {subscriptionStatus}
           </p>
         </CardHeader>

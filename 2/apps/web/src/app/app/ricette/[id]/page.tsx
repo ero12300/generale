@@ -76,7 +76,7 @@ export default async function RicettaDetailPage({
       <Card className="border-emerald-500/30 bg-gradient-to-br from-emerald-500/5 to-transparent">
         <CardHeader>
           <CardTitle>Suggerimento</CardTitle>
-          <p className="text-sm text-zinc-300 mt-2 leading-relaxed">{fc.suggestion}</p>
+          <p className="text-sm text-stone-700 mt-2 leading-relaxed">{fc.suggestion}</p>
           <p className="text-sm text-emerald-400 mt-3 font-medium">
             Prezzo minimo: {formatEuro(fc.min_recommended_price_cents)} ·
             Ideale: {formatEuro(fc.ideal_recommended_price_cents)}

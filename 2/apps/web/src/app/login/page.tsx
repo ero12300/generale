@@ -6,7 +6,7 @@ import { LoginForm } from "./login-form";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-mesh text-zinc-100">
+    <div className="min-h-screen bg-mesh">
       <MarketingHeader />
       <main className="max-w-md mx-auto px-4 py-12 md:py-20">
         <div className="text-center mb-8">

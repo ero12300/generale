@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils";
 import type { FoodCostStatus } from "@ristoprofit/types";
 
 const statusStyles: Record<FoodCostStatus, string> = {
-  excellent: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  good: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20",
-  warning: "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  critical: "bg-red-500/15 text-red-400 border-red-500/30",
+  excellent: "bg-emerald-50 text-emerald-800 border-emerald-200",
+  good: "bg-emerald-50/80 text-emerald-700 border-emerald-200/80",
+  warning: "bg-amber-50 text-amber-800 border-amber-200",
+  critical: "bg-red-50 text-red-700 border-red-200",
 };
 
 const statusLabels: Record<FoodCostStatus, string> = {
@@ -45,9 +45,9 @@ export function Badge({
   variant?: "default" | "gold" | "muted";
 }) {
   const variants = {
-    default: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-    gold: "bg-amber-500/15 text-amber-400 border-amber-500/30",
-    muted: "bg-zinc-800 text-zinc-400 border-zinc-700",
+    default: "bg-emerald-50 text-emerald-800 border-emerald-200",
+    gold: "bg-amber-50 text-amber-800 border-amber-200",
+    muted: "bg-stone-100 text-stone-600 border-stone-200",
   };
   return (
     <span

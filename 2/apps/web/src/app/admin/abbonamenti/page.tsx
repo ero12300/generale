@@ -17,7 +17,7 @@ export default function AdminAbbonamentiPage() {
             <CardHeader>
               <CardTitle>{p.name}</CardTitle>
               {p.monthly_price_cents > 0 ? (
-                <p className="font-display text-2xl text-emerald-400 mt-3">
+                <p className="font-display text-2xl text-emerald-700 mt-3">
                   {formatEuro(p.monthly_price_cents)}
                   <span className="text-sm font-sans text-zinc-500 font-normal">/mese</span>
                 </p>

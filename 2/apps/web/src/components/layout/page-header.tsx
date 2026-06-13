@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 type Accent = "emerald" | "amber" | "blue";
 
 const eyebrowClass: Record<Accent, string> = {
-  emerald: "text-emerald-400/80",
-  amber: "text-amber-400/80",
-  blue: "text-blue-400/80",
+  emerald: "text-emerald-700",
+  amber: "text-amber-700",
+  blue: "text-blue-700",
 };
 
 interface PageHeaderProps {
@@ -44,7 +44,7 @@ export function PageHeader({
           </p>
         )}
         <h1 className="font-display text-3xl font-semibold tracking-tight">{title}</h1>
-        {subtitle && <p className="text-zinc-500 text-sm mt-1">{subtitle}</p>}
+        {subtitle && <p className="text-stone-500 text-sm mt-1">{subtitle}</p>}
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
     </div>

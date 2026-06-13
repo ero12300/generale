@@ -24,7 +24,7 @@ export default function IngredientiPage() {
                   <Badge variant="gold">+{ing.last_price_change_percent}%</Badge>
                 )}
               </div>
-              <p className="text-sm text-emerald-400 mt-2">
+              <p className="text-sm text-emerald-700 mt-2">
                 {formatEuro(ing.unit_price_cents)} / {ing.unit}
               </p>
               <p className="text-xs text-zinc-500 mt-1">

@@ -17,7 +17,7 @@ export default function PartnerDashboardPage() {
         subtitle={
           <>
             Codice partner:{" "}
-            <span className="text-emerald-400 font-medium">EMOTIVE-MESSINA</span>
+            <span className="text-emerald-700 font-medium">EMOTIVE-MESSINA</span>
           </>
         }
       />

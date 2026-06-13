@@ -64,7 +64,7 @@ export default function CustomerDashboardPage() {
                   key={p.recipe_id}
                   className="flex items-center justify-between text-sm py-2 border-b border-[var(--border-subtle)] last:border-0"
                 >
-                  <span className="text-zinc-200">{p.recipe_name}</span>
+                  <span className="text-stone-800">{p.recipe_name}</span>
                   <div className="flex items-center gap-2">
                     <span className="text-zinc-500 text-xs">{formatPercent(p.food_cost_percent)}</span>
                     <FoodCostBadge status={p.status} />
@@ -81,7 +81,7 @@ export default function CustomerDashboardPage() {
             <div className="mt-4 space-y-2">
               {dash.price_increases.map((i) => (
                 <div key={i.name} className="flex justify-between text-sm py-2">
-                  <span className="text-zinc-300">{i.name}</span>
+                  <span className="text-stone-700">{i.name}</span>
                   <Badge variant="gold">+{i.change_percent}%</Badge>
                 </div>
               ))}
@@ -106,7 +106,7 @@ export default function CustomerDashboardPage() {
         <Card className="border-emerald-500/15 bg-gradient-to-br from-emerald-500/5 to-transparent">
           <CardHeader>
             <CardTitle>Azioni consigliate oggi</CardTitle>
-            <ol className="mt-4 space-y-2.5 text-sm text-zinc-300 list-decimal list-inside leading-relaxed">
+            <ol className="mt-4 space-y-2.5 text-sm text-stone-700 list-decimal list-inside leading-relaxed">
               {dash.recommended_actions.map((a) => (
                 <li key={a}>{a}</li>
               ))}

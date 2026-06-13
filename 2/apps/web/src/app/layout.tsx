@@ -28,13 +28,13 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "RistoProfit OS",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0c0f",
+  themeColor: "#f6f4ef",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

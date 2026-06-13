@@ -6,7 +6,7 @@ import { SignupForm } from "./signup-form";
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen bg-mesh text-zinc-100">
+    <div className="min-h-screen bg-mesh">
       <MarketingHeader />
       <main className="max-w-md mx-auto px-4 py-12 md:py-20">
         <div className="text-center mb-8 animate-fade-up">

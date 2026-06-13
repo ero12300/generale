@@ -55,7 +55,7 @@ const stats = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-mesh text-zinc-100">
+    <div className="min-h-screen bg-mesh">
       <MarketingHeader />
 
       <main>
@@ -63,7 +63,7 @@ export default function HomePage() {
         <section className="relative max-w-6xl mx-auto px-4 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
             <div className="flex-1 text-center lg:text-left animate-fade-up">
-              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-400/90 mb-6">
+              <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700 mb-6">
                 <Sparkles className="h-3.5 w-3.5" />
                 Emotive S.r.l. · Messina
               </p>
@@ -71,7 +71,7 @@ export default function HomePage() {
                 Scopri quanto guadagni{" "}
                 <span className="text-gradient-profit">davvero</span> su ogni piatto
               </h1>
-              <p className="mt-6 text-lg text-zinc-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="mt-6 text-lg text-stone-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                 RistoProfit OS è il cruscotto economico per ristoranti, bar, pizzerie e gelaterie.
                 Margini chiari, sprechi sotto controllo, decisioni ogni giorno.
               </p>
@@ -90,7 +90,7 @@ export default function HomePage() {
             <div className="flex-1 flex justify-center animate-fade-up-delay-1">
               <div className="relative">
                 <div className="absolute -inset-8 bg-emerald-500/10 rounded-full blur-3xl" />
-                <div className="relative glass-panel rounded-3xl p-8 border border-emerald-500/10 shadow-2xl shadow-black/40">
+                <div className="relative glass-panel rounded-3xl p-8 border border-emerald-200/80 shadow-xl shadow-stone-900/5">
                   <Image
                     src="/logo.png"
                     alt="RistoProfit OS"
@@ -101,9 +101,9 @@ export default function HomePage() {
                   />
                   <div className="mt-6 grid grid-cols-3 gap-3 text-center">
                     {stats.map((s) => (
-                      <div key={s.label} className="rounded-xl bg-black/20 py-3 px-2">
-                        <p className="font-display text-lg font-semibold text-emerald-400">{s.value}</p>
-                        <p className="text-[10px] text-zinc-500 leading-tight mt-1">{s.label}</p>
+                      <div key={s.label} className="rounded-xl bg-emerald-50 border border-emerald-100 py-3 px-2">
+                        <p className="font-display text-lg font-semibold text-emerald-700">{s.value}</p>
+                        <p className="text-[10px] text-stone-500 leading-tight mt-1">{s.label}</p>
                       </div>
                     ))}
                   </div>
@@ -119,7 +119,7 @@ export default function HomePage() {
             <h2 className="font-display text-3xl md:text-4xl font-semibold tracking-tight">
               Vendere tanto non significa guadagnare bene
             </h2>
-            <p className="mt-4 text-zinc-400 max-w-2xl mx-auto text-lg leading-relaxed">
+            <p className="mt-4 text-stone-600 max-w-2xl mx-auto text-lg leading-relaxed">
               Ingredienti in aumento, menu non aggiornati e piatti poco redditizi
               erodono il margine senza che il titolare se ne accorga in tempo.
             </p>
@@ -131,8 +131,8 @@ export default function HomePage() {
                   className={`absolute inset-0 bg-gradient-to-br ${accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                 />
                 <CardHeader className="relative">
-                  <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4">
-                    <Icon className="h-5 w-5 text-emerald-400" aria-hidden />
+                  <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-4">
+                    <Icon className="h-5 w-5 text-emerald-600" aria-hidden />
                   </div>
                   <CardTitle>{title}</CardTitle>
                   <CardDescription>{desc}</CardDescription>
@@ -146,7 +146,7 @@ export default function HomePage() {
         <section className="max-w-6xl mx-auto px-4 py-20 border-t border-[var(--border-subtle)]">
           <div className="text-center mb-12">
             <h2 className="font-display text-3xl font-semibold">Piani pensati per il locale</h2>
-            <p className="text-zinc-500 mt-2">Setup iniziale + canone mensile trasparente</p>
+            <p className="text-stone-500 mt-2">Setup iniziale + canone mensile trasparente</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {PLANS.map((plan) => (
@@ -154,12 +154,12 @@ export default function HomePage() {
                 key={plan.tier}
                 className={
                   plan.tier === "pro"
-                    ? "border-emerald-500/40 ring-1 ring-emerald-500/20 relative"
+                    ? "border-emerald-400/50 ring-1 ring-emerald-300/40 relative"
                     : ""
                 }
               >
                 {plan.tier === "pro" && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-wider bg-emerald-500 text-zinc-950 font-bold px-3 py-1 rounded-full">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-wider bg-emerald-600 text-white font-bold px-3 py-1 rounded-full">
                     Più scelto
                   </span>
                 )}
@@ -167,16 +167,16 @@ export default function HomePage() {
                   <CardTitle>{plan.name}</CardTitle>
                   {plan.monthly_price_cents > 0 ? (
                     <>
-                      <p className="font-display text-3xl font-semibold text-emerald-400 mt-3">
+                      <p className="font-display text-3xl font-semibold text-emerald-700 mt-3">
                         {formatEuro(plan.monthly_price_cents)}
-                        <span className="text-sm text-zinc-500 font-sans font-normal">/mese</span>
+                        <span className="text-sm text-stone-500 font-sans font-normal">/mese</span>
                       </p>
-                      <p className="text-xs text-zinc-500 mt-1">
+                      <p className="text-xs text-stone-500 mt-1">
                         Setup {formatEuro(plan.setup_price_cents)}
                       </p>
                     </>
                   ) : (
-                    <p className="font-display text-xl text-amber-400 mt-3">Su preventivo</p>
+                    <p className="font-display text-xl text-amber-700 mt-3">Su preventivo</p>
                   )}
                 </CardHeader>
               </Card>
@@ -191,11 +191,11 @@ export default function HomePage() {
 
         {/* CTA */}
         <section className="max-w-4xl mx-auto px-4 py-24 text-center">
-          <div className="glass-panel rounded-3xl p-10 md:p-14 border border-emerald-500/10">
+          <div className="glass-panel rounded-3xl p-10 md:p-14 border border-emerald-200/60">
             <h2 className="font-display text-2xl md:text-3xl font-semibold">
               Vuole sapere quali prodotti Le fanno guadagnare davvero?
             </h2>
-            <p className="mt-4 text-zinc-400 max-w-lg mx-auto">
+            <p className="mt-4 text-stone-600 max-w-lg mx-auto">
               Non è un gestionale in più. È il sistema che Le dice dove guadagna e dove perde.
             </p>
             <Button size="lg" className="mt-8" asChild>
