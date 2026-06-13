@@ -1,0 +1,43 @@
+import { demoStore } from "@/lib/demo-store";
+import { formatEuro, formatPercent } from "@ristoprofit/types";
+import { Card, CardHeader } from "@/components/ui/card";
+
+export default function ReportPage() {
+  const report = demoStore.getCustomerDashboard().last_report;
+  if (!report) return null;
+
+  return (
+    <div className="space-y-8 max-w-2xl">
+      <div>
+        <h1 className="text-2xl font-bold">Report giornaliero</h1>
+        <p className="text-zinc-400 text-sm">{report.report_date}</p>
+      </div>
+      <Card>
+        <CardHeader>
+          <p className="text-xs text-emerald-500 font-medium tracking-widest">REPORT GIORNALIERO</p>
+          <div className="mt-6 space-y-3 text-sm">
+            <div className="flex justify-between"><span className="text-zinc-400">Incasso</span><span className="font-medium">{formatEuro(report.revenue_cents)}</span></div>
+            <div className="flex justify-between"><span className="text-zinc-400">Coperti</span><span>{report.covers}</span></div>
+            <div className="flex justify-between"><span className="text-zinc-400">Scontrino medio</span><span>{formatEuro(report.avg_ticket_cents)}</span></div>
+            <div className="flex justify-between"><span className="text-zinc-400">Food cost stimato</span><span>{formatPercent(report.estimated_food_cost_percent)}</span></div>
+            <div className="flex justify-between"><span className="text-zinc-400">Costo personale</span><span>{formatEuro(report.estimated_staff_cost_cents)}</span></div>
+            <div className="flex justify-between border-t border-zinc-800 pt-3"><span className="text-zinc-400">Margine lordo stimato</span><span className="text-emerald-400 font-medium">{formatEuro(report.estimated_gross_margin_cents)}</span></div>
+          </div>
+          <div className="mt-6 space-y-2 text-sm">
+            <p><span className="text-zinc-500">Più venduto:</span> {report.top_seller}</p>
+            <p><span className="text-zinc-500">Più redditizio:</span> {report.most_profitable}</p>
+            <p><span className="text-zinc-500">Critico:</span> {report.critical_product}</p>
+          </div>
+          <div className="mt-6">
+            <p className="text-sm font-medium mb-2">Azioni consigliate</p>
+            <ol className="list-decimal list-inside text-sm text-zinc-300 space-y-1">
+              {report.recommended_actions.map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ol>
+          </div>
+        </CardHeader>
+      </Card>
+    </div>
+  );
+}
