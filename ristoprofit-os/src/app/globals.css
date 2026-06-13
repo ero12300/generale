@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #16181d; /* nero/antracite */
+  --color-ink-soft: #23262e;
+  --color-profit: #16a34a; /* verde profitto */
+  --color-profit-soft: #dcfce7;
+  --color-gold: #c9a227; /* oro leggero */
+  --color-gold-soft: #f8f0d8;
+  --color-warmgray: #8a857c; /* grigio caldo */
+  --color-paper: #faf9f7;
+  --font-sans: var(--font-geist, ui-sans-serif, system-ui, sans-serif);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+::selection {
+  background: var(--color-profit-soft);
+}
