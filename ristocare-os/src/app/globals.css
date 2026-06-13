@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* RistoCare OS — palette premium Ho.Re.Ca (sez. 46 documento):
+   nero/antracite, bianco, grigio caldo, verde tecnico, accento oro leggero. */
+:root {
+  --background: #0b0f0e;
+  --surface: #121716;
+  --surface-2: #18201e;
+  --border: #2a3330;
+  --foreground: #f4f5f3;
+  --muted: #9aa6a1;
+  --primary: #1f7a5c; /* verde tecnico */
+  --primary-strong: #25946f;
+  --gold: #c9a35a; /* accento oro leggero */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-gold: var(--gold);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.bg-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+.gradient-hero {
+  background:
+    radial-gradient(60% 70% at 80% 0%, rgba(31, 122, 92, 0.22), transparent 60%),
+    radial-gradient(50% 60% at 10% 10%, rgba(201, 163, 90, 0.1), transparent 55%);
+}

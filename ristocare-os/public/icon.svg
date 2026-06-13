@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="RistoCare OS">
+  <rect width="512" height="512" rx="112" fill="#0b0f0e"/>
+  <rect x="40" y="40" width="432" height="432" rx="88" fill="none" stroke="#1f7a5c" stroke-width="14"/>
+  <path d="M170 360V152h104c44 0 74 28 74 68 0 31-18 54-46 63l54 77h-58l-48-71h-30v71h-50zm50-114h48c19 0 31-11 31-28s-12-27-31-27h-48v55z" fill="#f4f5f3"/>
+  <circle cx="372" cy="150" r="22" fill="#c9a35a"/>
+</svg>
