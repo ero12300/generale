@@ -20,7 +20,7 @@ export default function LoginPage() {
           <LoginForm />
         </Suspense>
         <p className="text-center text-xs text-zinc-500 mt-8">
-          <Link href="/" className="hover:text-emerald-400 transition-colors">← Torna al sito</Link>
+          <Link href="/" className="hover:text-emerald-700 transition-colors">← Torna al sito</Link>
         </p>
       </main>
     </div>

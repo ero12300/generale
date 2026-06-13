@@ -21,7 +21,7 @@ export default function SignupPage() {
         </Suspense>
         <p className="text-center text-xs text-zinc-500 mt-8">
           Hai già un account?{" "}
-          <Link href="/login" className="text-emerald-400 hover:underline font-medium">
+          <Link href="/login" className="text-emerald-700 hover:underline font-medium">
             Accedi
           </Link>
         </p>

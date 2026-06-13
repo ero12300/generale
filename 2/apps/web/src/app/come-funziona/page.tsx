@@ -16,7 +16,7 @@ export default function ComeFunzionaPage() {
       <MarketingHeader />
       <main className="max-w-4xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-14 animate-fade-up">
-          <p className="text-sm font-medium text-emerald-400 uppercase tracking-widest mb-3">
+          <p className="text-sm font-medium text-emerald-700 uppercase tracking-widest mb-3">
             In quattro passi
           </p>
           <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
@@ -34,7 +34,7 @@ export default function ComeFunzionaPage() {
               style={{ animationDelay: `${i * 60}ms` }}
             >
               <CardHeader className="flex flex-row gap-5 items-start">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 font-display font-semibold text-lg border border-emerald-500/20">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-700 font-display font-semibold text-lg border border-emerald-500/20">
                   {s.n}
                 </span>
                 <div>

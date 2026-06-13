@@ -11,7 +11,7 @@ export default function PrezziPage() {
       <MarketingHeader />
       <main className="max-w-5xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-14 animate-fade-up">
-          <p className="text-sm font-medium text-emerald-400 uppercase tracking-widest mb-3">
+          <p className="text-sm font-medium text-emerald-700 uppercase tracking-widest mb-3">
             Prezzi trasparenti
           </p>
           <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">Piani e prezzi</h1>
@@ -32,7 +32,7 @@ export default function PrezziPage() {
             >
               <CardHeader>
                 {plan.tier === "pro" && (
-                  <span className="inline-flex w-fit text-xs font-semibold text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-full mb-2">
+                  <span className="inline-flex w-fit text-xs font-semibold text-emerald-700 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-full mb-2">
                     Più scelto
                   </span>
                 )}

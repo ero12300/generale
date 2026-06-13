@@ -26,7 +26,7 @@ export function SignupForm() {
             Registrazione disponibile con Supabase configurato. Usa la{" "}
             <button
               type="button"
-              className="text-emerald-400 hover:underline"
+              className="text-emerald-700 hover:underline"
               onClick={() => router.push("/login")}
             >
               modalità demo
@@ -67,7 +67,7 @@ export function SignupForm() {
     return (
       <Card className="border-emerald-500/30">
         <CardHeader>
-          <CardTitle className="text-base text-emerald-400">Account creato!</CardTitle>
+          <CardTitle className="text-base text-emerald-700">Account creato!</CardTitle>
           <p className="text-sm text-zinc-400 mt-2">Reindirizzamento alla dashboard...</p>
         </CardHeader>
       </Card>

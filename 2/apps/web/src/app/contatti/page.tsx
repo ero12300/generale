@@ -8,7 +8,7 @@ export default function ContattiPage() {
       <MarketingHeader />
       <main className="max-w-lg mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-10 animate-fade-up">
-          <p className="text-sm font-medium text-emerald-400 uppercase tracking-widest mb-3">
+          <p className="text-sm font-medium text-emerald-700 uppercase tracking-widest mb-3">
             Siamo qui per Lei
           </p>
           <h1 className="font-display text-4xl font-semibold">Contatti</h1>

@@ -16,7 +16,7 @@ export default function ReferralPage() {
       <MarketingHeader />
       <main className="max-w-4xl mx-auto px-4 py-16 md:py-20">
         <div className="text-center mb-14 animate-fade-up">
-          <p className="text-sm font-medium text-emerald-400 uppercase tracking-widest mb-3">
+          <p className="text-sm font-medium text-emerald-700 uppercase tracking-widest mb-3">
             Guadagna segnalando
           </p>
           <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
@@ -35,7 +35,7 @@ export default function ReferralPage() {
             >
               <CardHeader>
                 <CardTitle className="font-display text-lg">Piano {r.plan}</CardTitle>
-                <p className="font-display text-3xl text-emerald-400 font-semibold mt-2">
+                <p className="font-display text-3xl text-emerald-700 font-semibold mt-2">
                   {r.reward}
                 </p>
                 <p className="text-xs text-zinc-500 mt-2">
