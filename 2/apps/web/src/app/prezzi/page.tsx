@@ -1,8 +1,9 @@
 import { MarketingHeader, MarketingFooter } from "@/components/marketing/header-footer";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { PLANS, formatEuro } from "@ristoprofit/types";
-import { Button } from "@/components/ui/button";
+import { CheckoutButton } from "@/components/billing/checkout-button";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function PrezziPage() {
   return (
@@ -42,6 +43,11 @@ export default function PrezziPage() {
                   <p className="text-xs text-zinc-500 mt-4">
                     Fino a {plan.max_recipes} ricette · {plan.max_users} utenti
                   </p>
+                )}
+                {plan.monthly_price_cents > 0 && plan.tier !== "enterprise" && (
+                  <div className="mt-4">
+                    <CheckoutButton tier={plan.tier} label={`Attiva ${plan.name}`} />
+                  </div>
                 )}
               </CardHeader>
             </Card>

@@ -1,23 +1,34 @@
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Upload } from "lucide-react";
+import { InvoiceUpload } from "@/components/invoices/invoice-upload";
+import { getAuthContext, getSupabaseClient } from "@/lib/auth/session";
+import { isSupabaseConfigured } from "@/lib/utils";
 
-export default function FatturePage() {
+export default async function FatturePage() {
+  let initial: { id: string; document_path: string | null; status: string; created_at: string }[] = [];
+
+  if (isSupabaseConfigured()) {
+    const auth = await getAuthContext();
+    if (auth) {
+      const supabase = await getSupabaseClient();
+      const { data } = await supabase
+        .schema("profit")
+        .from("supplier_invoices")
+        .select("id, document_path, status, created_at")
+        .eq("organization_id", auth.organizationId)
+        .order("created_at", { ascending: false })
+        .limit(20);
+      initial = data ?? [];
+    }
+  }
+
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Fatture fornitori</h1>
-      <Card className="border-dashed border-2 border-zinc-700">
-        <CardHeader className="text-center py-12">
-          <Upload className="h-10 w-10 text-zinc-500 mx-auto mb-4" />
-          <CardTitle>Carica fattura PDF o foto</CardTitle>
-          <CardDescription className="mt-2">
-            MVP: caricamento manuale. Fase 3: estrazione automatica con AI.
-          </CardDescription>
-          <Button className="mt-6 mx-auto" variant="secondary">
-            Seleziona file
-          </Button>
-        </CardHeader>
-      </Card>
+      <div>
+        <h1 className="text-2xl font-bold">Fatture fornitori</h1>
+        <p className="text-zinc-400 text-sm mt-1">
+          Carica PDF o foto — estrazione AI in arrivo (Fase 3)
+        </p>
+      </div>
+      <InvoiceUpload initial={initial} />
     </div>
   );
 }

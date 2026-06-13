@@ -11,10 +11,10 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@ristoprofit/types": "workspace:*",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.12",
+    "@ristoprofit/types": "workspace:*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
     "class-variance-authority": "^0.7.1",
@@ -23,6 +23,7 @@
     "next": "15.5.19",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "stripe": "^22.2.1",
     "tailwind-merge": "^3.3.0",
     "zod": "^3.25.32"
   },

@@ -1,19 +1,17 @@
-"use client";
-
-import { AppShell } from "@/components/layout/app-shell";
-import { customerNav } from "@/lib/navigation";
+import { getAuthContext } from "@/lib/auth/session";
+import { isSupabaseConfigured } from "@/lib/utils";
 import { demoStore } from "@/lib/demo-store";
+import { CustomerShell } from "@/components/layout/customer-shell";
 
-export default function CustomerLayout({ children }: { children: React.ReactNode }) {
+export default async function CustomerLayout({ children }: { children: React.ReactNode }) {
+  const auth = isSupabaseConfigured() ? await getAuthContext() : null;
+
   return (
-    <AppShell
-      brand="RistoProfit OS"
-      subtitle={demoStore.orgName}
-      nav={customerNav}
-      accent="emerald"
-      demo
+    <CustomerShell
+      orgName={auth?.organizationName ?? demoStore.orgName}
+      demo={!auth}
     >
       {children}
-    </AppShell>
+    </CustomerShell>
   );
 }
