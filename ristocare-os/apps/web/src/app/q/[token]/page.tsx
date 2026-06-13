@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { repository } from "@/lib/data/repository";
+import { tryGetRepository } from "@/lib/auth/session";
+import { DemoRepository } from "@/lib/data/demo-repository";
 import { MarketingHeader } from "@/components/marketing/site-chrome";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +16,8 @@ export default async function QrEquipmentPage({
   params: Promise<{ token: string }>;
 }) {
   const { token } = await params;
-  const equipment = repository.getEquipmentByQrToken(token);
+  const repo = (await tryGetRepository()) ?? new DemoRepository();
+  const equipment = await repo.getEquipmentByQrToken(token);
   if (!equipment) notFound();
 
   return (

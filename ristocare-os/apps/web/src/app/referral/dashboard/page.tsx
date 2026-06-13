@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +9,8 @@ export const metadata = { title: "Area partner" };
 
 export default async function ReferralDashboardPage() {
   const session = await getSession();
-  const referrals = repository.listReferrals();
+  const repo = await getRepository();
+  const referrals = await repo.listReferrals();
 
   return (
     <PortalShell variant="referral" title="Partner RistoCare" subtitle="I tuoi lead" mode={session.mode} email={session.email}>

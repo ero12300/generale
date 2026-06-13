@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+  "buildCommand": "cd ../.. && pnpm build",
+  "framework": "nextjs",
+  "regions": ["fra1"],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://itpchwzqecitaxvbovwd.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0cGNod3pxZWNpdGF4dmJvdndkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTYxODUsImV4cCI6MjA5Njg3MjE4NX0.KGxYd8SmH3QO5vUW1zqo8yMr-uUReMnC6pow8-MMiZ8",
+    "NEXT_PUBLIC_APP_URL": "https://ristocare-os.vercel.app",
+    "EMAIL_FROM": "RistoCare OS <onboarding@resend.dev>"
+  }
+}

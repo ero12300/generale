@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { AlertTriangle, Package, Ticket, Wrench } from "lucide-react";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,9 +11,10 @@ export const metadata = { title: "Dashboard" };
 
 export default async function CustomerDashboardPage() {
   const session = await getSession();
+  const repo = await getRepository();
   const orgId = session.orgId ?? "org-demo-001";
-  const stats = repository.getCustomerStats(orgId);
-  const tickets = repository.listTickets(orgId).slice(0, 5);
+  const stats = await repo.getCustomerStats(orgId);
+  const tickets = (await repo.listTickets(orgId)).slice(0, 5);
 
   const cards = [
     { label: "Attrezzature", value: stats.equipment_count, icon: Package, href: "/app/equipment" },

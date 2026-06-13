@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { QrCode } from "lucide-react";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EQUIPMENT_CATEGORY_LABELS } from "@ristocare/types";
@@ -12,8 +11,9 @@ export const metadata = { title: "Attrezzature" };
 
 export default async function EquipmentListPage() {
   const session = await getSession();
+  const repo = await getRepository();
   const orgId = session.orgId ?? "org-demo-001";
-  const items = repository.listEquipment(orgId);
+  const items = await repo.listEquipment(orgId);
 
   return (
     <PortalShell

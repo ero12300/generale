@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { AdminTicketActions } from "@/components/admin/ticket-actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,14 +16,21 @@ export default async function AdminTicketDetailPage({
 }) {
   const { id } = await params;
   const session = await getSession();
-  const ticket = repository.getTicket(id);
+  const repo = await getRepository();
+  const ticket = await repo.getTicket(id);
   if (!ticket) notFound();
 
-  const org = repository.getOrganization(ticket.organization_id);
-  const equipment = ticket.equipment_id ? repository.getEquipment(ticket.equipment_id) : null;
-  const technicians = repository.listTechnicians();
-  const quotes = repository.listQuotes(id);
-  const requests = repository.listTechnicianRequests(id);
+  const org = await repo.getOrganization(ticket.organization_id);
+  const equipment = ticket.equipment_id ? await repo.getEquipment(ticket.equipment_id) : null;
+  const technicians = await repo.listTechnicians();
+  const quotes = await repo.listQuotes(id);
+  const requests = await repo.listTechnicianRequests(id);
+  const requestsWithTech = await Promise.all(
+    requests.map(async (r) => ({
+      request: r,
+      tech: await repo.getTechnician(r.technician_id),
+    }))
+  );
 
   return (
     <PortalShell variant="admin" title="RistoCare Admin" subtitle="Dettaglio ticket" mode={session.mode} email={session.email}>
@@ -77,19 +83,16 @@ export default async function AdminTicketDetailPage({
           draftQuoteId={quotes.find((q) => q.status === "draft")?.id}
         />
 
-        {requests.length > 0 && (
+        {requestsWithTech.length > 0 && (
           <Card>
             <CardHeader><CardTitle className="text-base">Richieste tecnico (vista interna)</CardTitle></CardHeader>
             <CardContent className="space-y-3">
-              {requests.map((r) => {
-                const tech = repository.getTechnician(r.technician_id);
-                return (
-                  <div key={r.id} className="text-sm border-b border-zinc-800 pb-3 last:border-0">
-                    <p className="text-zinc-200">{tech?.name} — {formatCurrency(r.internal_price ?? 0)} interno</p>
-                    <p className="text-zinc-500">{r.availability} · {r.response_status}</p>
-                  </div>
-                );
-              })}
+              {requestsWithTech.map(({ request: r, tech }) => (
+                <div key={r.id} className="text-sm border-b border-zinc-800 pb-3 last:border-0">
+                  <p className="text-zinc-200">{tech?.name} — {formatCurrency(r.internal_price ?? 0)} interno</p>
+                  <p className="text-zinc-500">{r.availability} · {r.response_status}</p>
+                </div>
+              ))}
             </CardContent>
           </Card>
         )}

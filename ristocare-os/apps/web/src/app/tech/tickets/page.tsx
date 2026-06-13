@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
@@ -10,8 +9,9 @@ export const metadata = { title: "Portale tecnico" };
 
 export default async function TechTicketsPage() {
   const session = await getSession();
+  const repo = await getRepository();
   const techId = session.technicianId ?? "tech-001";
-  const tickets = repository.listTicketsForTechnician(techId);
+  const tickets = await repo.listTicketsForTechnician(techId);
 
   return (
     <PortalShell variant="technician" title="Portale tecnico" subtitle="Ticket assegnati" mode={session.mode} email={session.email}>

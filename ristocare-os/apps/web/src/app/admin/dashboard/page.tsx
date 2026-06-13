@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Building2, Clock, Ticket, TrendingUp, Users, Wrench } from "lucide-react";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
@@ -11,11 +10,17 @@ export const metadata = { title: "Admin Dashboard" };
 
 export default async function AdminDashboardPage() {
   const session = await getSession();
-  const stats = repository.getAdminStats();
-  const urgentTickets = repository
-    .listAllTickets()
+  const repo = await getRepository();
+  const stats = await repo.getAdminStats();
+  const urgentTickets = (await repo.listAllTickets())
     .filter((t) => t.urgency === "high" || t.urgency === "critical")
     .slice(0, 5);
+  const urgentWithOrg = await Promise.all(
+    urgentTickets.map(async (t) => ({
+      ticket: t,
+      org: await repo.getOrganization(t.organization_id),
+    }))
+  );
 
   const cards = [
     { label: "Ticket nuovi", value: stats.new_tickets, icon: Ticket },
@@ -54,27 +59,24 @@ export default async function AdminDashboardPage() {
             <Link href="/admin/tickets" className="text-sm text-amber-400 hover:underline">Tutti i ticket</Link>
           </CardHeader>
           <CardContent>
-            {urgentTickets.length === 0 ? (
+            {urgentWithOrg.length === 0 ? (
               <p className="text-sm text-zinc-500">Nessun ticket urgente.</p>
             ) : (
               <ul className="divide-y divide-zinc-800">
-                {urgentTickets.map((t) => {
-                  const org = repository.getOrganization(t.organization_id);
-                  return (
-                    <li key={t.id} className="py-3 flex items-center justify-between gap-4">
-                      <div>
-                        <Link href={`/admin/tickets/${t.id}`} className="font-medium text-zinc-200 hover:text-amber-400">
-                          {t.title}
-                        </Link>
-                        <p className="text-xs text-zinc-500">{org?.name} · {formatDate(t.created_at)}</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <UrgencyBadge urgency={t.urgency} />
-                        <TicketStatusBadge status={t.status} />
-                      </div>
-                    </li>
-                  );
-                })}
+                {urgentWithOrg.map(({ ticket: t, org }) => (
+                  <li key={t.id} className="py-3 flex items-center justify-between gap-4">
+                    <div>
+                      <Link href={`/admin/tickets/${t.id}`} className="font-medium text-zinc-200 hover:text-amber-400">
+                        {t.title}
+                      </Link>
+                      <p className="text-xs text-zinc-500">{org?.name} · {formatDate(t.created_at)}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <UrgencyBadge urgency={t.urgency} />
+                      <TicketStatusBadge status={t.status} />
+                    </div>
+                  </li>
+                ))}
               </ul>
             )}
           </CardContent>

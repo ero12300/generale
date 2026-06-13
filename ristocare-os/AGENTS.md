@@ -37,8 +37,38 @@ pnpm test
 
 ## Modalità demo
 
-Senza variabili Supabase, l'app usa `demoStore` in-memory.
+Senza variabili Supabase, l'app usa `demoStore` in-memory. Con Supabase configurato puoi comunque usare la demo da `/login` (cookie `ristocare_demo_role`).
 
-## Ruoli
+## Supabase
+
+Progetto cloud: `ristocare-os` (eu-west-1). Migrazioni in `supabase/migrations/`.
+
+Variabili in `apps/web/.env.local` (vedi `.env.example`):
+
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` — referral pubblici e upload admin
+- `RESEND_API_KEY` / `CONTACT_NOTIFY_EMAIL` — email transazionali
+
+### Operatore RistoCare
+
+Dopo signup, assegna ruolo operatore con SQL (Dashboard Supabase):
+
+```sql
+UPDATE memberships SET role = 'operator'
+WHERE user_id = '<uuid-utente>' AND organization_id IS NOT NULL;
+```
+
+Per accesso cross-tenant admin, usa `super_admin` su membership dedicata.
+
+## Deploy Vercel
+
+Root directory: `apps/web`. `vercel.json` include env pubbliche Supabase.
+
+```bash
+cd apps/web && npx vercel --prod
+```
+
+Imposta in Vercel: `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `CONTACT_NOTIFY_EMAIL`.
+
 
 `super_admin`, `operator`, `customer_admin`, `customer_staff`, `technician`, `referral_partner`

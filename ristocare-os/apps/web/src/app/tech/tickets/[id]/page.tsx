@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge } from "@/components/shared/status-badges";
@@ -15,11 +14,12 @@ export default async function TechTicketDetailPage({
 }) {
   const { id } = await params;
   const session = await getSession();
-  const ticket = repository.getTicket(id);
+  const repo = await getRepository();
+  const ticket = await repo.getTicket(id);
   if (!ticket || ticket.assigned_technician_id !== (session.technicianId ?? "tech-001")) notFound();
 
-  const equipment = ticket.equipment_id ? repository.getEquipment(ticket.equipment_id) : null;
-  const requests = repository.listTechnicianRequests(id);
+  const equipment = ticket.equipment_id ? await repo.getEquipment(ticket.equipment_id) : null;
+  const requests = await repo.listTechnicianRequests(id);
 
   return (
     <PortalShell variant="technician" title="Portale tecnico" subtitle="Dettaglio" mode={session.mode} email={session.email}>

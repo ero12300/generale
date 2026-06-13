@@ -1,5 +1,4 @@
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +8,8 @@ export const metadata = { title: "Tecnici partner" };
 
 export default async function TechniciansPage() {
   const session = await getSession();
-  const technicians = repository.listTechnicians();
+  const repo = await getRepository();
+  const technicians = await repo.listTechnicians();
 
   return (
     <PortalShell variant="admin" title="RistoCare Admin" subtitle="Tecnici" mode={session.mode} email={session.email}>

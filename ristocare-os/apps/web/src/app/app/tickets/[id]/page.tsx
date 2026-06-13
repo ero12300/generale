@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
-import { formatDate } from "@/lib/utils";
-import { formatCurrency } from "@/lib/utils";
+import { formatDate, formatCurrency } from "@/lib/utils";
 
 export const metadata = { title: "Dettaglio ticket" };
 
@@ -17,11 +15,12 @@ export default async function TicketDetailPage({
 }) {
   const { id } = await params;
   const session = await getSession();
-  const ticket = repository.getTicket(id);
+  const repo = await getRepository();
+  const ticket = await repo.getTicket(id);
   if (!ticket) notFound();
 
-  const equipment = ticket.equipment_id ? repository.getEquipment(ticket.equipment_id) : null;
-  const quotes = repository.listQuotes(id);
+  const equipment = ticket.equipment_id ? await repo.getEquipment(ticket.equipment_id) : null;
+  const quotes = await repo.listQuotes(id);
 
   return (
     <PortalShell

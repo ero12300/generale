@@ -2,13 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import QRCode from "qrcode";
 import { FileText, QrCode } from "lucide-react";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EQUIPMENT_CATEGORY_LABELS } from "@ristocare/types";
 import { WarrantyBadge } from "@/components/shared/status-badges";
+import { DocumentUpload } from "@/components/equipment/document-upload";
 import { formatDate } from "@/lib/utils";
 
 export const metadata = { title: "Scheda attrezzatura" };
@@ -20,11 +20,12 @@ export default async function EquipmentDetailPage({
 }) {
   const { id } = await params;
   const session = await getSession();
-  const equipment = repository.getEquipment(id);
+  const repo = await getRepository();
+  const equipment = await repo.getEquipment(id);
   if (!equipment) notFound();
 
-  const documents = repository.listDocuments(id);
-  const tickets = repository.listTickets(equipment.organization_id).filter((t) => t.equipment_id === id);
+  const documents = await repo.listDocuments(id);
+  const tickets = (await repo.listTickets(equipment.organization_id)).filter((t) => t.equipment_id === id);
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001";
   const qrUrl = `${appUrl}/q/${equipment.qr_token}`;
   const qrDataUrl = await QRCode.toDataURL(qrUrl, { width: 200, margin: 2, color: { dark: "#16a34a" } });
@@ -102,6 +103,7 @@ export default async function EquipmentDetailPage({
                 ))}
               </ul>
             )}
+            <DocumentUpload equipmentId={equipment.id} />
           </CardContent>
         </Card>
 

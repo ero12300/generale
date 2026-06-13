@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { getSession } from "@/lib/auth/session";
-import { repository } from "@/lib/data/repository";
+import { getRepository, getSession } from "@/lib/auth/session";
 import { PortalShell } from "@/components/layout/portal-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { TicketStatusBadge, UrgencyBadge } from "@/components/shared/status-badges";
@@ -10,8 +9,9 @@ export const metadata = { title: "Ticket" };
 
 export default async function TicketsListPage() {
   const session = await getSession();
+  const repo = await getRepository();
   const orgId = session.orgId ?? "org-demo-001";
-  const tickets = repository.listTickets(orgId);
+  const tickets = await repo.listTickets(orgId);
 
   return (
     <PortalShell
