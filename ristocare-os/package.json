@@ -1,0 +1,15 @@
+{
+  "name": "ristocare-os",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter @ristocare/web dev",
+    "build": "pnpm --filter @ristocare/web build",
+    "lint": "pnpm --filter @ristocare/web lint",
+    "typecheck": "pnpm --filter @ristocare/web typecheck",
+    "test": "pnpm --filter @ristocare/web test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.15.0"
+}
