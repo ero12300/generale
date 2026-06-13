@@ -11,9 +11,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@ristocare/types": "workspace:*",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@ristocare/types": "workspace:*",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
     "class-variance-authority": "^0.7.1",
@@ -24,6 +24,7 @@
     "qrcode": "^1.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "stripe": "^22.2.1",
     "tailwind-merge": "^3.3.0",
     "zod": "^3.25.32"
   },

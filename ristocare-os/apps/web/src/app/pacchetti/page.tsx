@@ -4,6 +4,7 @@ import { PLAN_LABELS, PLAN_PRICES } from "@ristocare/types";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PlanCheckoutButton } from "@/components/billing/plan-checkout-button";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/site-chrome";
 import { MarketingPageShell, PageHero } from "@/components/marketing/page-shell";
 
@@ -71,7 +72,10 @@ export default function PacchettiPage() {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full mt-4" variant={highlighted ? "default" : "secondary"} asChild>
+                  <PlanCheckoutButton plan={plan} variant={highlighted ? "default" : "secondary"} className="w-full mt-4">
+                    Abbonati ora
+                  </PlanCheckoutButton>
+                  <Button className="w-full" variant="ghost" size="sm" asChild>
                     <Link href={`/contatti?tipo=quote&piano=${plan}`}>Richiedi preventivo</Link>
                   </Button>
                 </CardContent>

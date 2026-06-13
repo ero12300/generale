@@ -19,6 +19,9 @@ Aggiungi questi **secrets** nelle impostazioni Cloud Agent di Cursor (o esportal
 | `SUPABASE_ACCESS_TOKEN` | [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens) |
 | `VERCEL_TOKEN` | [vercel.com/account/settings/tokens](https://vercel.com/account/settings/tokens) |
 | `RESEND_API_KEY` | (opzionale) [resend.com/api-keys](https://resend.com/api-keys) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys) |
+| `STRIPE_SECRET_KEY` | Chiave segreta Stripe (solo server, mai nel frontend) |
+| `STRIPE_WEBHOOK_SECRET` | Dopo aver creato webhook su Stripe (vedi sotto) |
 
 Poi esegui:
 
@@ -66,3 +69,16 @@ WHERE user_id = '<uuid-da-auth-users>';
 
 Senza `RESEND_API_KEY` l'app funziona: le email vengono solo loggate in console.
 Con Resend, usa `onboarding@resend.dev` in sandbox o verifica dominio `ristocare.it`.
+
+## Stripe (pagamenti abbonamenti)
+
+1. Le chiavi live vanno in `apps/web/.env.local` (locale) e nei secrets Vercel (produzione):
+   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — chiave pubblica (`pk_live_...`)
+   - `STRIPE_SECRET_KEY` — chiave segreta (`sk_live_...`), **mai committata su Git**
+2. Dashboard Stripe → **Developers → Webhooks** → Aggiungi endpoint:
+   - URL: `https://ristocare-os.vercel.app/api/stripe/webhook`
+   - Eventi: `checkout.session.completed`, `customer.subscription.deleted`
+   - Copia il **Signing secret** (`whsec_...`) in `STRIPE_WEBHOOK_SECRET`
+3. Pagina `/pacchetti` → pulsante **Abbonati ora** apre Stripe Checkout (abbonamento + setup una tantum).
+
+⚠️ Se hai condiviso la chiave segreta in chat o email, rigenerala da Stripe Dashboard e aggiorna le env.

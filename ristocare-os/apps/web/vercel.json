@@ -8,6 +8,7 @@
     "NEXT_PUBLIC_SUPABASE_URL": "https://itpchwzqecitaxvbovwd.supabase.co",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0cGNod3pxZWNpdGF4dmJvdndkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTYxODUsImV4cCI6MjA5Njg3MjE4NX0.KGxYd8SmH3QO5vUW1zqo8yMr-uUReMnC6pow8-MMiZ8",
     "NEXT_PUBLIC_APP_URL": "https://ristocare-os.vercel.app",
-    "EMAIL_FROM": "RistoCare OS <onboarding@resend.dev>"
+    "EMAIL_FROM": "RistoCare OS <onboarding@resend.dev>",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY": "pk_live_51IQAIbFWnTLWd8YE0ThqZcERMcnUuQir3rOLD1c4hTXHdfwRgi5ePASKbWyiCew9aCpJsURDYSYDt9jAIxbFxsxp00EzLjuQtM"
   }
 }

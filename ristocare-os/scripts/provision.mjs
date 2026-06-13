@@ -149,6 +149,15 @@ async function provisionVercel(keys) {
   if (process.env.RESEND_API_KEY) {
     envVars.push({ key: "RESEND_API_KEY", value: process.env.RESEND_API_KEY });
   }
+  if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+    envVars.push({ key: "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY", value: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY });
+  }
+  if (process.env.STRIPE_SECRET_KEY) {
+    envVars.push({ key: "STRIPE_SECRET_KEY", value: process.env.STRIPE_SECRET_KEY });
+  }
+  if (process.env.STRIPE_WEBHOOK_SECRET) {
+    envVars.push({ key: "STRIPE_WEBHOOK_SECRET", value: process.env.STRIPE_WEBHOOK_SECRET });
+  }
 
   for (const item of envVars) {
     if (!item.value) continue;
@@ -202,6 +211,11 @@ function writeLocalEnv(keys) {
   ];
   if (keys.serviceRoleKey) lines.push(`SUPABASE_SERVICE_ROLE_KEY=${keys.serviceRoleKey}`);
   if (process.env.RESEND_API_KEY) lines.push(`RESEND_API_KEY=${process.env.RESEND_API_KEY}`);
+  if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+    lines.push(`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}`);
+  }
+  if (process.env.STRIPE_SECRET_KEY) lines.push(`STRIPE_SECRET_KEY=${process.env.STRIPE_SECRET_KEY}`);
+  if (process.env.STRIPE_WEBHOOK_SECRET) lines.push(`STRIPE_WEBHOOK_SECRET=${process.env.STRIPE_WEBHOOK_SECRET}`);
 
   writeFileSync(resolve(WEB, ".env.local"), `${lines.join("\n")}\n`);
   console.log("\n📝 Creato apps/web/.env.local (non committato)");
