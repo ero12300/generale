@@ -33,7 +33,8 @@ pnpm dev
 |-----------|--------------|-------------|
 | `NEXT_PUBLIC_SUPABASE_URL` | Per auth reale | URL progetto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Per auth reale | Chiave anon |
-| `STRIPE_SECRET_KEY` | Per pagamenti | Chiave segreta Stripe |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Per Stripe.js (opzionale) | Chiave pubblica `pk_live_...` |
+| `STRIPE_SECRET_KEY` | Per pagamenti | Chiave segreta `sk_live_...` (solo server) |
 | `STRIPE_WEBHOOK_SECRET` | Per webhook | Secret endpoint `/api/stripe/webhook` |
 | `NEXT_PUBLIC_APP_URL` | Deploy | URL pubblico app |
 
@@ -46,7 +47,14 @@ cd 2/apps/web
 npx vercel --prod
 ```
 
-Impostare le variabili ambiente nel dashboard Vercel.
+Impostare le variabili ambiente nel dashboard Vercel (incluse `STRIPE_SECRET_KEY` e `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`).
+
+### Webhook Stripe (obbligatorio per attivare abbonamenti)
+
+1. [Stripe Dashboard](https://dashboard.stripe.com/webhooks) → **Aggiungi endpoint**
+2. URL: `https://TUO-DOMINIO/api/stripe/webhook`
+3. Eventi: `checkout.session.completed`, `customer.subscription.deleted`
+4. Copia il **Signing secret** (`whsec_...`) in `STRIPE_WEBHOOK_SECRET`
 
 ## Comandi
 
