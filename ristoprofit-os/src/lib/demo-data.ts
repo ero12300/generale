@@ -66,10 +66,10 @@ export const DEMO_RECIPES: Recipe[] = [
     portions: 1,
     ingredients: [
       { name: "Pane burger", packPriceCents: toCents(0.5), packSize: 1, quantity: 1, unit: "pz" },
-      { name: "Hamburger manzo 180g", packPriceCents: toCents(14), packSize: 1000, quantity: 180, unit: "g" },
+      { name: "Hamburger manzo 180g", packPriceCents: toCents(15), packSize: 1000, quantity: 180, unit: "g" },
       { name: "Cheddar", packPriceCents: toCents(11), packSize: 1000, quantity: 40, unit: "g" },
       { name: "Bacon", packPriceCents: toCents(13), packSize: 1000, quantity: 40, unit: "g" },
-      { name: "Salse e contorni", packPriceCents: toCents(60), packSize: 100, quantity: 60, unit: "g" },
+      { name: "Salse e contorni", packPriceCents: toCents(10), packSize: 1000, quantity: 60, unit: "g" },
     ],
   },
   {
