@@ -30,7 +30,7 @@ export default async function TechTicketsPage() {
                 <Card className="hover:border-emerald-500/25 transition-all duration-300">
                   <CardContent className="py-4 flex justify-between gap-4">
                     <div>
-                      <p className="font-medium text-zinc-200">{t.title}</p>
+                      <p className="font-medium text-zinc-800">{t.title}</p>
                       <p className="text-xs text-zinc-500">{formatDate(t.created_at)}</p>
                     </div>
                     <div className="flex gap-2">

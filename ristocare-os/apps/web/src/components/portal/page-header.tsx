@@ -18,7 +18,7 @@ export function PortalPageHeader({
   action,
   variant = "customer",
 }: PortalPageHeaderProps) {
-  const backColor = variant === "admin" ? "hover:text-amber-300" : "hover:text-emerald-400";
+  const backColor = variant === "admin" ? "hover:text-amber-700" : "hover:text-emerald-700";
 
   return (
     <div className="flex flex-wrap items-start justify-between gap-4 mb-8">
@@ -28,10 +28,10 @@ export function PortalPageHeader({
             ← {backLabel}
           </Link>
         )}
-        <h1 className={cn("font-display text-2xl md:text-3xl font-semibold text-zinc-50", backHref && "mt-2")}>
+        <h1 className={cn("font-display text-2xl md:text-3xl font-semibold text-zinc-900", backHref && "mt-2")}>
           {title}
         </h1>
-        {description && <p className="text-zinc-500 text-sm mt-1.5">{description}</p>}
+        {description && <p className="text-zinc-600 text-sm mt-1.5">{description}</p>}
       </div>
       {action}
     </div>
@@ -51,24 +51,24 @@ export function StatCard({ label, value, icon: Icon, href, variant = "customer" 
   const content = (
     <div
       className={cn(
-        "rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.04] to-transparent p-6 transition-all duration-300 h-full",
-        href && (accent === "amber" ? "hover:border-amber-500/25 hover:from-amber-500/[0.06]" : "hover:border-emerald-500/25 hover:from-emerald-500/[0.06]")
+        "rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all duration-300 h-full",
+        href && (accent === "amber" ? "hover:border-amber-300 hover:shadow-md" : "hover:border-emerald-300 hover:shadow-md")
       )}
     >
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-zinc-500">{label}</p>
-          <p className="font-display text-3xl font-semibold text-zinc-100 mt-1">{value}</p>
+          <p className="text-sm text-zinc-600">{label}</p>
+          <p className="font-display text-3xl font-semibold text-zinc-900 mt-1">{value}</p>
         </div>
         <div
           className={cn(
             "flex h-11 w-11 items-center justify-center rounded-xl border",
             accent === "amber"
-              ? "bg-amber-500/10 border-amber-500/15"
-              : "bg-emerald-500/10 border-emerald-500/15"
+              ? "bg-amber-50 border-amber-200"
+              : "bg-emerald-50 border-emerald-200"
           )}
         >
-          <Icon className={cn("h-5 w-5", accent === "amber" ? "text-amber-400/80" : "text-emerald-400/80")} />
+          <Icon className={cn("h-5 w-5", accent === "amber" ? "text-amber-700" : "text-emerald-700")} />
         </div>
       </div>
     </div>
@@ -86,9 +86,9 @@ interface EmptyStateProps {
 
 export function EmptyState({ title, description, action }: EmptyStateProps) {
   return (
-    <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] py-16 px-6 text-center">
-      <p className="font-display text-lg text-zinc-300">{title}</p>
-      {description && <p className="text-sm text-zinc-500 mt-2 max-w-sm mx-auto">{description}</p>}
+    <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 py-16 px-6 text-center">
+      <p className="font-display text-lg text-zinc-800">{title}</p>
+      {description && <p className="text-sm text-zinc-600 mt-2 max-w-sm mx-auto">{description}</p>}
       {action && <div className="mt-6">{action}</div>}
     </div>
   );

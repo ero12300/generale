@@ -54,20 +54,20 @@ export default async function EquipmentDetailPage({
               <CardTitle className="text-base">Dati tecnici</CardTitle>
             </CardHeader>
             <CardContent className="grid sm:grid-cols-2 gap-4 text-sm">
-              <div><span className="text-zinc-500">Marca</span><p className="text-zinc-200 mt-0.5">{equipment.brand ?? "—"}</p></div>
-              <div><span className="text-zinc-500">Modello</span><p className="text-zinc-200 mt-0.5">{equipment.model ?? "—"}</p></div>
-              <div><span className="text-zinc-500">Matricola</span><p className="text-zinc-200 font-mono mt-0.5">{equipment.serial_number ?? "—"}</p></div>
-              <div><span className="text-zinc-500">Fornitore</span><p className="text-zinc-200 mt-0.5">{equipment.supplier ?? "—"}</p></div>
-              <div><span className="text-zinc-500">Area</span><p className="text-zinc-200 mt-0.5">{equipment.area ?? "—"}</p></div>
-              <div><span className="text-zinc-500">Installazione</span><p className="text-zinc-200 mt-0.5">{formatDate(equipment.installation_date)}</p></div>
-              <div><span className="text-zinc-500">Garanzia fino</span><p className="text-zinc-200 mt-0.5">{formatDate(equipment.warranty_end)}</p></div>
+              <div><span className="text-zinc-500">Marca</span><p className="text-zinc-800 mt-0.5">{equipment.brand ?? "—"}</p></div>
+              <div><span className="text-zinc-500">Modello</span><p className="text-zinc-800 mt-0.5">{equipment.model ?? "—"}</p></div>
+              <div><span className="text-zinc-500">Matricola</span><p className="text-zinc-800 font-mono mt-0.5">{equipment.serial_number ?? "—"}</p></div>
+              <div><span className="text-zinc-500">Fornitore</span><p className="text-zinc-800 mt-0.5">{equipment.supplier ?? "—"}</p></div>
+              <div><span className="text-zinc-500">Area</span><p className="text-zinc-800 mt-0.5">{equipment.area ?? "—"}</p></div>
+              <div><span className="text-zinc-500">Installazione</span><p className="text-zinc-800 mt-0.5">{formatDate(equipment.installation_date)}</p></div>
+              <div><span className="text-zinc-500">Garanzia fino</span><p className="text-zinc-800 mt-0.5">{formatDate(equipment.warranty_end)}</p></div>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <QrCode className="h-4 w-4 text-emerald-400/80" />
+                <QrCode className="h-4 w-4 text-emerald-700" />
                 QR Code
               </CardTitle>
             </CardHeader>
@@ -85,7 +85,7 @@ export default async function EquipmentDetailPage({
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <FileText className="h-4 w-4 text-emerald-400/80" />
+              <FileText className="h-4 w-4 text-emerald-700" />
               Documenti ({documents.length})
             </CardTitle>
           </CardHeader>
@@ -95,7 +95,7 @@ export default async function EquipmentDetailPage({
             ) : (
               <ul className="space-y-2 mb-4">
                 {documents.map((d) => (
-                  <li key={d.id} className="flex items-center gap-2 text-sm text-zinc-300 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2">
+                  <li key={d.id} className="flex items-center gap-2 text-sm text-zinc-700 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2">
                     <FileText className="h-4 w-4 text-zinc-500 shrink-0" />
                     <span className="truncate">{d.file_name}</span>
                     <span className="text-zinc-600 text-xs ml-auto shrink-0">({d.document_type})</span>
@@ -118,7 +118,7 @@ export default async function EquipmentDetailPage({
                   <li key={t.id}>
                     <Link
                       href={`/app/tickets/${t.id}`}
-                      className="block text-sm text-emerald-400 hover:text-emerald-300 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2 transition-colors"
+                      className="block text-sm text-emerald-600 hover:text-emerald-700 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 transition-colors"
                     >
                       {t.title}
                     </Link>

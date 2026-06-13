@@ -32,7 +32,7 @@ export default async function OrganizationsPage() {
             <Card key={org.id} className="hover:border-amber-500/20 transition-colors">
               <CardContent className="py-4 flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <p className="font-medium text-zinc-200">{org.name}</p>
+                  <p className="font-medium text-zinc-800">{org.name}</p>
                   <p className="text-sm text-zinc-500">
                     {org.city} ({org.province}) · {org.phone}
                   </p>

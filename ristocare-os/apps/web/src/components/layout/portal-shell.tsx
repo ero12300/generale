@@ -67,9 +67,9 @@ export function PortalShell({ children, variant, subtitle, mode, email }: Portal
   const isAdmin = variant === "admin";
 
   return (
-    <div className="min-h-screen text-zinc-100 flex bg-[#080a09]">
-      <aside className="w-[17rem] border-r border-white/5 bg-[#060807]/90 hidden md:flex flex-col">
-        <div className="p-5 border-b border-white/5">
+    <div className="min-h-screen text-zinc-900 flex bg-[var(--background)]">
+      <aside className="w-[17rem] border-r border-zinc-200 bg-white hidden md:flex flex-col shadow-sm">
+        <div className="p-5 border-b border-zinc-200">
           <Link href={isAdmin ? "/admin/dashboard" : "/app/dashboard"}>
             <Logo size="sm" variant={isAdmin ? "admin" : "default"} />
           </Link>
@@ -87,9 +87,9 @@ export function PortalShell({ children, variant, subtitle, mode, email }: Portal
                   "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                   active
                     ? isAdmin
-                      ? "bg-amber-500/10 text-amber-200 border border-amber-500/20"
-                      : "bg-emerald-500/10 text-emerald-200 border border-emerald-500/20"
-                    : "text-zinc-400 hover:bg-white/5 hover:text-zinc-100 border border-transparent"
+                      ? "bg-amber-50 text-amber-900 border border-amber-200"
+                      : "bg-emerald-50 text-emerald-900 border border-emerald-200"
+                    : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 border border-transparent"
                 )}
               >
                 <Icon className="h-4 w-4 shrink-0" aria-hidden />
@@ -99,9 +99,9 @@ export function PortalShell({ children, variant, subtitle, mode, email }: Portal
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/5 space-y-3">
+        <div className="p-4 border-t border-zinc-200 space-y-3">
           {mode === "demo" && (
-            <div className="flex items-center gap-2 text-xs text-amber-400/80 bg-amber-500/10 rounded-lg px-3 py-2 border border-amber-500/15">
+            <div className="flex items-center gap-2 text-xs text-amber-800 bg-amber-50 rounded-lg px-3 py-2 border border-amber-200">
               <Sparkles className="h-3.5 w-3.5" />
               Modalità demo
             </div>
@@ -109,7 +109,7 @@ export function PortalShell({ children, variant, subtitle, mode, email }: Portal
           {email && <p className="text-xs text-zinc-500 truncate px-1">{email}</p>}
           <Link
             href="/login"
-            className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 px-1 transition-colors"
+            className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-800 px-1 transition-colors"
           >
             <LogOut className="h-3.5 w-3.5" />
             Cambia accesso
@@ -118,7 +118,7 @@ export function PortalShell({ children, variant, subtitle, mode, email }: Portal
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 border-b border-white/5 flex items-center px-4 md:px-8 bg-[#080a09]/80 backdrop-blur-md sticky top-0 z-40">
+        <header className="h-16 border-b border-zinc-200 flex items-center px-4 md:px-8 bg-white/90 backdrop-blur-md sticky top-0 z-40">
           <div className="md:hidden">
             <Logo size="sm" showWordmark={false} />
           </div>
@@ -126,7 +126,7 @@ export function PortalShell({ children, variant, subtitle, mode, email }: Portal
           {variant === "customer" && (
             <Link
               href="/app/tickets/new"
-              className="inline-flex items-center gap-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/30 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-xl shadow-md shadow-emerald-600/20 transition-colors"
             >
               <Plus className="h-4 w-4" />
               Apri ticket

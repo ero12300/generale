@@ -35,9 +35,9 @@ export function DocumentUpload({ equipmentId }: DocumentUploadProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 border-t border-white/5 pt-4 mt-4">
-      <p className="text-sm font-medium text-zinc-300 flex items-center gap-2">
-        <Upload className="h-4 w-4 text-emerald-400/80" />
+    <form onSubmit={handleSubmit} className="space-y-4 border-t border-zinc-200 pt-4 mt-4">
+      <p className="text-sm font-medium text-zinc-700 flex items-center gap-2">
+        <Upload className="h-4 w-4 text-emerald-700" />
         Carica documento
       </p>
       <div className="grid sm:grid-cols-2 gap-4">
@@ -60,7 +60,7 @@ export function DocumentUpload({ equipmentId }: DocumentUploadProps) {
             type="file"
             required
             accept=".pdf,image/*"
-            className="block w-full text-sm text-zinc-400 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:px-3 file:py-2 file:text-white file:text-sm file:font-medium hover:file:bg-emerald-500 transition-colors"
+            className="block w-full text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-600 file:px-3 file:py-2 file:text-white file:text-sm file:font-medium hover:file:bg-emerald-500 transition-colors"
           />
         </div>
       </div>
@@ -68,7 +68,7 @@ export function DocumentUpload({ equipmentId }: DocumentUploadProps) {
         {status === "loading" ? "Caricamento..." : "Carica"}
       </Button>
       {message && (
-        <p className={`text-xs ${status === "error" ? "text-red-400" : "text-emerald-400"}`}>{message}</p>
+        <p className={`text-xs ${status === "error" ? "text-red-400" : "text-emerald-600"}`}>{message}</p>
       )}
     </form>
   );

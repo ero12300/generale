@@ -49,7 +49,7 @@ export function ContactForm() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/25">
             <span className="text-2xl">✓</span>
           </div>
-          <p className="font-display text-xl text-emerald-300">Richiesta inviata</p>
+          <p className="font-display text-xl text-emerald-700">Richiesta inviata</p>
           <p className="text-zinc-500 text-sm mt-2">Ti contatteremo al più presto.</p>
         </CardContent>
       </Card>

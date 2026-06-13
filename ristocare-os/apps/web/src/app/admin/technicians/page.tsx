@@ -30,12 +30,12 @@ export default async function TechniciansPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-zinc-500 space-y-2">
-                <p className="text-zinc-400">{t.company_name}</p>
+                <p className="text-zinc-600">{t.company_name}</p>
                 <p>
                   {t.phone} · {t.city} ({t.province})
                 </p>
                 <p className="text-xs">{t.categories.map((c) => EQUIPMENT_CATEGORY_LABELS[c]).join(", ")}</p>
-                {t.notes_internal && <p className="text-xs text-zinc-600 italic border-t border-white/5 pt-2">{t.notes_internal}</p>}
+                {t.notes_internal && <p className="text-xs text-zinc-600 italic border-t border-zinc-200 pt-2">{t.notes_internal}</p>}
               </CardContent>
             </Card>
           ))}

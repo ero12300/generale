@@ -29,7 +29,7 @@ export default async function AdminTicketsPage() {
               <Card className="hover:border-amber-500/25 transition-all duration-300">
                 <CardContent className="py-4 flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="font-medium text-zinc-200">{t.title}</p>
+                    <p className="font-medium text-zinc-800">{t.title}</p>
                     <p className="text-xs text-zinc-500">
                       {org?.name} · {formatDate(t.created_at)}
                     </p>

@@ -52,14 +52,14 @@ export default async function AdminTicketDetailPage({
         <div className="grid md:grid-cols-2 gap-6">
           <Card>
             <CardHeader><CardTitle className="text-base">Problema segnalato</CardTitle></CardHeader>
-            <CardContent className="text-sm text-zinc-300 leading-relaxed">{ticket.description}</CardContent>
+            <CardContent className="text-sm text-zinc-700 leading-relaxed">{ticket.description}</CardContent>
           </Card>
           <Card>
             <CardHeader><CardTitle className="text-base">Attrezzatura</CardTitle></CardHeader>
-            <CardContent className="text-sm text-zinc-300">
+            <CardContent className="text-sm text-zinc-700">
               {equipment ? (
                 <>
-                  <p className="font-medium text-zinc-200">{equipment.name}</p>
+                  <p className="font-medium text-zinc-800">{equipment.name}</p>
                   <p className="text-zinc-500 mt-1">Matricola: {equipment.serial_number}</p>
                   <p className="text-zinc-500">Garanzia: {equipment.warranty_status}</p>
                 </>
@@ -73,7 +73,7 @@ export default async function AdminTicketDetailPage({
         {ticket.internal_notes && (
           <Card className="border-amber-500/20 from-amber-500/[0.04]">
             <CardHeader><CardTitle className="text-base">Note interne</CardTitle></CardHeader>
-            <CardContent className="text-sm text-zinc-400">{ticket.internal_notes}</CardContent>
+            <CardContent className="text-sm text-zinc-600">{ticket.internal_notes}</CardContent>
           </Card>
         )}
 
@@ -88,8 +88,8 @@ export default async function AdminTicketDetailPage({
             <CardHeader><CardTitle className="text-base">Richieste tecnico (vista interna)</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {requestsWithTech.map(({ request: r, tech }) => (
-                <div key={r.id} className="text-sm border-b border-white/5 pb-3 last:border-0 last:pb-0">
-                  <p className="text-zinc-200">{tech?.name} — {formatCurrency(r.internal_price ?? 0)} interno</p>
+                <div key={r.id} className="text-sm border-b border-zinc-200 pb-3 last:border-0 last:pb-0">
+                  <p className="text-zinc-800">{tech?.name} — {formatCurrency(r.internal_price ?? 0)} interno</p>
                   <p className="text-zinc-500 mt-0.5">{r.availability} · {r.response_status}</p>
                 </div>
               ))}
@@ -102,8 +102,8 @@ export default async function AdminTicketDetailPage({
             <CardHeader><CardTitle className="text-base">Preventivi</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {quotes.map((q) => (
-                <div key={q.id} className="flex justify-between text-sm rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2">
-                  <span className="text-zinc-400">
+                <div key={q.id} className="flex justify-between text-sm rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2">
+                  <span className="text-zinc-600">
                     Cliente: {formatCurrency(q.customer_price)} · Margine: {formatCurrency(q.margin)}
                   </span>
                   <span className="text-zinc-500">{q.status}</span>

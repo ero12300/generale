@@ -84,7 +84,7 @@ export default function SignupPage() {
           </form>
           <p className="text-sm text-zinc-500 mt-4 text-center">
             Hai già un account?{" "}
-            <Link href="/login" className="text-emerald-400 hover:underline">
+            <Link href="/login" className="text-emerald-600 hover:underline">
               Accedi
             </Link>
           </p>

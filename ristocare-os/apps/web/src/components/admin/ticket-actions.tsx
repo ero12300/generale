@@ -82,7 +82,7 @@ export function AdminTicketActions({ ticketId, technicians, draftQuoteId }: Admi
   return (
     <div className="space-y-4">
       {message && (
-        <p className="text-sm text-amber-400 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-2">
+        <p className="text-sm text-amber-700 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-2">
           {message}
         </p>
       )}

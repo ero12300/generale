@@ -44,7 +44,7 @@ export default async function EquipmentListPage() {
                   <p>Matricola: {eq.serial_number ?? "—"}</p>
                   <p>Area: {eq.area ?? "—"}</p>
                   {eq.warranty_end && <p>Garanzia fino: {formatDate(eq.warranty_end)}</p>}
-                  <div className="flex items-center gap-1.5 text-emerald-400/80 text-xs pt-2">
+                  <div className="flex items-center gap-1.5 text-emerald-700 text-xs pt-2">
                     <QrCode className="h-3.5 w-3.5" />
                     QR disponibile
                   </div>

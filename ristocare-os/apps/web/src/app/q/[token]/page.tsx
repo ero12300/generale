@@ -39,7 +39,7 @@ export default async function QrEquipmentPage({
             <WarrantyBadge status={equipment.warranty_status} />
             <p className="text-sm text-zinc-500">
               Matricola:{" "}
-              <span className="font-mono text-zinc-200">{equipment.serial_number ?? "—"}</span>
+              <span className="font-mono text-zinc-800">{equipment.serial_number ?? "—"}</span>
             </p>
             <p className="text-sm text-zinc-500 leading-relaxed">
               Accedi al portale per vedere manuali, documenti e storico interventi.

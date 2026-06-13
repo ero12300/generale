@@ -15,10 +15,10 @@ export default function PacchettiSuccessPage() {
         <Card className="text-center border-emerald-500/20 from-emerald-500/[0.06]">
           <CardContent className="pt-10 pb-10 space-y-6">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/20">
-              <CheckCircle2 className="h-8 w-8 text-emerald-400" />
+              <CheckCircle2 className="h-8 w-8 text-emerald-600" />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-semibold text-zinc-50">Pagamento ricevuto</h1>
+              <h1 className="font-display text-2xl font-semibold text-zinc-900">Pagamento ricevuto</h1>
               <p className="text-sm text-zinc-500 mt-3 leading-relaxed">
                 Grazie per aver scelto RistoCare OS. Riceverai una conferma via email e il tuo piano verrà attivato
                 entro pochi minuti.

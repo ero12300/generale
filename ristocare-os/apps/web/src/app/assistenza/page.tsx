@@ -45,16 +45,16 @@ export default function AssistenzaPage() {
 
         <div className="grid sm:grid-cols-2 gap-5">
           {steps.map(({ step, icon: Icon, title, desc }) => (
-            <Card key={step} className="border-white/5 hover:border-emerald-500/20 transition-colors">
+            <Card key={step} className="border-zinc-200 hover:border-emerald-500/20 transition-colors">
               <CardContent className="pt-6 flex gap-4">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
-                  <Icon className="h-5 w-5 text-emerald-400" aria-hidden />
+                  <Icon className="h-5 w-5 text-emerald-600" aria-hidden />
                 </div>
                 <div>
-                  <p className="text-[10px] font-semibold text-emerald-400/80 tracking-widest uppercase mb-1">
+                  <p className="text-[10px] font-semibold text-emerald-700 tracking-widest uppercase mb-1">
                     Step {step}
                   </p>
-                  <h3 className="font-display text-lg font-medium text-zinc-100">{title}</h3>
+                  <h3 className="font-display text-lg font-medium text-zinc-900">{title}</h3>
                   <p className="text-sm text-zinc-500 mt-1 leading-relaxed">{desc}</p>
                 </div>
               </CardContent>
@@ -63,7 +63,7 @@ export default function AssistenzaPage() {
         </div>
 
         <div className="mt-16 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-8 text-center">
-          <p className="font-display text-xl text-zinc-100">Il cliente non sceglie il tecnico</p>
+          <p className="font-display text-xl text-zinc-900">Il cliente non sceglie il tecnico</p>
           <p className="text-zinc-500 mt-2 max-w-lg mx-auto text-sm leading-relaxed">
             La centrale operativa RistoCare coordina la rete partner e ti presenta un unico preventivo.
             Tu vedi solo lo stato avanzamento e il costo finale.

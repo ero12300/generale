@@ -37,22 +37,22 @@ export default function PacchettiPage() {
                 className={
                   highlighted
                     ? "border-emerald-500/40 bg-gradient-to-b from-emerald-500/10 to-transparent ring-1 ring-emerald-500/20"
-                    : "border-white/5"
+                    : "border-zinc-200"
                 }
               >
                 <CardHeader>
                   {highlighted && (
-                    <span className="text-[10px] font-semibold text-emerald-300 uppercase tracking-widest bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
+                    <span className="text-[10px] font-semibold text-emerald-700 uppercase tracking-widest bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/20 w-fit">
                       Consigliato
                     </span>
                   )}
                   <CardTitle className="font-display text-xl mt-2">{PLAN_LABELS[plan]}</CardTitle>
                   <CardDescription>
                     {plan === "enterprise" ? (
-                      <span className="font-display text-2xl font-semibold text-zinc-100">Su preventivo</span>
+                      <span className="font-display text-2xl font-semibold text-zinc-900">Su preventivo</span>
                     ) : (
                       <>
-                        <span className="font-display text-3xl font-semibold text-zinc-100">
+                        <span className="font-display text-3xl font-semibold text-zinc-900">
                           {formatCurrency(p.monthly)}
                         </span>
                         <span className="text-zinc-500">/mese</span>
@@ -66,7 +66,7 @@ export default function PacchettiPage() {
                   )}
                   <ul className="space-y-2.5">
                     {planFeatures[plan].map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-zinc-300">
+                      <li key={f} className="flex items-start gap-2 text-sm text-zinc-700">
                         <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
                         {f}
                       </li>

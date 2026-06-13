@@ -33,14 +33,14 @@ export default async function TechTicketDetailPage({
 
         <Card>
           <CardHeader><CardTitle className="text-base">Problema</CardTitle></CardHeader>
-          <CardContent className="text-sm text-zinc-300 leading-relaxed">{ticket.description}</CardContent>
+          <CardContent className="text-sm text-zinc-700 leading-relaxed">{ticket.description}</CardContent>
         </Card>
 
         {equipment && (
           <Card>
             <CardHeader><CardTitle className="text-base">Macchina</CardTitle></CardHeader>
-            <CardContent className="text-sm text-zinc-300">
-              <p className="font-medium text-zinc-200">{equipment.name}</p>
+            <CardContent className="text-sm text-zinc-700">
+              <p className="font-medium text-zinc-800">{equipment.name}</p>
               <p className="text-zinc-500 mt-1">Matricola: {equipment.serial_number}</p>
               <p className="text-zinc-500">Area: {equipment.area}</p>
             </CardContent>
@@ -50,10 +50,10 @@ export default async function TechTicketDetailPage({
         {requests.map((r) => (
           <Card key={r.id}>
             <CardHeader><CardTitle className="text-base">La tua risposta</CardTitle></CardHeader>
-            <CardContent className="text-sm text-zinc-400">
+            <CardContent className="text-sm text-zinc-600">
               <p>Disponibilità: {r.availability}</p>
               <p className="mt-1">Stato: {r.response_status}</p>
-              {r.notes && <p className="mt-2 text-zinc-300">{r.notes}</p>}
+              {r.notes && <p className="mt-2 text-zinc-700">{r.notes}</p>}
             </CardContent>
           </Card>
         ))}

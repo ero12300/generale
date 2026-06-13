@@ -46,7 +46,7 @@ export default async function TicketsListPage() {
                 <Card className="hover:border-emerald-500/25 transition-all duration-300">
                   <CardContent className="py-4 flex flex-wrap items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-medium text-zinc-200">{t.title}</p>
+                      <p className="font-medium text-zinc-800">{t.title}</p>
                       <p className="text-xs text-zinc-500 mt-1">
                         {formatDate(t.created_at)} · {t.customer_visible_status}
                       </p>

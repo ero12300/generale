@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row justify-between items-center">
             <CardTitle>Ticket urgenti</CardTitle>
-            <Link href="/admin/tickets" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
+            <Link href="/admin/tickets" className="text-sm text-amber-700 hover:text-amber-700 transition-colors">
               Tutti i ticket →
             </Link>
           </CardHeader>
@@ -64,7 +64,7 @@ export default async function AdminDashboardPage() {
                     <div>
                       <Link
                         href={`/admin/tickets/${t.id}`}
-                        className="font-medium text-zinc-200 hover:text-amber-400 transition-colors"
+                        className="font-medium text-zinc-800 hover:text-amber-700 transition-colors"
                       >
                         {t.title}
                       </Link>

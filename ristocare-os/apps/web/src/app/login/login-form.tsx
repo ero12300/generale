@@ -115,7 +115,7 @@ export default function LoginForm() {
             </form>
             <p className="text-sm text-zinc-500 mt-4 text-center">
               Non hai un account?{" "}
-              <Link href="/signup" className="text-emerald-400 hover:underline">
+              <Link href="/signup" className="text-emerald-600 hover:underline">
                 Registrati
               </Link>
             </p>
@@ -128,10 +128,10 @@ export default function LoginForm() {
       </p>
       <div className="relative grid sm:grid-cols-2 gap-4 w-full max-w-2xl animate-fade-up animate-fade-up-delay-2">
         {demoRoles.map(({ role, title, desc, icon: Icon, href }) => (
-          <Card key={role} className="border-white/5 hover:border-emerald-500/25 transition-all duration-300 group">
+          <Card key={role} className="border-zinc-200 hover:border-emerald-500/25 transition-all duration-300 group">
             <CardHeader>
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/15 group-hover:bg-emerald-500/15 transition-colors">
-                <Icon className="h-5 w-5 text-emerald-400" />
+                <Icon className="h-5 w-5 text-emerald-600" />
               </div>
               <CardTitle className="text-base">{title}</CardTitle>
               <CardDescription>{desc}</CardDescription>

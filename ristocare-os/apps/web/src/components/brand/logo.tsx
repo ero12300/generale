@@ -17,7 +17,7 @@ export function LogoSvg({ className, size = "md" }: { className?: string; size?:
       viewBox="0 0 120 120"
       width={px}
       height={px}
-      className={cn("shrink-0 drop-shadow-lg drop-shadow-emerald-950/50", className)}
+      className={cn("shrink-0 drop-shadow-md drop-shadow-emerald-900/10", className)}
       fill="none"
       aria-hidden
     >
@@ -52,9 +52,9 @@ export function LogoSvg({ className, size = "md" }: { className?: string; size?:
 
 export function Logo({ className, showWordmark = true, size = "md", variant = "default" }: LogoProps) {
   const titleColor =
-    variant === "light" ? "text-white" : variant === "admin" ? "text-amber-50" : "text-zinc-50";
+    variant === "light" ? "text-white" : variant === "admin" ? "text-amber-900" : "text-zinc-900";
   const subtitleColor =
-    variant === "admin" ? "text-amber-200/60" : "text-emerald-200/50";
+    variant === "admin" ? "text-amber-700/80" : "text-emerald-700/70";
 
   return (
     <div className={cn("flex items-center gap-3", className)}>
@@ -62,7 +62,7 @@ export function Logo({ className, showWordmark = true, size = "md", variant = "d
       {showWordmark && (
         <div className="leading-tight">
           <p className={cn("font-display font-semibold tracking-tight", textSize[size], titleColor)}>
-            RistoCare <span className="text-emerald-400">OS</span>
+            RistoCare <span className="text-emerald-600">OS</span>
           </p>
           <p className={cn("text-[10px] uppercase tracking-[0.2em] font-medium", subtitleColor)}>
             Emotive S.r.l.

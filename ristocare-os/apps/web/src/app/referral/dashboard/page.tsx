@@ -42,7 +42,7 @@ export default async function ReferralDashboardPage() {
               <Card key={r.id}>
                 <CardContent className="py-4 flex flex-wrap justify-between gap-4">
                   <div>
-                    <p className="font-medium text-zinc-200">{r.referred_company}</p>
+                    <p className="font-medium text-zinc-800">{r.referred_company}</p>
                     <p className="text-sm text-zinc-500">
                       {r.referred_contact} · {formatDate(r.created_at)}
                     </p>
@@ -50,7 +50,7 @@ export default async function ReferralDashboardPage() {
                   <div className="flex items-center gap-3 text-sm">
                     <Badge variant={r.status === "converted" ? "success" : "default"}>{r.status}</Badge>
                     {r.reward_amount && (
-                      <span className="font-display text-emerald-400">{formatCurrency(r.reward_amount)}</span>
+                      <span className="font-display text-emerald-600">{formatCurrency(r.reward_amount)}</span>
                     )}
                   </div>
                 </CardContent>

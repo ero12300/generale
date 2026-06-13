@@ -56,11 +56,11 @@ export default function ReferralPage() {
             { plan: "Pro", reward: "100 €" },
             { plan: "Premium", reward: "200 €" },
           ].map(({ plan, reward }) => (
-            <Card key={plan} className="border-white/5 text-center hover:border-emerald-500/20 transition-colors">
+            <Card key={plan} className="border-zinc-200 text-center hover:border-emerald-500/20 transition-colors">
               <CardContent className="pt-8 pb-6">
-                <Gift className="h-6 w-6 text-emerald-400 mx-auto mb-3" aria-hidden />
+                <Gift className="h-6 w-6 text-emerald-600 mx-auto mb-3" aria-hidden />
                 <p className="text-sm text-zinc-500">Piano {plan}</p>
-                <p className="font-display text-3xl font-semibold text-emerald-400 mt-1">{reward}</p>
+                <p className="font-display text-3xl font-semibold text-emerald-600 mt-1">{reward}</p>
               </CardContent>
             </Card>
           ))}
@@ -69,8 +69,8 @@ export default function ReferralPage() {
         {status === "success" ? (
           <Card className="glass-panel glow-emerald">
             <CardContent className="py-16 text-center">
-              <Users className="h-10 w-10 text-emerald-400 mx-auto mb-4" />
-              <p className="font-display text-xl text-emerald-300">Segnalazione inviata</p>
+              <Users className="h-10 w-10 text-emerald-600 mx-auto mb-4" />
+              <p className="font-display text-xl text-emerald-700">Segnalazione inviata</p>
               <p className="text-zinc-500 text-sm mt-2">Ti aggiorneremo sullo stato del lead.</p>
               <Button className="mt-8" variant="secondary" asChild>
                 <Link href="/referral/dashboard">Vai all&apos;area partner</Link>

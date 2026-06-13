@@ -58,7 +58,7 @@ export default async function CustomerDashboardPage() {
                     <div className="min-w-0">
                       <Link
                         href={`/app/tickets/${t.id}`}
-                        className="font-medium text-zinc-200 hover:text-emerald-400 truncate block transition-colors"
+                        className="font-medium text-zinc-800 hover:text-emerald-600 truncate block transition-colors"
                       >
                         {t.title}
                       </Link>

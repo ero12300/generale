@@ -5,7 +5,7 @@ export const metadata = { title: "Accedi" };
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#080a09] text-zinc-500">Caricamento...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[var(--background)] text-zinc-500">Caricamento...</div>}>
       <LoginForm />
     </Suspense>
   );

@@ -50,12 +50,12 @@ export default async function TicketDetailPage({
             <CardTitle className="text-base">Stato pratica</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-emerald-400 font-medium">{ticket.customer_visible_status ?? "In gestione"}</p>
-            <p className="text-sm text-zinc-400 mt-3 leading-relaxed">{ticket.description}</p>
+            <p className="text-emerald-600 font-medium">{ticket.customer_visible_status ?? "In gestione"}</p>
+            <p className="text-sm text-zinc-600 mt-3 leading-relaxed">{ticket.description}</p>
             {equipment && (
               <p className="text-sm text-zinc-500 mt-4">
                 Attrezzatura:{" "}
-                <Link href={`/app/equipment/${equipment.id}`} className="text-emerald-400 hover:text-emerald-300 transition-colors">
+                <Link href={`/app/equipment/${equipment.id}`} className="text-emerald-600 hover:text-emerald-700 transition-colors">
                   {equipment.name}
                 </Link>
               </p>
@@ -69,7 +69,7 @@ export default async function TicketDetailPage({
               <CardTitle className="text-base">Preventivo RistoCare</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="font-display text-3xl font-semibold text-zinc-100">{formatCurrency(q.customer_price)}</p>
+              <p className="font-display text-3xl font-semibold text-zinc-900">{formatCurrency(q.customer_price)}</p>
               <p className="text-sm text-zinc-500 mt-1">Valido fino al {formatDate(q.valid_until)}</p>
               <p className="text-xs text-zinc-600 mt-4">
                 Per accettare il preventivo contatta la centrale operativa RistoCare.
