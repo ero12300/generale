@@ -1,6 +1,7 @@
 import { demoStore } from "@/lib/demo-store";
 import { formatEuro } from "@ristoprofit/types";
 import { KpiCard } from "@/components/dashboard/kpi-cards";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function PartnerDashboardPage() {
@@ -9,27 +10,35 @@ export default function PartnerDashboardPage() {
   const totalReward = leads.reduce((s, l) => s + (l.reward_cents ?? 0), 0);
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Portale Referral</h1>
-      <p className="text-zinc-400 text-sm">Codice partner: <span className="text-emerald-400">EMOTIVE-MESSINA</span></p>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Programma referral"
+        title="Portale Partner"
+        subtitle={
+          <>
+            Codice partner:{" "}
+            <span className="text-emerald-400 font-medium">EMOTIVE-MESSINA</span>
+          </>
+        }
+      />
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <KpiCard label="Segnalazioni" value={String(leads.length)} />
         <KpiCard label="In corso" value={String(pending)} />
         <KpiCard label="Premi maturati" value={formatEuro(totalReward)} highlight />
       </div>
-      <Card>
+      <Card glow>
         <CardHeader>
           <CardTitle>Ultimi lead</CardTitle>
-          <ul className="mt-4 space-y-2 text-sm">
+          <ul className="mt-4 space-y-3 text-sm">
             {leads.map((l) => (
-              <li key={l.id} className="flex justify-between">
-                <span>{l.client_name} — {l.city}</span>
-                <span className="text-zinc-500">{l.status}</span>
+              <li key={l.id} className="flex justify-between border-b border-[var(--border-subtle)] pb-2 last:border-0">
+                <span className="text-zinc-200">{l.client_name} — {l.city}</span>
+                <span className="text-zinc-500 capitalize">{l.status.replace("_", " ")}</span>
               </li>
             ))}
           </ul>
         </CardHeader>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

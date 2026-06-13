@@ -41,9 +41,9 @@ export function InvoiceUpload({ initial }: { initial?: InvoiceRow[] }) {
 
   return (
     <div className="space-y-6">
-      <Card className="border-dashed border-2 border-zinc-700">
+      <Card className="border-dashed border-2 border-emerald-500/20 bg-emerald-500/5" glow>
         <CardHeader className="text-center py-8">
-          <Upload className="h-10 w-10 text-zinc-500 mx-auto mb-4" aria-hidden />
+          <Upload className="h-10 w-10 text-emerald-500/60 mx-auto mb-4" aria-hidden />
           <CardTitle>Carica fattura PDF o foto</CardTitle>
           <CardDescription className="mt-2">
             Max 10MB · PDF, JPEG, PNG, WebP
@@ -77,9 +77,9 @@ export function InvoiceUpload({ initial }: { initial?: InvoiceRow[] }) {
       </Card>
 
       {invoices.length > 0 && (
-        <Card>
+        <Card glow>
           <CardHeader>
-            <CardTitle className="text-base">Fatture caricate</CardTitle>
+            <CardTitle>Fatture caricate</CardTitle>
             <ul className="mt-4 space-y-2 text-sm">
               {invoices.map((inv) => (
                 <li key={inv.id} className="flex justify-between text-zinc-400">

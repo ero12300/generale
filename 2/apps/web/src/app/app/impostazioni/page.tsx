@@ -1,6 +1,7 @@
 import { getAuthContext, getSupabaseClient } from "@/lib/auth/session";
 import { isSupabaseConfigured } from "@/lib/utils";
 import { demoStore } from "@/lib/demo-store";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckoutButton } from "@/components/billing/checkout-button";
 
@@ -30,30 +31,34 @@ export default async function ImpostazioniPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-lg">
-      <h1 className="text-2xl font-bold">Impostazioni</h1>
-      <Card>
+    <PageContainer className="max-w-lg">
+      <PageHeader
+        eyebrow="Account"
+        title="Impostazioni"
+        subtitle="Organizzazione e abbonamento"
+      />
+      <Card glow>
         <CardHeader>
-          <CardTitle className="text-base">Organizzazione</CardTitle>
+          <CardTitle>Organizzazione</CardTitle>
           <p className="text-sm text-zinc-400 mt-2">{orgName}</p>
           <p className="text-sm text-zinc-500">{demoStore.locationName}</p>
-          <p className="text-sm text-emerald-400 mt-2">
+          <p className="text-sm text-emerald-400 mt-3 font-medium">
             Piano {planName} · {subscriptionStatus}
           </p>
         </CardHeader>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Abbonamento</CardTitle>
-          <p className="text-sm text-zinc-400 mt-2">
+          <CardTitle>Abbonamento</CardTitle>
+          <p className="text-sm text-zinc-400 mt-2 leading-relaxed">
             Attiva o aggiorna il piano con pagamento sicuro Stripe.
           </p>
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 flex flex-wrap gap-2">
             <CheckoutButton tier="pro" label="Attiva Pro" />
             <CheckoutButton tier="premium" label="Attiva Premium" />
           </div>
         </CardHeader>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

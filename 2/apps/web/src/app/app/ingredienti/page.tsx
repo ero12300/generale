@@ -1,5 +1,6 @@
 import { demoStore } from "@/lib/demo-store";
 import { formatEuro } from "@ristoprofit/types";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -7,14 +8,18 @@ export default function IngredientiPage() {
   const ingredients = demoStore.listIngredients();
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Ingredienti</h1>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Anagrafica"
+        title="Ingredienti"
+        subtitle={`${ingredients.length} ingredienti monitorati`}
+      />
       <div className="grid md:grid-cols-2 gap-4">
         {ingredients.map((ing) => (
-          <Card key={ing.id}>
+          <Card key={ing.id} glow>
             <CardHeader>
               <div className="flex justify-between items-start">
-                <CardTitle className="text-base">{ing.name}</CardTitle>
+                <CardTitle>{ing.name}</CardTitle>
                 {ing.last_price_change_percent && ing.last_price_change_percent > 5 && (
                   <Badge variant="gold">+{ing.last_price_change_percent}%</Badge>
                 )}
@@ -29,6 +34,6 @@ export default function IngredientiPage() {
           </Card>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }

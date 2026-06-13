@@ -1,6 +1,7 @@
 import { InvoiceUpload } from "@/components/invoices/invoice-upload";
 import { getAuthContext, getSupabaseClient } from "@/lib/auth/session";
 import { isSupabaseConfigured } from "@/lib/utils";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 
 export default async function FatturePage() {
   let initial: { id: string; document_path: string | null; status: string; created_at: string }[] = [];
@@ -21,14 +22,13 @@ export default async function FatturePage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Fatture fornitori</h1>
-        <p className="text-zinc-400 text-sm mt-1">
-          Carica PDF o foto — estrazione AI in arrivo (Fase 3)
-        </p>
-      </div>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Documenti"
+        title="Fatture fornitori"
+        subtitle="Carica PDF o foto — estrazione AI in arrivo (Fase 3)"
+      />
       <InvoiceUpload initial={initial} />
-    </div>
+    </PageContainer>
   );
 }

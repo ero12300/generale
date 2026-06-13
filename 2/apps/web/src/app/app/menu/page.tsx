@@ -1,4 +1,5 @@
 import { demoStore } from "@/lib/demo-store";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -20,19 +21,18 @@ export default function MenuPage() {
   const engineering = demoStore.getMenuEngineering();
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Menu Engineering</h1>
-        <p className="text-zinc-400 text-sm mt-1">
-          Classificazione prodotti per vendite e margine
-        </p>
-      </div>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Menu engineering"
+        title="Analisi menu"
+        subtitle="Classificazione prodotti per vendite e margine"
+      />
       <div className="space-y-4">
         {engineering.map((item) => (
-          <Card key={item.recipe_id}>
+          <Card key={item.recipe_id} glow>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <CardTitle className="text-base">{item.recipe_name}</CardTitle>
+                <CardTitle>{item.recipe_name}</CardTitle>
                 <Badge variant={categoryColors[item.category]}>
                   {categoryLabels[item.category]}
                 </Badge>
@@ -41,11 +41,11 @@ export default function MenuPage() {
                 <span>Vendite: {item.sales_count}</span>
                 <span>Food cost: {item.food_cost_percent}%</span>
               </div>
-              <p className="text-sm text-zinc-300 mt-2">{item.action}</p>
+              <p className="text-sm text-zinc-300 mt-2 leading-relaxed">{item.action}</p>
             </CardHeader>
           </Card>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }

@@ -1,3 +1,4 @@
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function FornitoriPage() {
@@ -8,18 +9,22 @@ export default function FornitoriPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Fornitori</h1>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Acquisti"
+        title="Fornitori"
+        subtitle={`${suppliers.length} fornitori attivi`}
+      />
       <div className="grid md:grid-cols-2 gap-4">
         {suppliers.map((s) => (
-          <Card key={s.name}>
+          <Card key={s.name} glow>
             <CardHeader>
-              <CardTitle className="text-base">{s.name}</CardTitle>
+              <CardTitle>{s.name}</CardTitle>
               <p className="text-sm text-zinc-500 mt-1">{s.email}</p>
             </CardHeader>
           </Card>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }

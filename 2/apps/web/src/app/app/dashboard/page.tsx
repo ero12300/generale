@@ -3,6 +3,7 @@ import { Upload, Plus, TrendingUp, Wallet, Percent, Users } from "lucide-react";
 import { demoStore } from "@/lib/demo-store";
 import { formatEuro, formatPercent } from "@ristoprofit/types";
 import { KpiCard } from "@/components/dashboard/kpi-cards";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { FoodCostBadge, Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,24 +12,22 @@ export default function CustomerDashboardPage() {
   const dash = demoStore.getCustomerDashboard();
 
   return (
-    <div className="space-y-8 max-w-6xl">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-emerald-400/80 font-medium mb-2">
-            Cruscotto economico
-          </p>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">Dashboard</h1>
-          <p className="text-zinc-500 text-sm mt-1">{demoStore.locationName} · Piano Pro</p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="secondary" size="sm" asChild>
-            <Link href="/app/fatture"><Upload className="h-4 w-4" /> Carica fattura</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/app/ricette"><Plus className="h-4 w-4" /> Nuova ricetta</Link>
-          </Button>
-        </div>
-      </div>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Cruscotto economico"
+        title="Dashboard"
+        subtitle={`${demoStore.locationName} · Piano Pro`}
+        actions={
+          <>
+            <Button variant="secondary" size="sm" asChild>
+              <Link href="/app/fatture"><Upload className="h-4 w-4" /> Carica fattura</Link>
+            </Button>
+            <Button size="sm" asChild>
+              <Link href="/app/ricette"><Plus className="h-4 w-4" /> Nuova ricetta</Link>
+            </Button>
+          </>
+        }
+      />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
@@ -115,6 +114,6 @@ export default function CustomerDashboardPage() {
           </CardHeader>
         </Card>
       </div>
-    </div>
+    </PageContainer>
   );
 }

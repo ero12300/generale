@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 
 export default function AdminClientiPage() {
   const clients = [
@@ -8,21 +9,28 @@ export default function AdminClientiPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Clienti</h1>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Gestione clienti"
+        title="Clienti"
+        subtitle={`${clients.length} locali in piattaforma`}
+        accent="amber"
+      />
       <div className="space-y-3">
         {clients.map((c) => (
-          <Card key={c.name}>
+          <Card key={c.name} glow>
             <CardHeader className="flex flex-row items-center justify-between mb-0">
               <div>
-                <CardTitle className="text-base">{c.name}</CardTitle>
-                <p className="text-xs text-zinc-500">{c.city} · {c.plan}</p>
+                <CardTitle>{c.name}</CardTitle>
+                <p className="text-xs text-zinc-500 mt-1">{c.city} · {c.plan}</p>
               </div>
-              <span className="text-xs text-emerald-400">{c.status}</span>
+              <span className="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">
+                {c.status}
+              </span>
             </CardHeader>
           </Card>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }

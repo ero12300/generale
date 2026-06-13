@@ -1,14 +1,20 @@
 import { demoStore } from "@/lib/demo-store";
 import { formatEuro } from "@ristoprofit/types";
 import { KpiCard } from "@/components/dashboard/kpi-cards";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AdminDashboardPage() {
   const kpis = demoStore.getAdminKpis();
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Dashboard Admin Emotive</h1>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Emotive interno"
+        title="Dashboard Admin"
+        subtitle="Panoramica MRR, clienti e attività commerciali"
+        accent="amber"
+      />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard label="MRR mensile" value={formatEuro(kpis.mrr_cents)} highlight />
         <KpiCard label="Clienti attivi" value={String(kpis.active_clients)} />
@@ -19,7 +25,7 @@ export default function AdminDashboardPage() {
         <KpiCard label="Conversione demo" value={`${kpis.conversion_rate}%`} />
         <KpiCard label="Modulo top" value={kpis.top_module} />
       </div>
-      <Card>
+      <Card glow>
         <CardHeader>
           <CardTitle>Clienti da richiamare</CardTitle>
           <ul className="mt-4 text-sm text-zinc-400 space-y-2">
@@ -28,6 +34,6 @@ export default function AdminDashboardPage() {
           </ul>
         </CardHeader>
       </Card>
-    </div>
+    </PageContainer>
   );
 }

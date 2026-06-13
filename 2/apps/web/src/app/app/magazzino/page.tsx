@@ -1,18 +1,23 @@
 import { demoStore } from "@/lib/demo-store";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function MagazzinoPage() {
   const lowStock = demoStore.getCustomerDashboard().low_stock;
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Magazzino semplice</h1>
-      <Card>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Scorte"
+        title="Magazzino"
+        subtitle="Monitoraggio livelli minimi e riordino"
+      />
+      <Card glow>
         <CardHeader>
           <CardTitle>Prodotti in esaurimento</CardTitle>
-          <ul className="mt-4 space-y-2 text-sm">
+          <ul className="mt-4 space-y-3 text-sm">
             {lowStock.map((i) => (
-              <li key={i.name} className="flex justify-between text-amber-400">
+              <li key={i.name} className="flex justify-between text-amber-300/90 border-b border-[var(--border-subtle)] pb-2 last:border-0">
                 <span>{i.name}</span>
                 <span>{i.current} kg (min {i.min})</span>
               </li>
@@ -23,6 +28,6 @@ export default function MagazzinoPage() {
       <p className="text-sm text-zinc-500">
         Carichi da fattura, scarichi manuali e lista riordino — prossima fase MVP.
       </p>
-    </div>
+    </PageContainer>
   );
 }

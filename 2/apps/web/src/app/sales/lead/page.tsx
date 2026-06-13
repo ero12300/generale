@@ -1,5 +1,6 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { PageContainer, PageHeader } from "@/components/layout/page-header";
 
 export default function SalesLeadPage() {
   const leads = [
@@ -9,21 +10,26 @@ export default function SalesLeadPage() {
   ];
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Lead assegnati</h1>
+    <PageContainer>
+      <PageHeader
+        eyebrow="Pipeline commerciale"
+        title="Lead assegnati"
+        subtitle={`${leads.length} opportunità in lavorazione`}
+        accent="blue"
+      />
       <div className="space-y-3">
         {leads.map((l) => (
-          <Card key={l.name}>
+          <Card key={l.name} glow>
             <CardHeader className="flex flex-row justify-between items-center mb-0">
               <div>
-                <CardTitle className="text-base">{l.name}</CardTitle>
-                <p className="text-xs text-zinc-500">{l.city}</p>
+                <CardTitle>{l.name}</CardTitle>
+                <p className="text-xs text-zinc-500 mt-1">{l.city}</p>
               </div>
               <Badge variant="gold">{l.status}</Badge>
             </CardHeader>
           </Card>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 }
