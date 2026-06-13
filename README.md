@@ -43,6 +43,7 @@ Apri [http://localhost:3000](http://localhost:3000)
 - [architecture.md](./architecture.md) — architettura sistema
 - [docs/er-schema.md](./docs/er-schema.md) — schema entità
 - [docs/mvp-backlog.md](./docs/mvp-backlog.md) — backlog tecnico
+- [docs/cartella-2/ristoprofit-os-documento-operativo.md](./docs/cartella-2/ristoprofit-os-documento-operativo.md) — programma operativo RistoProfit OS (cartella 2)
 - [AGENTS.md](./AGENTS.md) — regole per agenti AI
 
 ## Deploy produzione (automatico)
