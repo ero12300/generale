@@ -6,7 +6,7 @@ import { parseBody } from "@/lib/validations/api";
 import { z } from "zod";
 
 const onboardingSchema = z.object({
-  orgName: z.string().trim().min(2, "Nome organizzazione troppo corto").max(120),
+  orgName: z.string().trim().min(2, "Nome salone troppo corto").max(120),
 });
 
 export async function POST(request: Request) {

@@ -69,7 +69,7 @@ const analyses: Record<string, AnalysisResult> = {};
 
 export const demoStore = {
   orgId: DEMO_ORG_ID,
-  orgName: "Immobiliare Demo SRL",
+  orgName: "Royal Fade Club",
 
   listDeals(): Deal[] {
     return [...deals].sort(

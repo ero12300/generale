@@ -3,20 +3,27 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Building2,
+  BadgePercent,
+  CalendarDays,
+  Crown,
+  CreditCard,
   LayoutDashboard,
-  LineChart,
   LogOut,
+  Scissors,
   Sparkles,
-  Workflow,
+  UsersRound,
+  WalletCards,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/deals", label: "Pipeline Deal", icon: Workflow },
-  { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
+  { href: "/agenda", label: "Agenda", icon: CalendarDays },
+  { href: "/clienti", label: "Clienti", icon: UsersRound },
+  { href: "/incassi", label: "Incassi", icon: WalletCards },
+  { href: "/campagne", label: "Campagne", icon: BadgePercent },
+  { href: "/billing", label: "Piani SaaS", icon: CreditCard },
 ];
 
 interface AppShellProps {
@@ -43,9 +50,9 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
       <aside className="w-64 border-r border-zinc-800 bg-zinc-900/50 hidden md:flex flex-col">
         <div className="p-6 border-b border-zinc-800">
           <div className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-amber-500" />
+            <Scissors className="h-6 w-6 text-amber-500" />
             <div>
-              <p className="font-semibold text-sm tracking-wide">DEAL DESK</p>
+              <p className="font-semibold text-sm tracking-wide">ROYAL FADE OS</p>
               <p className="text-xs text-zinc-500 truncate max-w-[160px]">{orgName}</p>
             </div>
           </div>
@@ -91,15 +98,18 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-14 border-b border-zinc-800 flex items-center px-4 md:px-8 gap-4">
           <div className="md:hidden flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-amber-500" />
-            <span className="font-semibold text-sm">Deal Desk</span>
+            <Scissors className="h-5 w-5 text-amber-500" />
+            <span className="font-semibold text-sm">Royal Fade OS</span>
           </div>
           <div className="flex-1" />
           <Link
-            href="/deals/new"
+            href="/booking"
             className="text-sm bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
           >
-            + Nuovo deal
+            <span className="inline-flex items-center gap-1">
+              <Crown className="h-3 w-3" aria-hidden />
+              Prenota demo
+            </span>
           </Link>
         </header>
         <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>

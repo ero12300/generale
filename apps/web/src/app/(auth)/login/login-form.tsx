@@ -45,8 +45,8 @@ export function LoginForm() {
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Accedi a Deal Desk</CardTitle>
-          <CardDescription>Gestionale investimenti immobiliari in SRL</CardDescription>
+          <CardTitle>Accedi a Royal Fade OS</CardTitle>
+          <CardDescription>Gestionale premium per barber shop e saloni scalabili</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

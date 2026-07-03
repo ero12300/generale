@@ -54,20 +54,20 @@ export default function SignupPage() {
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Crea il tuo workspace</CardTitle>
-          <CardDescription>Configura la tua SRL immobiliare su Deal Desk</CardDescription>
+          <CardTitle>Crea il tuo barber workspace</CardTitle>
+          <CardDescription>Configura il tuo salone su Royal Fade OS</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="orgName">Nome organizzazione / SRL</Label>
+              <Label htmlFor="orgName">Nome barber shop / salone</Label>
               <Input
                 id="orgName"
                 required
                 minLength={2}
                 value={orgName}
                 onChange={(e) => setOrgName(e.target.value)}
-                placeholder="Es. Immobiliare Alpha SRL"
+                placeholder="Es. Royal Fade Club"
               />
             </div>
             <div>
