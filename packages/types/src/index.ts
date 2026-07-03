@@ -247,3 +247,5 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export * from "./barber";

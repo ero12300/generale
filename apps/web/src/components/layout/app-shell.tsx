@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  CalendarClock,
   Building2,
+  Crown,
   LayoutDashboard,
   LineChart,
   LogOut,
   Sparkles,
+  Users,
   Workflow,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -17,6 +20,9 @@ const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/deals", label: "Pipeline Deal", icon: Workflow },
   { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
+  { href: "/barber/dashboard", label: "Barber Dashboard", icon: Crown },
+  { href: "/barber/bookings", label: "Prenotazioni", icon: CalendarClock },
+  { href: "/barber/clients", label: "Clienti", icon: Users },
 ];
 
 interface AppShellProps {
@@ -29,6 +35,7 @@ interface AppShellProps {
 export function AppShell({ children, mode, orgName, email }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const isBarberArea = pathname.startsWith("/barber");
 
   async function handleLogout() {
     if (mode === "demo") return;
@@ -96,10 +103,10 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
           </div>
           <div className="flex-1" />
           <Link
-            href="/deals/new"
+            href={isBarberArea ? "/barber/bookings" : "/deals/new"}
             className="text-sm bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
           >
-            + Nuovo deal
+            {isBarberArea ? "+ Nuova prenotazione" : "+ Nuovo deal"}
           </Link>
         </header>
         <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>
