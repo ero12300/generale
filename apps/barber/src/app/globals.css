@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-charcoal: #0a0a0b;
+  --color-charcoal-light: #141416;
+  --color-cream: #f5f0e8;
+  --color-gold: #c9a227;
+  --color-gold-light: #e8c547;
+  --color-gold-dark: #9a7b1a;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-gold/10;
+  }
+
+  body {
+    @apply bg-charcoal text-cream antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold-light via-gold to-gold-dark bg-clip-text text-transparent;
+  }
+
+  .glass-card {
+    @apply rounded-2xl border border-gold/10 bg-charcoal-light/60 backdrop-blur-xl;
+  }
+
+  .hero-glow {
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 162, 39, 0.15), transparent);
+  }
+}
