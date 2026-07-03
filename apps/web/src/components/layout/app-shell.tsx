@@ -3,20 +3,27 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Building2,
+  CalendarDays,
+  ChartColumnIncreasing,
+  Crown,
+  Gem,
+  HandCoins,
   LayoutDashboard,
-  LineChart,
   LogOut,
+  Scissors,
   Sparkles,
-  Workflow,
+  Users,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/deals", label: "Pipeline Deal", icon: Workflow },
-  { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
+  { href: "/bookings", label: "Prenotazioni", icon: CalendarDays },
+  { href: "/clients", label: "Clienti", icon: Users },
+  { href: "/revenue", label: "Incassi", icon: HandCoins },
+  { href: "/growth", label: "Crescita", icon: ChartColumnIncreasing },
+  { href: "/settings", label: "Piano SaaS", icon: Crown },
 ];
 
 interface AppShellProps {
@@ -43,9 +50,9 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
       <aside className="w-64 border-r border-zinc-800 bg-zinc-900/50 hidden md:flex flex-col">
         <div className="p-6 border-b border-zinc-800">
           <div className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-amber-500" />
+            <Scissors className="h-6 w-6 text-amber-500" />
             <div>
-              <p className="font-semibold text-sm tracking-wide">DEAL DESK</p>
+              <p className="font-semibold text-sm tracking-[0.24em]">ATELIER FADE</p>
               <p className="text-xs text-zinc-500 truncate max-w-[160px]">{orgName}</p>
             </div>
           </div>
@@ -71,7 +78,7 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
           {mode === "demo" ? (
             <div className="flex items-center gap-2 text-xs text-zinc-500">
               <Sparkles className="h-3 w-3" />
-              Modalità demo attiva
+              Demo premium attiva
             </div>
           ) : (
             <>
@@ -91,17 +98,41 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-14 border-b border-zinc-800 flex items-center px-4 md:px-8 gap-4">
           <div className="md:hidden flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-amber-500" />
-            <span className="font-semibold text-sm">Deal Desk</span>
+            <Scissors className="h-5 w-5 text-amber-500" />
+            <span className="font-semibold text-sm">Atelier Fade</span>
+          </div>
+          <div className="hidden md:flex items-center gap-2 text-xs text-zinc-400">
+            <Gem className="h-3.5 w-3.5 text-amber-400" aria-hidden />
+            Barber OS per prenotazioni, incassi e retention
           </div>
           <div className="flex-1" />
           <Link
-            href="/deals/new"
+            href="/book"
             className="text-sm bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
           >
-            + Nuovo deal
+            + Link booking
           </Link>
         </header>
+        <nav
+          aria-label="Navigazione mobile"
+          className="md:hidden flex items-center gap-2 overflow-x-auto border-b border-zinc-800 px-4 py-3"
+        >
+          {nav.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50",
+                pathname.startsWith(href)
+                  ? "border-amber-500/30 bg-amber-600/15 text-amber-300"
+                  : "border-zinc-800 bg-zinc-950 text-zinc-400"
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" aria-hidden />
+              {label}
+            </Link>
+          ))}
+        </nav>
         <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>
       </div>
     </div>

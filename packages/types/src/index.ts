@@ -247,3 +247,90 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export type BarberBookingStatus = "confirmed" | "pending" | "checked_in" | "completed";
+
+export type BarberBookingChannel = "app" | "instagram" | "walk_in" | "whatsapp";
+
+export type BarberCampaignStatus = "active" | "scheduled" | "completed";
+
+export type BarberSubscriptionTier = "starter" | "pro" | "elite";
+
+export interface BarberService {
+  id: string;
+  name: string;
+  category: string;
+  duration_minutes: number;
+  price: number;
+  premium: boolean;
+}
+
+export interface BarberStaffMember {
+  id: string;
+  name: string;
+  role: string;
+  utilization_rate: number;
+  rating: number;
+}
+
+export interface BarberBooking {
+  id: string;
+  organization_id: string;
+  client_name: string;
+  service_id: string;
+  staff_id: string;
+  start_at: string;
+  end_at: string;
+  channel: BarberBookingChannel;
+  status: BarberBookingStatus;
+  amount: number;
+  notes: string | null;
+}
+
+export interface BarberClient {
+  id: string;
+  organization_id: string;
+  full_name: string;
+  phone: string;
+  preferred_service: string;
+  last_visit_at: string;
+  total_spent: number;
+  visit_count: number;
+  loyalty_points: number;
+  referred_friends: number;
+  tags: string[];
+}
+
+export interface BarberTransaction {
+  id: string;
+  organization_id: string;
+  booking_id: string | null;
+  label: string;
+  amount: number;
+  paid_at: string;
+  method: "cash" | "card" | "stripe";
+  category: "service" | "product" | "subscription";
+}
+
+export interface BarberCampaign {
+  id: string;
+  organization_id: string;
+  title: string;
+  offer: string;
+  audience: string;
+  channel: "sms" | "email" | "whatsapp" | "referral";
+  status: BarberCampaignStatus;
+  redemption_rate: number;
+  revenue_generated: number;
+}
+
+export interface BarberSubscriptionPlan {
+  id: string;
+  tier: BarberSubscriptionTier;
+  monthly_price: number;
+  yearly_price: number;
+  seats: string;
+  booking_fee_percent: number;
+  features: string[];
+  recommended: boolean;
+}
