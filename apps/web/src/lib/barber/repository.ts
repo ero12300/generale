@@ -38,10 +38,10 @@ export interface BarberRepository {
   createCustomer(input: CreateBarberCustomerInput): Promise<BarberCustomer>;
 }
 
-let inMemoryServices = [...demoServices];
+const inMemoryServices = [...demoServices];
 let inMemoryCustomers = [...demoCustomers];
 let inMemoryBookings = [...demoBookings];
-let inMemoryCampaigns = [...demoCampaigns];
+const inMemoryCampaigns = [...demoCampaigns];
 
 function makeReferralCode(fullName: string) {
   return fullName
