@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0c0a09;
+  --color-ink-soft: #1a1613;
+  --color-ink-card: #201b17;
+  --color-gold: #c9a24b;
+  --color-gold-soft: #e0c37e;
+  --color-cream: #f5efe4;
+  --color-cream-dim: #b8ad97;
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background-color: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(120deg, #e0c37e 0%, #c9a24b 45%, #f2dfa9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card {
+  @apply rounded-2xl border border-white/10 bg-ink-card p-6;
+}
+
+.btn-gold {
+  @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold tracking-wide text-ink transition hover:bg-gold-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-soft disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center gap-2 rounded-full border border-gold/60 px-6 py-3 text-sm font-semibold tracking-wide text-gold transition hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-soft disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.input {
+  @apply w-full rounded-xl border border-white/15 bg-ink-soft px-4 py-2.5 text-sm text-cream placeholder:text-cream-dim/60 focus:border-gold focus:outline-none focus-visible:ring-1 focus-visible:ring-gold;
+}
+
+.label {
+  @apply mb-1.5 block text-xs font-semibold uppercase tracking-widest text-cream-dim;
+}
