@@ -39,7 +39,9 @@ export function CheckoutButton({ plan }: { plan: PlanId }) {
         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
         Attiva {plan === "pro" ? "Pro" : "Basic"}
       </button>
-      {message ? <p className="text-xs text-amber-100/70" role="status">{message}</p> : null}
+      <p className="min-h-8 text-xs leading-4 text-amber-100/70" role="status" aria-live="polite">
+        {message}
+      </p>
     </div>
   );
 }
