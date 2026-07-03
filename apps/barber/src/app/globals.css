@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0b;
+  --surface: #141416;
+  --foreground: #f5f3ef;
+  --card: #17171a;
+  --border: #2a2a2e;
+  --gold: #c9a24b;
+  --gold-soft: #e3c680;
+  --muted: #9c9aa3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Sfondo premium con texture soft */
+.bg-premium {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(201, 162, 75, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 0% 110%, rgba(201, 162, 75, 0.06), transparent 55%),
+    var(--background);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(90deg, #e3c680, #c9a24b 60%, #a9822f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-ring {
+  box-shadow: 0 0 0 1px rgba(201, 162, 75, 0.08), 0 20px 40px -24px rgba(0, 0, 0, 0.8);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2e;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a40;
+}
