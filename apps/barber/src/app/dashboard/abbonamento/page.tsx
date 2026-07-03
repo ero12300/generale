@@ -10,13 +10,16 @@ import { useStore } from "@/lib/store/store-context";
 import { PLAN_LIST, PLANS } from "@/lib/plans";
 
 export default function AbbonamentoPage() {
-  const { state, setPlan } = useStore();
+  const { state, setPlan, ready } = useStore();
   const [loading, setLoading] = useState(false);
   const [banner, setBanner] = useState<{ tone: "ok" | "info"; text: string } | null>(null);
 
   const currentPlan = state.subscription.plan;
 
   useEffect(() => {
+    // Attendiamo l'idratazione dello store (localStorage) prima di applicare
+    // l'upgrade, altrimenti il caricamento dello stato sovrascriverebbe il piano.
+    if (!ready) return;
     const params = new URLSearchParams(window.location.search);
     if (params.get("upgrade") === "success") {
       setPlan("pro", {
@@ -34,7 +37,7 @@ export default function AbbonamentoPage() {
       setBanner({ tone: "info", text: "Upgrade annullato. Puoi riprovare quando vuoi." });
       window.history.replaceState({}, "", "/dashboard/abbonamento");
     }
-  }, [setPlan]);
+  }, [ready, setPlan]);
 
   async function upgrade() {
     setLoading(true);
@@ -45,7 +48,17 @@ export default function AbbonamentoPage() {
         body: JSON.stringify({ email: undefined }),
       });
       const data = await res.json();
-      if (data.url) {
+      if (data.demo) {
+        // Modalità demo: attiviamo Pro senza reindirizzamento reale.
+        setPlan("pro", {
+          status: "trialing",
+          currentPeriodEnd: new Date(Date.now() + 14 * 864e5).toISOString(),
+        });
+        setBanner({
+          tone: "ok",
+          text: "Upgrade a Pro simulato (modalità demo). Collega Stripe per pagamenti reali.",
+        });
+      } else if (data.url) {
         window.location.href = data.url;
       } else {
         setBanner({ tone: "info", text: data.error ?? "Impossibile avviare il checkout." });
