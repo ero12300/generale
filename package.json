@@ -3,6 +3,10 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @deal-desk/web dev",
+    "dev:barber": "pnpm --filter @barber/web dev",
+    "build:barber": "pnpm --filter @barber/web build",
+    "lint:barber": "pnpm --filter @barber/web lint",
+    "typecheck:barber": "pnpm --filter @barber/web typecheck",
     "build": "pnpm --filter @deal-desk/web build",
     "lint": "pnpm --filter @deal-desk/web lint",
     "typecheck": "pnpm --filter @deal-desk/web typecheck",
