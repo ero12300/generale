@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, Clock3, Smartphone } from "lucide-react";
 import { barberServices } from "@/lib/barber-data";
 import { formatCurrency } from "@/lib/utils";
@@ -11,15 +11,24 @@ import { Input } from "@/components/ui/input";
 const slotOptions = ["09:30", "11:00", "13:00", "15:30", "17:30", "19:00"];
 
 export function PublicBookingForm() {
+  const defaultServiceId = barberServices[0]?.id ?? "";
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
-  const [serviceId, setServiceId] = useState(barberServices[0]?.id ?? "");
+  const [serviceId, setServiceId] = useState(defaultServiceId);
   const [slot, setSlot] = useState(slotOptions[1]);
   const [success, setSuccess] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!serviceId && defaultServiceId) {
+      setServiceId(defaultServiceId);
+    }
+  }, [defaultServiceId, serviceId]);
+
+  const resolvedServiceId = serviceId || defaultServiceId;
+
   const selectedService = useMemo(
-    () => barberServices.find((service) => service.id === serviceId) ?? barberServices[0],
-    [serviceId]
+    () => barberServices.find((service) => service.id === resolvedServiceId) ?? barberServices[0],
+    [resolvedServiceId]
   );
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -30,7 +39,7 @@ export function PublicBookingForm() {
     );
     setFullName("");
     setPhone("");
-    setServiceId(barberServices[0]?.id ?? "");
+    setServiceId(defaultServiceId);
     setSlot(slotOptions[1]);
   }
 
@@ -69,7 +78,7 @@ export function PublicBookingForm() {
             <label className="space-y-2 text-sm block">
               <span className="text-zinc-300">Servizio</span>
               <select
-                value={serviceId}
+                value={resolvedServiceId}
                 onChange={(event) => setServiceId(event.target.value)}
                 className="flex h-10 w-full rounded-md border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
               >

@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const AUTH_PATHS = ["/login", "/signup", "/auth"];
 const PUBLIC_API_PATHS = ["/api/analytics/health"];
+const PUBLIC_PAGE_PATHS = ["/", "/pricing", "/book"];
 
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -36,8 +37,11 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isAuthPath = AUTH_PATHS.some((p) => pathname.startsWith(p));
   const isPublicApiPath = PUBLIC_API_PATHS.some((p) => pathname.startsWith(p));
+  const isPublicPagePath = PUBLIC_PAGE_PATHS.some((p) =>
+    p === "/" ? pathname === "/" : pathname.startsWith(p)
+  );
 
-  if (!user && !isAuthPath && !isPublicApiPath) {
+  if (!user && !isAuthPath && !isPublicApiPath && !isPublicPagePath) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
     }
