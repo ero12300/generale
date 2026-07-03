@@ -21,6 +21,17 @@ import {
 import { calculateBarberDashboardMetrics } from "@/lib/barber/metrics";
 import { getFirebaseAdminDb } from "@/lib/firebase/admin";
 
+interface BarberDemoStore {
+  services: BarberService[];
+  customers: BarberCustomer[];
+  bookings: BarberBooking[];
+  campaigns: BarberCampaign[];
+}
+
+declare global {
+  var __barberDemoStore: BarberDemoStore | undefined;
+}
+
 export interface BarberRepository {
   readonly context: {
     mode: "demo" | "firebase";
@@ -38,10 +49,15 @@ export interface BarberRepository {
   createCustomer(input: CreateBarberCustomerInput): Promise<BarberCustomer>;
 }
 
-const inMemoryServices = [...demoServices];
-let inMemoryCustomers = [...demoCustomers];
-let inMemoryBookings = [...demoBookings];
-const inMemoryCampaigns = [...demoCampaigns];
+function getDemoStore() {
+  globalThis.__barberDemoStore ??= {
+    services: [...demoServices],
+    customers: [...demoCustomers],
+    bookings: [...demoBookings],
+    campaigns: [...demoCampaigns],
+  };
+  return globalThis.__barberDemoStore;
+}
 
 function makeReferralCode(fullName: string) {
   return fullName
@@ -73,19 +89,19 @@ class DemoBarberRepository implements BarberRepository {
   };
 
   async listServices() {
-    return inMemoryServices.filter((service) => service.active);
+    return getDemoStore().services.filter((service) => service.active);
   }
 
   async listCustomers() {
-    return sortCustomers(inMemoryCustomers);
+    return sortCustomers(getDemoStore().customers);
   }
 
   async listBookings() {
-    return sortBookings(inMemoryBookings);
+    return sortBookings(getDemoStore().bookings);
   }
 
   async listCampaigns() {
-    return [...inMemoryCampaigns].sort((a, b) => Number(b.active) - Number(a.active));
+    return [...getDemoStore().campaigns].sort((a, b) => Number(b.active) - Number(a.active));
   }
 
   async listPlans() {
@@ -101,10 +117,11 @@ class DemoBarberRepository implements BarberRepository {
   }
 
   async createBooking(input: CreateBarberBookingInput) {
-    const service = inMemoryServices.find((item) => item.id === input.service_id && item.active);
+    const store = getDemoStore();
+    const service = store.services.find((item) => item.id === input.service_id && item.active);
     if (!service) throw new Error("Servizio non disponibile");
 
-    const existingCustomer = inMemoryCustomers.find(
+    const existingCustomer = store.customers.find(
       (customer) => customer.phone.replace(/\s/g, "") === input.customer_phone.replace(/\s/g, "")
     );
 
@@ -125,11 +142,12 @@ class DemoBarberRepository implements BarberRepository {
       created_at: new Date().toISOString(),
     };
 
-    inMemoryBookings = [...inMemoryBookings, booking];
+    store.bookings = [...store.bookings, booking];
     return booking;
   }
 
   async createCustomer(input: CreateBarberCustomerInput) {
+    const store = getDemoStore();
     const customer: BarberCustomer = {
       id: `cus-${Date.now()}`,
       organization_id: this.context.organizationId,
@@ -145,7 +163,7 @@ class DemoBarberRepository implements BarberRepository {
       notes: input.notes ?? null,
       created_at: new Date().toISOString(),
     };
-    inMemoryCustomers = [customer, ...inMemoryCustomers];
+    store.customers = [customer, ...store.customers];
     return customer;
   }
 }
