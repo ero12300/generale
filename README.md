@@ -1,6 +1,37 @@
-# Deal Desk Immobiliare
+# Barber Suite
 
-Piattaforma operativa per analisi e gestione di investimenti immobiliari in SRL.
+Web app premium per barber shop: prenotazioni online, gestionale incassi, database clienti, campagne sconto/referral e abbonamenti Stripe. Il frontend gira su Vercel; il backend dati e pronto per Firebase Firestore con fallback demo locale.
+
+## Funzionalita Barber Suite
+
+- **Landing premium** — posizionamento SaaS con CTA verso demo e prenotazione cliente
+- **Dashboard incassi** — ricavi giornalieri/mensili, ticket medio, occupazione agenda
+- **Prenotazioni integrate** — form pubblico e interno con stati loading/error/success
+- **Database clienti** — segmenti, storico spesa, visite e codici porta un amico
+- **Campagne marketing** — sconti, referral, rientro clienti e target incassi
+- **Monetizzazione SaaS** — piani Basic/Pro/Elite e checkout Stripe-ready
+
+## Avvio rapido Barber Suite
+
+```bash
+pnpm install
+cp .env.example .env
+pnpm dev
+```
+
+Apri [http://localhost:3000](http://localhost:3000). Senza variabili Firebase/Stripe l'app usa dati demo.
+
+## Deploy Vercel + Firebase
+
+Configura su Vercel le variabili `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, `BARBER_ORGANIZATION_ID`, `STRIPE_SECRET_KEY`, `STRIPE_PRICE_BASIC`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_ELITE` e `NEXT_PUBLIC_APP_URL`.
+
+Schema Firestore: [docs/firebase-barber-schema.md](./docs/firebase-barber-schema.md).
+
+---
+
+## Legacy Deal Desk Immobiliare
+
+Piattaforma operativa per analisi e gestione di investimenti immobiliari in SRL. Il codice legacy resta nel repository per compatibilita e possibile riuso futuro.
 
 ## Funzionalità MVP
 

@@ -247,3 +247,123 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export type BarberBookingStatus =
+  | "requested"
+  | "confirmed"
+  | "completed"
+  | "cancelled"
+  | "no_show";
+
+export type BarberCampaignType = "discount" | "referral" | "reactivation" | "vip";
+
+export type BarberCustomerSegment =
+  | "new"
+  | "regular"
+  | "vip"
+  | "at_risk"
+  | "referred";
+
+export type BarberPlanId = "basic" | "pro" | "elite";
+
+export interface BarberService {
+  id: string;
+  organization_id: string;
+  name: string;
+  description: string;
+  duration_minutes: number;
+  price_cents: number;
+  active: boolean;
+  created_at: string;
+}
+
+export interface BarberCustomer {
+  id: string;
+  organization_id: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  segment: BarberCustomerSegment;
+  referral_code: string;
+  referred_by_customer_id: string | null;
+  total_spent_cents: number;
+  visits_count: number;
+  last_visit_at: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface BarberBooking {
+  id: string;
+  organization_id: string;
+  customer_id: string | null;
+  customer_name: string;
+  customer_phone: string;
+  service_id: string;
+  service_name: string;
+  starts_at: string;
+  duration_minutes: number;
+  price_cents: number;
+  status: BarberBookingStatus;
+  referral_code: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface BarberCampaign {
+  id: string;
+  organization_id: string;
+  name: string;
+  type: BarberCampaignType;
+  audience: BarberCustomerSegment | "all";
+  incentive: string;
+  message: string;
+  active: boolean;
+  expected_redemptions: number;
+  revenue_target_cents: number;
+  created_at: string;
+}
+
+export interface BarberDashboardMetrics {
+  today_revenue_cents: number;
+  month_revenue_cents: number;
+  confirmed_bookings_today: number;
+  average_ticket_cents: number;
+  occupancy_rate: number;
+  customers_total: number;
+  referral_customers: number;
+  active_campaigns: number;
+}
+
+export interface BarberPlan {
+  id: BarberPlanId;
+  name: string;
+  tagline: string;
+  monthly_price_cents: number;
+  stripe_price_env: string;
+  highlighted: boolean;
+  features: string[];
+  limits: {
+    seats: number;
+    monthly_bookings: number | null;
+    automations: number;
+  };
+}
+
+export interface CreateBarberBookingInput {
+  customer_name: string;
+  customer_phone: string;
+  service_id: string;
+  starts_at: string;
+  referral_code?: string | null;
+  notes?: string | null;
+}
+
+export interface CreateBarberCustomerInput {
+  full_name: string;
+  phone: string;
+  email?: string | null;
+  segment?: BarberCustomerSegment;
+  referral_code?: string | null;
+  notes?: string | null;
+}

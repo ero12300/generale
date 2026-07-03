@@ -9,7 +9,7 @@ export async function getSupabaseClient(): Promise<SupabaseClient> {
 export async function ensureUserOrganization(
   supabase: SupabaseClient,
   userId: string,
-  defaultOrgName = "La mia SRL immobiliare"
+  defaultOrgName = "Il mio Barber Shop"
 ): Promise<{ organizationId: string; organizationName: string }> {
   const { data: membership, error: memberError } = await supabase
     .from("organization_members")
@@ -50,7 +50,7 @@ export async function ensureUserOrganization(
 
   const { error: taxError } = await supabase.from("tax_profiles").insert({
     organization_id: org.id,
-    name: "Profilo SRL default",
+    name: "Profilo default",
     is_default: true,
   });
   if (taxError) throw taxError;

@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 const dealStrategySchema = z.enum(["fix_flip", "buy_renovate_rent", "buy_hold_sell"]);
+const barberCustomerSegmentSchema = z.enum(["new", "regular", "vip", "at_risk", "referred"]);
+const barberPlanIdSchema = z.enum(["basic", "pro", "elite"]);
 const dealStageSchema = z.enum([
   "lead",
   "analysis",
@@ -92,6 +94,28 @@ export const propertyUpdateSchema = z.object({
   media_urls: z.array(z.string().url()).optional(),
   raw_fields: z.record(z.unknown()).optional(),
   status: z.enum(["draft", "confirmed"]).optional(),
+});
+
+export const createBarberBookingSchema = z.object({
+  customer_name: z.string().trim().min(2, "Nome obbligatorio").max(120),
+  customer_phone: z.string().trim().min(7, "Telefono obbligatorio").max(30),
+  service_id: z.string().trim().min(1, "Seleziona un servizio").max(80),
+  starts_at: z.string().datetime("Data e ora non valide"),
+  referral_code: z.string().trim().max(40).nullable().optional(),
+  notes: z.string().trim().max(500).nullable().optional(),
+});
+
+export const createBarberCustomerSchema = z.object({
+  full_name: z.string().trim().min(2, "Nome obbligatorio").max(120),
+  phone: z.string().trim().min(7, "Telefono obbligatorio").max(30),
+  email: z.string().email().nullable().optional(),
+  segment: barberCustomerSegmentSchema.optional(),
+  referral_code: z.string().trim().max(40).nullable().optional(),
+  notes: z.string().trim().max(500).nullable().optional(),
+});
+
+export const stripeCheckoutSchema = z.object({
+  planId: barberPlanIdSchema,
 });
 
 export function parseBody<T extends z.ZodTypeAny>(

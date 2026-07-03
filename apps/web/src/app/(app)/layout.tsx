@@ -1,11 +1,11 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { getAuthContext } from "@/lib/auth/session";
+import { BARBER_DEMO_ORG_NAME } from "@/lib/barber/demo-data";
 import { isDemoMode } from "@/lib/data";
-import { demoStore } from "@/lib/demo-store";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   let mode: "demo" | "supabase" = "demo";
-  let orgName = demoStore.orgName;
+  let orgName = BARBER_DEMO_ORG_NAME;
   let email: string | null = null;
 
   if (!isDemoMode()) {

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Deal Desk Immobiliare",
-  description: "Deal desk operativo per investimenti immobiliari in SRL",
+  title: "Barber Suite | Gestionale premium per barbieri",
+  description: "Web app Vercel e Firebase per prenotazioni, clienti, incassi, campagne e abbonamenti Stripe.",
 };
 
 export default function RootLayout({
