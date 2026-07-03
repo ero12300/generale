@@ -33,11 +33,12 @@ export function BarberBookingForm() {
 
   async function handleBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setBookingStatus("loading");
     setErrors({});
     setMessage("");
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const parsed = bookingLeadSchema.safeParse({
       customerName: getFormValue(formData, "customerName"),
       phone: getFormValue(formData, "phone"),
@@ -68,7 +69,7 @@ export function BarberBookingForm() {
           ? "Prenotazione salvata su Firebase. Ti ricontatteremo per conferma."
           : "Prenotazione salvata in modalita demo locale. Collega Firebase per il database reale."
       );
-      event.currentTarget.reset();
+      form.reset();
     } catch (error) {
       const fallback =
         error instanceof z.ZodError ? "Dati non validi." : "Non riesco a salvare la richiesta.";
