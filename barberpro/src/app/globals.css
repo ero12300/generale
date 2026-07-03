@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink text-cream font-sans antialiased;
+  background-image: radial-gradient(
+    1200px 600px at 50% -10%,
+    rgba(201, 162, 39, 0.1),
+    transparent 60%
+  );
+  background-attachment: fixed;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .card {
+    @apply rounded-2xl border border-ink-line bg-ink-card shadow-card;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold
+    transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold
+    focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-gold {
+    @apply btn bg-gold-gradient text-ink hover:shadow-gold hover:brightness-105;
+  }
+
+  .btn-ghost {
+    @apply btn border border-ink-line bg-transparent text-cream hover:border-gold/50 hover:text-gold-soft;
+  }
+
+  .btn-outline-gold {
+    @apply btn border border-gold/60 bg-transparent text-gold-soft hover:bg-gold/10;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-ink-line bg-ink-soft px-4 py-2.5 text-sm text-cream
+    placeholder:text-cream/35 focus:border-gold/60 focus:outline-none focus:ring-1 focus:ring-gold/40;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wider text-cream/60;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium;
+  }
+
+  .kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.25em] text-gold-soft;
+  }
+}
+
+/* Scrollbar premium */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0b;
+}
+::-webkit-scrollbar-thumb {
+  background: #26262c;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a42;
+}
