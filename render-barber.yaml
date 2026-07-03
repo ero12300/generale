@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: barberpro
+    runtime: node
+    region: frankfurt
+    plan: free
+    rootDir: apps/barber
+    buildCommand: cd ../.. && pnpm install --frozen-lockfile && pnpm --filter @barberpro/web build
+    startCommand: pnpm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"

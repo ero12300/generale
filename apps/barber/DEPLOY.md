@@ -1,12 +1,15 @@
 # Pubblicazione BarberPro su Vercel
 
-## Opzione A — Import rapido (consigliata)
+## Opzione A — Import rapido (1 click) ⚡
 
-1. Vai su [vercel.com/new](https://vercel.com/new)
-2. Importa il repository **generale** da GitHub
-3. Imposta **Root Directory**: `apps/barber`
-4. Framework: **Next.js** (rilevato automaticamente)
-5. Clicca **Deploy**
+**Clicca qui per pubblicare su Vercel:**
+
+👉 [**Pubblica BarberPro su Vercel**](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fero12300%2Fgenerale&project-name=barberpro&root-directory=apps%2Fbarber&teamSlug=eros-projects-1943e19f)
+
+1. Si apre Vercel con il repo già configurato
+2. Root Directory: `apps/barber` (precompilata)
+3. Clicca **Deploy**
+4. In ~2 minuti l'app è online
 
 L'app funziona subito in **modalità demo** (senza Firebase/Stripe).
 

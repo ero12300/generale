@@ -2,7 +2,19 @@
 
 Piattaforma operativa per analisi e gestione di investimenti immobiliari in SRL.
 
-## Funzionalità MVP
+## BarberPro (Gestionale Barbieri)
+
+App SaaS separata in `apps/barber` — prenotazioni, incassi, clienti, campagne.
+
+```bash
+pnpm dev:barber   # http://localhost:3001
+```
+
+**Pubblica su Vercel (1 click):** [Deploy BarberPro](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fero12300%2Fgenerale&project-name=barberpro&root-directory=apps%2Fbarber&teamSlug=eros-projects-1943e19f)
+
+Guida completa: [apps/barber/DEPLOY.md](apps/barber/DEPLOY.md)
+
+---
 
 - **Intake immobile** — incolla URL annuncio, estrazione campi, revisione manuale
 - **Pipeline deal** — kanban per stage operativi
