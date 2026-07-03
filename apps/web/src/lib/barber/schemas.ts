@@ -25,8 +25,14 @@ export const bookingLeadSchema = z.object({
     .regex(/^[+0-9\s().-]+$/, "Usa solo numeri e simboli telefonici"),
   email: z.string().trim().email("Email non valida").optional().or(z.literal("")),
   service: z.enum(barberServices),
-  preferredDate: z.string().min(1, "Scegli una data"),
-  preferredTime: z.string().min(1, "Scegli un orario"),
+  preferredDate: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Usa formato YYYY-MM-DD"),
+  preferredTime: z
+    .string()
+    .trim()
+    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Usa formato HH:mm"),
   referralCode: z.string().trim().max(24).optional().or(z.literal("")),
 });
 

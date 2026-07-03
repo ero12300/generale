@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, type ReactNode, useMemo, useState } from "react";
+import { type FormEvent, type ReactNode, useState } from "react";
 import { ArrowRight, CalendarCheck, Loader2, Sparkles } from "lucide-react";
 import { z } from "zod";
 import { saveBookingLead } from "@/lib/barber/repository";
@@ -30,8 +30,6 @@ export function BarberBookingForm() {
   const [checkoutStatus, setCheckoutStatus] = useState<BarberPlanId | null>(null);
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
-
-  const minDate = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   async function handleBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -143,11 +141,11 @@ export function BarberBookingForm() {
               ))}
             </select>
           </Field>
-          <Field label="Data" error={errors.preferredDate}>
-            <Input name="preferredDate" type="date" min={minDate} />
+          <Field label="Data (YYYY-MM-DD)" error={errors.preferredDate}>
+            <Input name="preferredDate" type="text" placeholder="2026-07-10" />
           </Field>
-          <Field label="Ora" error={errors.preferredTime}>
-            <Input name="preferredTime" type="time" min="09:00" max="20:00" />
+          <Field label="Ora (HH:mm)" error={errors.preferredTime}>
+            <Input name="preferredTime" type="text" placeholder="10:30" />
           </Field>
           <Field label="Codice porta un amico" error={errors.referralCode}>
             <Input name="referralCode" placeholder="FRIEND20" />
