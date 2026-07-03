@@ -71,12 +71,12 @@ function AbbonamentoContent() {
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-3xl font-bold">Abbonamento</h1>
-        <p className="mt-1 text-zinc-400">
-          Piano attuale:{" "}
+        <div className="mt-1 flex items-center gap-2 text-zinc-400">
+          <span>Piano attuale:</span>
           <Badge variant={currentPlan === "pro" ? "default" : "secondary"}>
             {currentPlan === "pro" ? "PRO" : "BASE"}
           </Badge>
-        </p>
+        </div>
       </div>
 
       {notice && (

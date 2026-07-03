@@ -77,7 +77,7 @@ export class BarberStore {
     const org: Organization = {
       id: "org-demo",
       name: "Lama d'Oro Barbershop",
-      plan: "pro",
+      plan: "base",
       ownerName: "Eros",
       slug: "lama-doro",
     };
