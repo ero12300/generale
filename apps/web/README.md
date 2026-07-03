@@ -1,3 +1,22 @@
+## BarberOS Premium (Vercel + Firebase + Stripe)
+
+Questa app include un nuovo modulo pronto per barber shop:
+
+- `/barber` → dashboard interna (incassi, prenotazioni, CRM, campagne)
+- `/book` → pagina pubblica prenotazioni
+- `/api/barber/stripe/checkout` → checkout Stripe per piano Pro
+
+### Configurazione variabili
+
+Usa le chiavi in `.env.example` per:
+
+- Firebase Web SDK (`NEXT_PUBLIC_FIREBASE_*`) per persistenza su Firestore
+- Stripe (`STRIPE_SECRET_KEY`, `STRIPE_PRICE_PRO_MONTHLY`) per abbonamenti
+
+Se Firebase non è configurato, la dashboard usa storage demo locale per funzionare subito.
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

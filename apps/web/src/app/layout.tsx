@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Deal Desk Immobiliare",
-  description: "Deal desk operativo per investimenti immobiliari in SRL",
+  title: "BarberOS Premium",
+  description: "Gestionale premium per barber shop con booking, CRM, incassi e abbonamenti SaaS",
 };
 
 export default function RootLayout({
