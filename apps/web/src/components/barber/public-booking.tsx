@@ -71,7 +71,7 @@ export function PublicBookingForm() {
             <p className="text-xs text-emerald-400">Richiesta inviata, ti confermiamo a breve.</p>
           ) : null}
           {state === "error" ? (
-            <p className="text-xs text-red-300">Errore nell'invio. Riprova tra qualche minuto.</p>
+            <p className="text-xs text-red-300">Errore nell&apos;invio. Riprova tra qualche minuto.</p>
           ) : null}
 
           <Button type="submit" disabled={state === "saving"}>
