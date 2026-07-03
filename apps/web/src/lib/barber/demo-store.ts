@@ -9,7 +9,7 @@ import type {
 
 const DEMO_ORG_ID = "demo-org-001";
 
-let services: BarberService[] = [
+const services: BarberService[] = [
   {
     id: "srv-1",
     organization_id: DEMO_ORG_ID,
@@ -114,7 +114,7 @@ let campaigns: BarberCampaign[] = [
   },
 ];
 
-let subscription: BarberSubscription = {
+const subscription: BarberSubscription = {
   organization_id: DEMO_ORG_ID,
   plan: "pro",
   status: "trialing",

@@ -28,6 +28,16 @@ const initialForm: BookingFormState = {
   deposit_amount: "0",
 };
 
+function toIsoDateTime(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const localPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+  if (!localPattern.test(trimmed)) return null;
+  const date = new Date(trimmed);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toISOString();
+}
+
 const statusSequence: BarberBooking["status"][] = [
   "pending",
   "confirmed",
@@ -99,12 +109,17 @@ export function BookingsManager() {
     setError(null);
     setSuccess(null);
     try {
+      const startsAtIso = toIsoDateTime(form.starts_at);
+      const endsAtIso = toIsoDateTime(form.ends_at);
+      if (!startsAtIso || !endsAtIso) {
+        throw new Error("Usa formato data: YYYY-MM-DDTHH:mm");
+      }
       const payload = {
         client_id: form.client_id,
         service_id: form.service_id,
         barber_name: form.barber_name || null,
-        starts_at: new Date(form.starts_at).toISOString(),
-        ends_at: new Date(form.ends_at).toISOString(),
+        starts_at: startsAtIso,
+        ends_at: endsAtIso,
         price_amount: Number(form.price_amount),
         deposit_amount: Number(form.deposit_amount || "0"),
       };
@@ -181,13 +196,17 @@ export function BookingsManager() {
               onChange={(event) => setForm((current) => ({ ...current, barber_name: event.target.value }))}
             />
             <Input
-              type="datetime-local"
+              type="text"
+              inputMode="numeric"
+              placeholder="2026-07-05T15:00"
               value={form.starts_at}
               onChange={(event) => setForm((current) => ({ ...current, starts_at: event.target.value }))}
               required
             />
             <Input
-              type="datetime-local"
+              type="text"
+              inputMode="numeric"
+              placeholder="2026-07-05T15:45"
               value={form.ends_at}
               onChange={(event) => setForm((current) => ({ ...current, ends_at: event.target.value }))}
               required
