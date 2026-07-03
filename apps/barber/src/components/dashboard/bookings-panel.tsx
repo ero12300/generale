@@ -50,13 +50,68 @@ export function BookingsPanel() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
-        <h1 className="font-display text-3xl font-bold mb-1">Prenotazioni</h1>
-        <p className="text-cream/50">Gestisci il calendario del salone</p>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold mb-1">Prenotazioni</h1>
+        <p className="text-sm text-cream/50">Gestisci il calendario del salone</p>
       </div>
 
-      <Card>
+      {/* Mobile: card list */}
+      <div className="space-y-3 lg:hidden">
+        {bookings.map((b) => (
+          <Card key={b.id}>
+            <CardContent className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-semibold">{b.customerName}</p>
+                  <p className="text-xs text-cream/50">{b.customerPhone}</p>
+                </div>
+                {statusBadge(b.status)}
+              </div>
+              <div className="text-sm text-cream/70 space-y-1">
+                <p>{b.date} · {formatTime(b.time)}</p>
+                <p>{b.serviceName} — <span className="text-gold">{formatEuro(b.priceCents)}</span></p>
+              </div>
+              <div className="flex gap-2 pt-1">
+                {b.status === "pending" && (
+                  <>
+                    <Button
+                      className="flex-1 min-h-[44px]"
+                      variant="outline"
+                      disabled={actionId === b.id}
+                      onClick={() => void updateStatus(b.id, "confirmed")}
+                    >
+                      <Check className="h-4 w-4" />
+                      Conferma
+                    </Button>
+                    <Button
+                      className="min-h-[44px]"
+                      variant="destructive"
+                      disabled={actionId === b.id}
+                      onClick={() => void updateStatus(b.id, "cancelled")}
+                      aria-label="Annulla"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </>
+                )}
+                {b.status === "confirmed" && (
+                  <Button
+                    className="w-full min-h-[44px]"
+                    disabled={actionId === b.id}
+                    onClick={() => void updateStatus(b.id, "completed")}
+                  >
+                    Segna completata
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Desktop: table */}
+      <Card className="hidden lg:block">
         <CardHeader>
           <CardTitle>Tutte le prenotazioni</CardTitle>
         </CardHeader>

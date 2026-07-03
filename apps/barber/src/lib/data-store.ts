@@ -84,4 +84,29 @@ export const dataStore = {
   async toggleCampaign(id: string): Promise<Campaign | undefined> {
     return demoStore.toggleCampaign(id);
   },
+
+  async updateShop(
+    shopId: string,
+    data: Partial<Pick<Shop, "name" | "email" | "phone" | "address" | "slug" | "description" | "openingHours">>
+  ): Promise<Shop> {
+    void shopId;
+    return demoStore.updateShop(data);
+  },
+
+  async updateService(
+    id: string,
+    data: Partial<Pick<Service, "name" | "description" | "durationMinutes" | "priceCents" | "active">>
+  ): Promise<Service | undefined> {
+    return demoStore.updateService(id, data);
+  },
+
+  async addService(
+    data: Omit<Service, "id">
+  ): Promise<Service> {
+    return demoStore.addService(data);
+  },
+
+  async deleteService(id: string): Promise<boolean> {
+    return demoStore.deleteService(id);
+  },
 };

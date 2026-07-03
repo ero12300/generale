@@ -52,7 +52,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       <SiteHeader />
 
-      <section className="relative pt-32 pb-20 hero-glow overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 hero-glow overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <Image
             src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1920&q=80"
@@ -70,7 +70,7 @@ export default function HomePage() {
               <Sparkles className="h-4 w-4" />
               Gestionale #1 per barbieri in Italia
             </div>
-            <h1 className="font-display text-5xl md:text-7xl font-bold leading-tight mb-6">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mb-6">
               Il tuo salone,
               <br />
               <span className="text-gradient-gold">elevato al massimo</span>

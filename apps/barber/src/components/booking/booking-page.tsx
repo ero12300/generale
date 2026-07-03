@@ -9,14 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { dataStore } from "@/lib/data-store";
+import { generateTimeSlots, getDayHoursForDate } from "@/lib/opening-hours";
 import type { Service, Shop } from "@/lib/types";
 import { formatEuro } from "@/lib/utils";
-
-const TIME_SLOTS = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "14:00", "14:30", "15:00", "15:30",
-  "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
-];
 
 interface BookingPageProps {
   slug: string;
@@ -136,10 +131,16 @@ export function BookingPage({ slug }: BookingPageProps) {
   }
 
   const minDate = new Date().toISOString().slice(0, 10);
+  const timeSlots = selectedDate && shop
+    ? generateTimeSlots(shop.openingHours, selectedDate)
+    : [];
+  const dayClosed = selectedDate && shop
+    ? getDayHoursForDate(shop.openingHours, selectedDate).closed
+    : false;
 
   return (
-    <div className="min-h-screen bg-charcoal">
-      <div className="relative h-48 md:h-64 overflow-hidden">
+    <div className="min-h-[100dvh] bg-charcoal flex flex-col">
+      <div className="relative h-40 sm:h-52 shrink-0 overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200&q=80"
           alt={shop.name}
@@ -152,7 +153,7 @@ export function BookingPage({ slug }: BookingPageProps) {
             <Scissors className="h-5 w-5 text-gold" />
             <Badge variant="default">Prenota Online</Badge>
           </div>
-          <h1 className="font-display text-3xl md:text-4xl font-bold">{shop.name}</h1>
+          <h1 className="font-display text-2xl sm:text-4xl font-bold">{shop.name}</h1>
           {shop.address && (
             <p className="flex items-center gap-1 text-sm text-cream/60 mt-1">
               <MapPin className="h-4 w-4" />
@@ -162,7 +163,7 @@ export function BookingPage({ slug }: BookingPageProps) {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-6 py-8">
+      <div className="flex-1 max-w-2xl mx-auto w-full px-4 sm:px-6 py-6 pb-8">
         <div className="flex items-center gap-2 mb-8">
           {[1, 2, 3].map((s) => (
             <div
@@ -185,7 +186,7 @@ export function BookingPage({ slug }: BookingPageProps) {
                   setSelectedService(s);
                   setStep(2);
                 }}
-                className="w-full text-left rounded-2xl border border-gold/10 bg-charcoal-light/80 p-5 hover:border-gold/30 transition-all"
+                className="w-full text-left rounded-2xl border border-gold/10 bg-charcoal-light/80 p-4 sm:p-5 hover:border-gold/30 transition-all min-h-[72px] touch-manipulation active:scale-[0.98]"
               >
                 <div className="flex justify-between items-start">
                   <div>
@@ -225,31 +226,44 @@ export function BookingPage({ slug }: BookingPageProps) {
                     type="date"
                     min={minDate}
                     value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedDate(e.target.value);
+                      setSelectedTime("");
+                    }}
                   />
                 </div>
                 <div>
                   <Label className="mb-2 block">Orario</Label>
-                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                    {TIME_SLOTS.map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => setSelectedTime(t)}
-                        className={`rounded-lg py-2 text-sm border transition-all ${
-                          selectedTime === t
-                            ? "bg-gold text-charcoal border-gold"
-                            : "border-gold/20 hover:border-gold/40"
-                        }`}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
+                  {!selectedDate ? (
+                    <p className="text-sm text-cream/50 py-4">Seleziona prima una data</p>
+                  ) : dayClosed ? (
+                    <p className="text-sm text-amber-400 py-4 rounded-xl bg-amber-500/10 border border-amber-500/20 px-4">
+                      Chiuso in questo giorno. Scegli un&apos;altra data.
+                    </p>
+                  ) : timeSlots.length === 0 ? (
+                    <p className="text-sm text-cream/50 py-4">Nessuno slot disponibile</p>
+                  ) : (
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {timeSlots.map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setSelectedTime(t)}
+                          className={`rounded-lg py-3 text-sm border transition-all min-h-[48px] touch-manipulation ${
+                            selectedTime === t
+                              ? "bg-gold text-charcoal border-gold font-medium"
+                              : "border-gold/20 hover:border-gold/40 active:bg-gold/10"
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <Button
-                  className="w-full"
-                  disabled={!selectedDate || !selectedTime}
+                  className="w-full min-h-[52px]"
+                  disabled={!selectedDate || !selectedTime || dayClosed}
                   onClick={() => setStep(3)}
                 >
                   Continua
@@ -314,7 +328,7 @@ export function BookingPage({ slug }: BookingPageProps) {
                     <p className="text-red-400 text-sm">{error}</p>
                   )}
 
-                  <Button type="submit" className="w-full" size="lg" disabled={submitting}>
+                  <Button type="submit" className="w-full min-h-[52px]" size="lg" disabled={submitting}>
                     {submitting ? "Prenotazione in corso..." : "Conferma Prenotazione"}
                   </Button>
                 </form>

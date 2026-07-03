@@ -195,4 +195,33 @@ export const demoStore = {
     if (campaign) campaign.active = !campaign.active;
     return campaign;
   },
+
+  updateShop(data: Partial<Pick<Shop, "name" | "email" | "phone" | "address" | "slug" | "description" | "openingHours">>) {
+    Object.assign(demoShop, data);
+    return { ...demoShop };
+  },
+
+  updateService(id: string, data: Partial<Pick<Service, "name" | "description" | "durationMinutes" | "priceCents" | "active">>) {
+    const service = demoServices.find((s) => s.id === id);
+    if (!service) return undefined;
+    Object.assign(service, data);
+    return { ...service };
+  },
+
+  addService(data: Omit<Service, "id" | "shopId">) {
+    const service: Service = {
+      ...data,
+      id: generateId(),
+      shopId,
+    };
+    demoServices.push(service);
+    return service;
+  },
+
+  deleteService(id: string) {
+    const index = demoServices.findIndex((s) => s.id === id);
+    if (index === -1) return false;
+    demoServices.splice(index, 1);
+    return true;
+  },
 };

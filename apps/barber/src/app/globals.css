@@ -16,13 +16,29 @@
     @apply border-gold/10;
   }
 
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-charcoal text-cream antialiased;
     font-family: var(--font-sans);
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
+  }
+
+  input, select, textarea, button {
+    font-size: 16px; /* Evita zoom su iOS */
+  }
+
+  @media (min-width: 640px) {
+    input, select, textarea, button {
+      font-size: inherit;
+    }
   }
 }
 
@@ -37,5 +53,17 @@
 
   .hero-glow {
     background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201, 162, 39, 0.15), transparent);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .touch-manipulation {
+    touch-action: manipulation;
   }
 }

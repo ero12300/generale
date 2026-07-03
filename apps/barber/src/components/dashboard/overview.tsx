@@ -96,24 +96,24 @@ export function DashboardOverview() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
-        <h1 className="font-display text-3xl font-bold mb-1">Dashboard</h1>
-        <p className="text-cream/50">Panoramica del tuo salone oggi</p>
+        <h1 className="font-display text-2xl sm:text-3xl font-bold mb-1">Dashboard</h1>
+        <p className="text-sm text-cream/50">Panoramica del tuo salone oggi</p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {kpis.map((kpi) => (
           <Card key={kpi.label}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-3">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
                 <kpi.icon className="h-5 w-5 text-gold" />
                 {kpi.trend && (
                   <span className="text-xs text-emerald-400">{kpi.trend}</span>
                 )}
               </div>
-              <p className="text-2xl font-bold mb-1">{kpi.value}</p>
-              <p className="text-sm text-cream/50">{kpi.label}</p>
+              <p className="text-xl sm:text-2xl font-bold mb-1">{kpi.value}</p>
+              <p className="text-xs sm:text-sm text-cream/50">{kpi.label}</p>
             </CardContent>
           </Card>
         ))}

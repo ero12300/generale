@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
   return (
-    <header className="fixed top-0 z-50 w-full border-b border-gold/10 bg-charcoal/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10 border border-gold/20 group-hover:bg-gold/20 transition-colors">
+    <header className="fixed top-0 z-50 w-full border-b border-gold/10 bg-charcoal/90 backdrop-blur-xl safe-top">
+      <div className="mx-auto flex h-14 sm:h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+        <Link href="/" className="flex items-center gap-2 group min-h-[44px]">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10 border border-gold/20">
             <Scissors className="h-5 w-5 text-gold" />
           </div>
-          <span className="font-display text-xl font-semibold tracking-tight">
+          <span className="font-display text-lg sm:text-xl font-semibold tracking-tight">
             Barber<span className="text-gold">Pro</span>
           </span>
         </Link>
@@ -21,11 +21,11 @@ export function SiteHeader() {
           <Link href="/book/fade-studio" className="hover:text-gold transition-colors">Demo Prenotazione</Link>
         </nav>
 
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" asChild>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Button variant="ghost" size="sm" className="min-h-[40px]" asChild>
             <Link href="/login">Accedi</Link>
           </Button>
-          <Button size="sm" asChild>
+          <Button size="sm" className="hidden sm:inline-flex min-h-[40px]" asChild>
             <Link href="/signup">Inizia Gratis</Link>
           </Button>
         </div>

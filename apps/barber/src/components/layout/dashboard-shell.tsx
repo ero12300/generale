@@ -6,105 +6,115 @@ import {
   Calendar,
   LayoutDashboard,
   Megaphone,
-  Menu,
   Scissors,
   Settings,
   Users,
   Wallet,
-  X,
 } from "lucide-react";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/dashboard/bookings", label: "Prenotazioni", icon: Calendar },
-  { href: "/dashboard/clients", label: "Clienti", icon: Users },
+  { href: "/dashboard", label: "Home", icon: LayoutDashboard },
+  { href: "/dashboard/bookings", label: "Agenda", icon: Calendar },
   { href: "/dashboard/revenue", label: "Incassi", icon: Wallet },
+  { href: "/dashboard/clients", label: "Clienti", icon: Users },
+  { href: "/dashboard/settings", label: "Orari", icon: Settings },
+];
+
+const secondaryNav = [
   { href: "/dashboard/campaigns", label: "Campagne", icon: Megaphone },
-  { href: "/dashboard/settings", label: "Impostazioni", icon: Settings },
 ];
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-charcoal">
-      <aside className="hidden lg:flex w-64 flex-col border-r border-gold/10 bg-charcoal-light/50">
-        <div className="flex h-16 items-center gap-2 border-b border-gold/10 px-6">
+    <div className="flex min-h-[100dvh] bg-charcoal">
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex w-64 flex-col border-r border-gold/10 bg-charcoal-light/50 shrink-0">
+        <div className="flex h-14 items-center gap-2 border-b border-gold/10 px-5">
           <Scissors className="h-5 w-5 text-gold" />
           <span className="font-display text-lg font-semibold">
             Barber<span className="text-gold">Pro</span>
           </span>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => {
+        <nav className="flex-1 p-3 space-y-1">
+          {[...navItems, ...secondaryNav].map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all",
+                  "flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-all min-h-[44px]",
                   active
                     ? "bg-gold/15 text-gold border border-gold/20"
                     : "text-cream/60 hover:text-cream hover:bg-white/5"
                 )}
               >
-                <item.icon className="h-4 w-4" />
+                <item.icon className="h-4 w-4 shrink-0" />
                 {item.label}
               </Link>
             );
           })}
         </nav>
-        <div className="p-4 border-t border-gold/10">
-          <div className="rounded-xl bg-gold/10 border border-gold/20 p-4">
-            <p className="text-xs text-gold font-medium mb-1">Piano Pro</p>
-            <p className="text-xs text-cream/50 mb-3">Campagne e referral attivi</p>
-            <Button variant="outline" size="sm" className="w-full" asChild>
-              <Link href="/pricing">Upgrade Elite</Link>
-            </Button>
-          </div>
+        <div className="p-3 border-t border-gold/10">
+          <Link
+            href="/book/fade-studio"
+            target="_blank"
+            className="flex items-center justify-center rounded-xl border border-gold/20 bg-gold/10 px-4 py-3 text-sm text-gold min-h-[44px]"
+          >
+            Pagina prenotazione
+          </Link>
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-gold/10 px-6 lg:px-8">
-          <button
-            type="button"
-            className="lg:hidden p-2 text-cream/70"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-          <p className="text-sm text-cream/50 hidden sm:block">Fade Studio — Milano</p>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/book/fade-studio" target="_blank">Pagina Prenotazione</Link>
-            </Button>
+      <div className="flex-1 flex flex-col min-w-0">
+        <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-gold/10 bg-charcoal/95 backdrop-blur-lg px-4 lg:px-8 safe-top">
+          <div className="lg:hidden flex items-center gap-2">
+            <Scissors className="h-5 w-5 text-gold" />
+            <span className="font-display text-base font-semibold truncate">
+              Fade Studio
+            </span>
           </div>
+          <p className="text-sm text-cream/50 hidden lg:block">Fade Studio — Milano</p>
+          <Link
+            href="/book/fade-studio"
+            target="_blank"
+            className="text-xs text-gold border border-gold/30 rounded-lg px-3 py-2 min-h-[40px] flex items-center lg:hidden"
+          >
+            Prenota
+          </Link>
         </header>
 
-        {mobileOpen && (
-          <nav className="lg:hidden border-b border-gold/10 p-4 space-y-1 bg-charcoal-light">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-cream/70 hover:bg-white/5"
-              >
-                <item.icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        )}
+        <main className="flex-1 p-4 lg:p-8 pb-24 lg:pb-8 overflow-x-hidden">
+          {children}
+        </main>
 
-        <main className="flex-1 p-6 lg:p-8">{children}</main>
+        {/* Mobile bottom navigation */}
+        <nav
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-gold/10 bg-charcoal-light/95 backdrop-blur-xl safe-bottom"
+          aria-label="Navigazione principale"
+        >
+          <div className="grid grid-cols-5 h-16 max-w-lg mx-auto">
+            {navItems.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex flex-col items-center justify-center gap-0.5 text-[10px] min-h-[64px] touch-manipulation",
+                    active ? "text-gold" : "text-cream/50"
+                  )}
+                >
+                  <item.icon className={cn("h-5 w-5", active && "scale-110")} />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
       </div>
     </div>
   );
