@@ -1,0 +1,8 @@
+node_modules
+.next
+.vercel
+next-env.d.ts.timestamp*
+tsconfig.tsbuildinfo
+.env
+.env.local
+.env.*.local
