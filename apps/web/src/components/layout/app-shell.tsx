@@ -3,20 +3,25 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Building2,
+  CalendarDays,
+  Crown,
   LayoutDashboard,
-  LineChart,
   LogOut,
+  Megaphone,
+  Scissors,
   Sparkles,
-  Workflow,
+  Users,
+  WalletCards,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/deals", label: "Pipeline Deal", icon: Workflow },
-  { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
+  { href: "/agenda", label: "Agenda", icon: CalendarDays },
+  { href: "/clients", label: "Clienti", icon: Users },
+  { href: "/revenue", label: "Incassi", icon: WalletCards },
+  { href: "/growth", label: "Growth", icon: Megaphone },
 ];
 
 interface AppShellProps {
@@ -43,9 +48,9 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
       <aside className="w-64 border-r border-zinc-800 bg-zinc-900/50 hidden md:flex flex-col">
         <div className="p-6 border-b border-zinc-800">
           <div className="flex items-center gap-2">
-            <Building2 className="h-6 w-6 text-amber-500" />
+            <Scissors className="h-6 w-6 text-amber-500" />
             <div>
-              <p className="font-semibold text-sm tracking-wide">DEAL DESK</p>
+              <p className="font-semibold text-sm tracking-wide">ATELIER OS</p>
               <p className="text-xs text-zinc-500 truncate max-w-[160px]">{orgName}</p>
             </div>
           </div>
@@ -71,7 +76,7 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
           {mode === "demo" ? (
             <div className="flex items-center gap-2 text-xs text-zinc-500">
               <Sparkles className="h-3 w-3" />
-              Modalità demo attiva
+              Modalita demo attiva
             </div>
           ) : (
             <>
@@ -91,15 +96,22 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
       <div className="flex-1 flex flex-col min-w-0">
         <header className="h-14 border-b border-zinc-800 flex items-center px-4 md:px-8 gap-4">
           <div className="md:hidden flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-amber-500" />
-            <span className="font-semibold text-sm">Deal Desk</span>
+            <Scissors className="h-5 w-5 text-amber-500" />
+            <span className="font-semibold text-sm">Atelier OS</span>
           </div>
           <div className="flex-1" />
           <Link
-            href="/deals/new"
+            href="/"
+            className="hidden md:inline-flex items-center gap-2 rounded-md border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800"
+          >
+            <Crown className="h-4 w-4 text-amber-400" />
+            Piani SaaS
+          </Link>
+          <Link
+            href="/agenda#new-booking"
             className="text-sm bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
           >
-            + Nuovo deal
+            + Nuovo slot
           </Link>
         </header>
         <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>

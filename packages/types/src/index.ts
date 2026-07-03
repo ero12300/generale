@@ -247,3 +247,146 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export type BarberAppointmentStatus =
+  | "pending"
+  | "confirmed"
+  | "in_service"
+  | "completed"
+  | "no_show";
+
+export type BarberServiceCategory =
+  | "cut"
+  | "beard"
+  | "combo"
+  | "premium"
+  | "color"
+  | "care";
+
+export type BarberCampaignType = "discount" | "referral" | "reactivation";
+
+export type BarberChannel = "app" | "instagram" | "phone" | "walk_in";
+
+export type BarberSubscriptionTier = "starter" | "pro" | "multi_store";
+
+export interface BarberService {
+  id: string;
+  name: string;
+  category: BarberServiceCategory;
+  duration_minutes: number;
+  price: number;
+  featured?: boolean;
+}
+
+export interface BarberClient {
+  id: string;
+  organization_id: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  tags: string[];
+  total_visits: number;
+  total_spent: number;
+  last_visit_at: string | null;
+  preferred_barber: string | null;
+  preferences: string[];
+  referral_code: string;
+  referred_by_client_id: string | null;
+  consent_marketing: boolean;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface BarberAppointment {
+  id: string;
+  organization_id: string;
+  client_id: string;
+  service_ids: string[];
+  barber_name: string;
+  starts_at: string;
+  duration_minutes: number;
+  status: BarberAppointmentStatus;
+  total_price: number;
+  channel: BarberChannel;
+  notes: string | null;
+  referral_code_used: string | null;
+  created_at: string;
+}
+
+export interface BarberPayment {
+  id: string;
+  organization_id: string;
+  appointment_id: string;
+  client_id: string;
+  amount: number;
+  method: "cash" | "card" | "online";
+  created_at: string;
+}
+
+export interface BarberCampaign {
+  id: string;
+  organization_id: string;
+  name: string;
+  type: BarberCampaignType;
+  description: string;
+  reward: string;
+  status: "draft" | "active" | "paused";
+  conversions: number;
+  revenue_generated: number;
+}
+
+export interface BarberSubscriptionPlan {
+  id: BarberSubscriptionTier;
+  name: string;
+  monthly_price: number;
+  yearly_price: number;
+  description: string;
+  features: string[];
+  cta: string;
+}
+
+export interface BarberDashboardSnapshot {
+  revenue_today: number;
+  revenue_month: number;
+  appointments_today: number;
+  occupancy_rate: number;
+  repeat_rate: number;
+  average_ticket: number;
+  new_clients_month: number;
+  referral_revenue_month: number;
+}
+
+export interface CreateBarberAppointmentInput {
+  client_name: string;
+  phone: string;
+  email?: string | null;
+  service_ids: string[];
+  barber_name: string;
+  starts_at: string;
+  notes?: string | null;
+  channel?: BarberChannel;
+  referral_code?: string | null;
+}
+
+export const BARBER_APPOINTMENT_STATUSES: {
+  value: BarberAppointmentStatus;
+  label: string;
+}[] = [
+  { value: "pending", label: "In attesa" },
+  { value: "confirmed", label: "Confermato" },
+  { value: "in_service", label: "In poltrona" },
+  { value: "completed", label: "Completato" },
+  { value: "no_show", label: "No show" },
+];
+
+export const BARBER_SERVICE_CATEGORIES: {
+  value: BarberServiceCategory;
+  label: string;
+}[] = [
+  { value: "cut", label: "Taglio" },
+  { value: "beard", label: "Barba" },
+  { value: "combo", label: "Combo" },
+  { value: "premium", label: "Premium" },
+  { value: "color", label: "Colore" },
+  { value: "care", label: "Trattamento" },
+];
