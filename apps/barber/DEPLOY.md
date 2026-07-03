@@ -1,5 +1,16 @@
 # Pubblicazione BarberPro su Vercel
 
+## App live
+
+**Produzione:** https://barberpro-seven.vercel.app
+
+| Pagina | URL |
+|--------|-----|
+| Homepage | https://barberpro-seven.vercel.app |
+| Dashboard | https://barberpro-seven.vercel.app/dashboard |
+| Backoffice orari/prezzi | https://barberpro-seven.vercel.app/dashboard/settings |
+| Prenotazione clienti | https://barberpro-seven.vercel.app/book/fade-studio |
+
 ## Opzione A — Import rapido (1 click) ⚡
 
 **Clicca qui per pubblicare su Vercel:**

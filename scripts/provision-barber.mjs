@@ -70,25 +70,41 @@ async function main() {
     console.log(`   ✓ Progetto esistente: ${project.id}`);
   }
 
-  console.log("🚀 Avvio deploy produzione...");
-  const deployment = await vercelFetch("/v13/deployments", {
-    method: "POST",
-    body: JSON.stringify({
-      name: PROJECT_NAME,
-      project: project.id,
-      target: "production",
-      gitSource: {
-        type: "github",
-        repo: GITHUB_REPO.replace("https://github.com/", ""),
-        ref: process.env.DEPLOY_BRANCH || "main",
-        repoId: undefined,
-      },
-    }),
+  console.log("🚀 Avvio deploy produzione (CLI)...");
+  const { execSync } = await import("node:child_process");
+  const { mkdirSync, writeFileSync } = await import("node:fs");
+  const { resolve, dirname } = await import("node:path");
+  const { fileURLToPath } = await import("node:url");
+
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  mkdirSync(resolve(root, ".vercel"), { recursive: true });
+  writeFileSync(
+    resolve(root, ".vercel/project.json"),
+    JSON.stringify({ orgId: VERCEL_TEAM_ID, projectId: project.id })
+  );
+
+  execSync("pnpm dlx vercel@latest deploy --prod --yes", {
+    cwd: root,
+    stdio: "inherit",
+    env: { ...process.env, VERCEL_TOKEN },
   });
 
-  const url = deployment?.url
-    ? `https://${deployment.url}`
-    : `https://${PROJECT_NAME}.vercel.app`;
+  const refreshed = await vercelFetch(`/v9/projects/${project.id}`);
+  const alias = refreshed?.alias?.[0]?.domain || refreshed?.targets?.production?.alias?.[0];
+  const url = alias ? `https://${alias}` : `https://${PROJECT_NAME}.vercel.app`;
+  try {
+    await vercelFetch(`/v10/projects/${project.id}/env`, {
+      method: "POST",
+      body: JSON.stringify({
+        key: "NEXT_PUBLIC_APP_URL",
+        value: url,
+        type: "plain",
+        target: ["production", "preview"],
+      }),
+    });
+  } catch {
+    /* env may already exist */
+  }
 
   console.log("\n✅ Deploy avviato!");
   console.log(`   URL:        ${url}`);
