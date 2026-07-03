@@ -3,9 +3,13 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @deal-desk/web dev",
+    "dev:barber": "pnpm --filter @deal-desk/barber dev",
     "build": "pnpm --filter @deal-desk/web build",
+    "build:barber": "pnpm --filter @deal-desk/barber build",
     "lint": "pnpm --filter @deal-desk/web lint",
+    "lint:barber": "pnpm --filter @deal-desk/barber lint",
     "typecheck": "pnpm --filter @deal-desk/web typecheck",
+    "typecheck:barber": "pnpm --filter @deal-desk/barber typecheck",
     "test": "pnpm --filter @deal-desk/web test",
     "test:analytics": "cd services/analytics && python3 -m pytest -q",
     "provision": "node scripts/provision-production.mjs",
