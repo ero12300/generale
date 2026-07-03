@@ -66,12 +66,14 @@ export function buildDemoDataset() {
     };
   });
 
+  const mod = (n: number, m: number) => ((n % m) + m) % m;
+
   const bookings: Booking[] = [];
   for (let dayOffset = -14; dayOffset <= 21; dayOffset++) {
     const perDay = Math.max(0, Math.round(6 + Math.sin(dayOffset / 2) * 3));
     for (let i = 0; i < perDay; i++) {
-      const svc = DEMO_SERVICES[(dayOffset + i + 5) % DEMO_SERVICES.length];
-      const cli = clients[(dayOffset + i * 3 + 7 + clients.length) % clients.length];
+      const svc = DEMO_SERVICES[mod(dayOffset + i + 5, DEMO_SERVICES.length)];
+      const cli = clients[mod(dayOffset + i * 3 + 7, clients.length)];
       const start = addDays(now, dayOffset);
       start.setHours(9 + i, (i * 15) % 60, 0, 0);
       const end = new Date(start.getTime() + svc.durationMin * 60_000);
