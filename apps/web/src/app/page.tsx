@@ -1,11 +1,9 @@
 import {
   BadgeEuro,
-  BarChart3,
   CalendarDays,
   Crown,
   Gift,
   Scissors,
-  ShieldCheck,
   Sparkles,
   Users,
 } from "lucide-react";
