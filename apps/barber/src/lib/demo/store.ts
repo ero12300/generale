@@ -196,7 +196,7 @@ export const demoStore = {
     return campaign;
   },
 
-  updateShop(data: Partial<Pick<Shop, "name" | "email" | "phone" | "address" | "slug" | "description" | "openingHours">>) {
+  updateShop(data: Partial<Pick<Shop, "name" | "email" | "phone" | "address" | "slug" | "description" | "openingHours" | "ownerId">>) {
     Object.assign(demoShop, data);
     return { ...demoShop };
   },

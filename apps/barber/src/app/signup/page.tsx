@@ -33,9 +33,15 @@ export default function SignupPage() {
     try {
       const { createUserWithEmailAndPassword } = await import("firebase/auth");
       const { getFirebaseAuth } = await import("@/lib/firebase/client");
+      const { dataStore } = await import("@/lib/data-store");
       const auth = getFirebaseAuth();
       if (!auth) throw new Error("Firebase non configurato");
-      await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const credential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      await dataStore.provisionShopForUser(
+        credential.user.uid,
+        form.shopName.trim() || "Il Mio Salone",
+        form.email.trim()
+      );
       router.push("/dashboard");
     } catch {
       setError("Errore durante la registrazione. In modalità demo, registrati senza Firebase.");

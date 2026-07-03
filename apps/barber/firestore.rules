@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(shopId) {
+      return request.auth != null
+        && get(/databases/$(database)/documents/shops/$(shopId)).data.ownerId == request.auth.uid;
+    }
+
+    match /shops/{shopId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if isOwner(shopId);
+
+      match /services/{serviceId} {
+        allow read: if true;
+        allow write: if isOwner(shopId);
+      }
+
+      match /customers/{customerId} {
+        allow read: if isOwner(shopId);
+        allow create: if true;
+        allow update, delete: if isOwner(shopId);
+      }
+
+      match /bookings/{bookingId} {
+        allow read: if isOwner(shopId);
+        allow create: if true;
+        allow update, delete: if isOwner(shopId);
+      }
+
+      match /transactions/{transactionId} {
+        allow read, write: if isOwner(shopId);
+      }
+
+      match /campaigns/{campaignId} {
+        allow read: if true;
+        allow write: if isOwner(shopId);
+      }
+    }
+  }
+}
