@@ -216,7 +216,7 @@ export function DashboardContent() {
                 >
                   <div className="w-full flex-1 flex items-end">
                     <div
-                      className="w-full rounded-t-md bg-gradient-to-t from-gold-500/30 via-gold-400/40 to-gold-300/70 group-hover:from-gold-500/50 group-hover:via-gold-400/60 group-hover:to-gold-300 transition-colors relative"
+                      className="w-full rounded-t-md bg-gradient-to-t from-gold-500/60 via-gold-400/80 to-gold-300 group-hover:from-gold-500/80 group-hover:via-gold-400 group-hover:to-gold-200 transition-colors relative shadow-[0_0_20px_-5px_rgba(212,167,44,0.5)]"
                       style={{ height: `${height}%` }}
                       title={formatCurrency(r.value)}
                     >

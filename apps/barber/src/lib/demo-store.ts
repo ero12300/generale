@@ -77,13 +77,17 @@ function buildSeed(): Store {
   ];
 
   const transactions: Transaction[] = [];
-  for (let d = 30; d >= 1; d--) {
-    const perDay = 6 + Math.floor(Math.random() * 6);
+  for (let d = 30; d >= 0; d--) {
+    const perDay = d === 0 ? 5 : 6 + Math.floor(Math.random() * 6);
     for (let i = 0; i < perDay; i++) {
       const svc = services[Math.floor(Math.random() * services.length)]!;
       const client = clients[Math.floor(Math.random() * clients.length)]!;
       const method: "cash" | "card" = Math.random() > 0.55 ? "card" : "cash";
       const tip = Math.random() > 0.7 ? Math.round(Math.random() * 5) : 0;
+      const now = new Date();
+      const hour = d === 0
+        ? Math.min(now.getHours(), 9 + Math.floor(Math.random() * Math.max(1, now.getHours() - 9)))
+        : 10 + Math.floor(Math.random() * 8);
       transactions.push({
         id: generateId("tx"),
         organizationId: DEMO_ORG_ID,
@@ -94,7 +98,7 @@ function buildSeed(): Store {
         method,
         tipAmount: tip,
         discountAmount: 0,
-        createdAt: daysAgo(d, 10 + Math.floor(Math.random() * 8), Math.floor(Math.random() * 60)),
+        createdAt: daysAgo(d, hour, Math.floor(Math.random() * 60)),
       });
     }
   }
