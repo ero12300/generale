@@ -11,6 +11,17 @@ type SaveBookingResult = {
 
 const demoStorageKey = "barber_os_booking_leads";
 
+function readDemoBookings(raw: string | null) {
+  if (!raw) return [];
+
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function saveBookingLead(input: BookingLeadInput): Promise<SaveBookingResult> {
   const booking = bookingLeadSchema.parse(input);
   const db = getFirestoreDb();
@@ -33,7 +44,8 @@ export async function saveBookingLead(input: BookingLeadInput): Promise<SaveBook
       : `demo-${Date.now()}`;
 
   if (typeof window !== "undefined") {
-    const current = JSON.parse(window.localStorage.getItem(demoStorageKey) ?? "[]");
+    const raw = window.localStorage.getItem(demoStorageKey);
+    const current = readDemoBookings(raw);
     window.localStorage.setItem(
       demoStorageKey,
       JSON.stringify([
