@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0c0a09;
+  --color-coal: #171412;
+  --color-panel: #1e1a17;
+  --color-panel-2: #262019;
+  --color-line: #372e24;
+  --color-gold: #c9a227;
+  --color-gold-bright: #e6c35c;
+  --color-cream: #f5efe0;
+  --color-muted: #a89e8c;
+  --font-display: var(--font-playfair), serif;
+  --font-body: var(--font-inter), sans-serif;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* input date/time scuri */
+input[type="date"],
+input[type="time"] {
+  color-scheme: dark;
+}
+
+.texture {
+  background-image: radial-gradient(
+      ellipse 80% 50% at 50% -10%,
+      rgba(201, 162, 39, 0.12),
+      transparent
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0px,
+      transparent 34px,
+      rgba(201, 162, 39, 0.025) 34px,
+      rgba(201, 162, 39, 0.025) 36px
+    );
+}
+
+.gold-ring {
+  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.35), 0 12px 40px -12px rgba(201, 162, 39, 0.25);
+}
