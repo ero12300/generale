@@ -10,6 +10,7 @@ Piattaforma operativa per analisi e gestione di investimenti immobiliari in SRL.
 - **Proposta acquisto** — bozza commerciale con placeholder legali
 - **Lista lavori** — WBS cantiere generata da template
 - **Indice Libertà Finanziaria** — dashboard patrimoniale
+- **Barber Premium SaaS** — `/barber`: prenotazioni, CRM clienti, incassi, campagne referral/sconti, piani Base/Pro e checkout Stripe
 
 ## Stack
 
@@ -116,6 +117,29 @@ Applica le migrazioni al tuo progetto Supabase:
 supabase db push
 # oppure esegui supabase/migrations/20250605000000_initial_schema.sql nell'SQL Editor
 ```
+
+## Modulo Barber (deploy Vercel + Firebase)
+
+Il modulo barber funziona in due modalità:
+
+- `demo` (default): dati in-memory utili per demo immediata
+- `firebase`: persistenza Firestore se configuri env Firebase Admin
+
+Env minime:
+
+- `FIREBASE_PROJECT_ID`
+- `FIREBASE_CLIENT_EMAIL`
+- `FIREBASE_PRIVATE_KEY` (con `\n` escaped)
+- `STRIPE_SECRET_KEY` (opzionale: se assente checkout in modalità demo)
+
+Route API principali:
+
+- `GET /api/barber/dashboard`
+- `POST /api/barber/customers`
+- `POST /api/barber/bookings`
+- `POST /api/barber/transactions`
+- `POST /api/barber/campaigns`
+- `POST /api/barber/billing/checkout`
 
 ## Test
 

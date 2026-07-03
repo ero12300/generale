@@ -247,3 +247,82 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export type BarberSubscriptionTier = "base" | "pro";
+
+export type BarberCustomerSource = "instagram" | "referral" | "walk_in" | "google" | "other";
+
+export interface BarberCustomer {
+  id: string;
+  organization_id: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  notes: string | null;
+  source: BarberCustomerSource;
+  total_spent_cents: number;
+  visits_count: number;
+  referred_by_customer_id: string | null;
+  created_at: string;
+}
+
+export type BarberBookingStatus = "requested" | "confirmed" | "completed" | "cancelled";
+
+export interface BarberBooking {
+  id: string;
+  organization_id: string;
+  customer_id: string;
+  service_name: string;
+  start_at: string;
+  duration_minutes: number;
+  price_cents: number;
+  status: BarberBookingStatus;
+  notes: string | null;
+  created_at: string;
+}
+
+export type BarberTransactionType = "service_sale" | "product_sale" | "subscription" | "refund";
+
+export interface BarberTransaction {
+  id: string;
+  organization_id: string;
+  customer_id: string | null;
+  booking_id: string | null;
+  type: BarberTransactionType;
+  amount_cents: number;
+  payment_method: "cash" | "card" | "digital_wallet" | "bank_transfer";
+  description: string;
+  created_at: string;
+}
+
+export type BarberCampaignType = "discount" | "bring_a_friend";
+
+export interface BarberCampaign {
+  id: string;
+  organization_id: string;
+  name: string;
+  type: BarberCampaignType;
+  code: string;
+  discount_percent: number;
+  reward_cents: number;
+  starts_at: string;
+  ends_at: string;
+  enabled: boolean;
+  created_at: string;
+}
+
+export interface BarberPricingPlan {
+  id: BarberSubscriptionTier;
+  name: string;
+  monthly_price_cents: number;
+  features: string[];
+  cta: string;
+  recommended: boolean;
+}
+
+export interface BarberDashboardSummary {
+  today_bookings_count: number;
+  monthly_revenue_cents: number;
+  active_customers_count: number;
+  referral_campaigns_count: number;
+}

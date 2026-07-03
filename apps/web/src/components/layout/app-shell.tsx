@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Building2,
+  Scissors,
   LayoutDashboard,
   LineChart,
   LogOut,
@@ -17,6 +18,7 @@ const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/deals", label: "Pipeline Deal", icon: Workflow },
   { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
+  { href: "/barber", label: "Barber Premium", icon: Scissors },
 ];
 
 interface AppShellProps {
