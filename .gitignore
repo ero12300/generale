@@ -7,6 +7,7 @@ build/
 *.pyc
 __pycache__/
 .pytest_cache/
+*.tsbuildinfo
 .venv/
 venv/
 .env
