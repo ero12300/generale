@@ -247,3 +247,118 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export type BarberPlan = "basic" | "pro";
+
+export type AppointmentStatus =
+  | "pending"
+  | "confirmed"
+  | "in_service"
+  | "completed"
+  | "cancelled"
+  | "no_show";
+
+export type PaymentMethod = "cash" | "card" | "online";
+
+export type ClientSegment = "new" | "loyal" | "vip" | "inactive";
+
+export type CampaignChannel = "sms" | "whatsapp" | "email" | "qr";
+
+export type CampaignStatus = "draft" | "scheduled" | "active" | "completed";
+
+export interface StudioProfile {
+  id: string;
+  name: string;
+  city: string;
+  plan: BarberPlan;
+  seats: number;
+  team_size: number;
+  opening_hours: string;
+  primary_goal: string;
+}
+
+export interface ServiceMenuItem {
+  id: string;
+  name: string;
+  duration_minutes: number;
+  price_cents: number;
+  category: "haircut" | "beard" | "combo" | "premium" | "color";
+  description: string;
+}
+
+export interface ClientProfile {
+  id: string;
+  full_name: string;
+  phone: string;
+  email: string | null;
+  segment: ClientSegment;
+  visits_count: number;
+  lifetime_value_cents: number;
+  last_visit_at: string | null;
+  preferred_service_id: string | null;
+  referred_by: string | null;
+  notes: string | null;
+  consent_marketing: boolean;
+}
+
+export interface Appointment {
+  id: string;
+  client_id: string;
+  service_id: string;
+  barber_name: string;
+  starts_at: string;
+  ends_at: string;
+  status: AppointmentStatus;
+  payment_method: PaymentMethod | null;
+  amount_cents: number;
+  source: "widget" | "staff" | "instagram" | "walk_in";
+}
+
+export interface RevenueSnapshot {
+  id: string;
+  date: string;
+  gross_cents: number;
+  tips_cents: number;
+  product_sales_cents: number;
+  refunds_cents: number;
+  bookings_count: number;
+  occupancy_ratio: number;
+}
+
+export interface ReferralCampaign {
+  id: string;
+  title: string;
+  reward_referrer: string;
+  reward_friend: string;
+  channel: CampaignChannel;
+  status: CampaignStatus;
+  conversions: number;
+  revenue_cents: number;
+  launch_date: string;
+}
+
+export interface SubscriptionTier {
+  id: BarberPlan | "enterprise";
+  name: string;
+  monthly_price_cents: number;
+  yearly_price_cents: number;
+  target: string;
+  features: string[];
+  stripe_price_lookup_key: string;
+}
+
+export const APPOINTMENT_STATUSES: { value: AppointmentStatus; label: string }[] = [
+  { value: "pending", label: "In attesa" },
+  { value: "confirmed", label: "Confermato" },
+  { value: "in_service", label: "In servizio" },
+  { value: "completed", label: "Completato" },
+  { value: "cancelled", label: "Annullato" },
+  { value: "no_show", label: "No-show" },
+];
+
+export const CLIENT_SEGMENTS: { value: ClientSegment; label: string }[] = [
+  { value: "new", label: "Nuovo" },
+  { value: "loyal", label: "Fedele" },
+  { value: "vip", label: "VIP" },
+  { value: "inactive", label: "Dormiente" },
+];
