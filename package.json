@@ -8,6 +8,10 @@
     "typecheck": "pnpm --filter @deal-desk/web typecheck",
     "test": "pnpm --filter @deal-desk/web test",
     "test:analytics": "cd services/analytics && python3 -m pytest -q",
+    "barber:dev": "pnpm --filter @barber-pro/web dev",
+    "barber:build": "pnpm --filter @barber-pro/web build",
+    "barber:lint": "pnpm --filter @barber-pro/web lint",
+    "barber:typecheck": "pnpm --filter @barber-pro/web typecheck",
     "provision": "node scripts/provision-production.mjs",
     "provision:render": "node scripts/provision-render.mjs"
   },

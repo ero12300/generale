@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+
+  /* Palette premium: nero notte + oro caldo */
+  --color-ink-950: #0a0908;
+  --color-ink-900: #111110;
+  --color-ink-800: #1a1917;
+  --color-ink-700: #26241f;
+  --color-ink-600: #3a3730;
+  --color-ink-500: #575349;
+  --color-ink-400: #8a857a;
+  --color-ink-300: #c4bfb2;
+  --color-ink-200: #e5e0d3;
+  --color-ink-100: #f4f0e6;
+  --color-ink-50:  #faf7ef;
+
+  --color-gold-500: #c9a24a;
+  --color-gold-400: #d9b968;
+  --color-gold-300: #e5cd8b;
+  --color-gold-600: #a8853a;
+
+  --color-emerald-500: #10b981;
+  --color-rose-500: #ef4444;
+  --color-amber-500: #f59e0b;
+}
+
+:root {
+  color-scheme: dark;
+  --background: var(--color-ink-950);
+  --foreground: var(--color-ink-100);
+  --muted: var(--color-ink-400);
+  --border: rgba(255, 255, 255, 0.08);
+  --card: rgba(255, 255, 255, 0.03);
+  --card-hover: rgba(255, 255, 255, 0.05);
+  --accent: var(--color-gold-500);
+}
+
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(201, 162, 74, 0.10), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(201, 162, 74, 0.06), transparent 60%),
+    var(--color-ink-950);
+  min-height: 100vh;
+}
+
+::selection { background: rgba(201, 162, 74, 0.35); color: var(--color-ink-50); }
+
+.font-display { font-family: var(--font-display); font-feature-settings: "liga", "dlig"; letter-spacing: -0.01em; }
+
+.glass {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+.glass-hover:hover { background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025)); }
+
+.gold-shine {
+  background: linear-gradient(120deg, #b5893a 0%, #e6c983 40%, #f6e5a8 50%, #d9b968 60%, #b5893a 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gold-ring {
+  box-shadow: 0 0 0 1px rgba(201, 162, 74, 0.5), 0 0 30px -8px rgba(201, 162, 74, 0.4);
+}
+
+.hairline { height: 1px; background: linear-gradient(90deg, transparent, rgba(201, 162, 74, 0.5), transparent); }
+
+/* Scrollbar sottile */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(201, 162, 74, 0.4); background-clip: padding-box; border: 2px solid transparent; }
+
+/* Focus a11y */
+:focus-visible {
+  outline: 2px solid var(--color-gold-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
