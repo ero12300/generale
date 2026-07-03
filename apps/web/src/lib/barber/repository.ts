@@ -9,13 +9,44 @@ import {
 import { getFirestoreDb, isFirebaseEnabled } from "@/lib/barber/firebase-admin";
 import { BARBER_PRICING_PLANS } from "@/lib/barber/monetization";
 
-type NewCustomerInput = Omit<
-  BarberCustomer,
-  "id" | "organization_id" | "total_spent_cents" | "visits_count" | "created_at"
->;
-type NewBookingInput = Omit<BarberBooking, "id" | "organization_id" | "created_at">;
-type NewTransactionInput = Omit<BarberTransaction, "id" | "organization_id" | "created_at">;
-type NewCampaignInput = Omit<BarberCampaign, "id" | "organization_id" | "created_at">;
+interface NewCustomerInput {
+  full_name: string;
+  phone: string;
+  email?: string | null;
+  notes?: string | null;
+  source: BarberCustomer["source"];
+  referred_by_customer_id?: string | null;
+}
+
+interface NewBookingInput {
+  customer_id: string;
+  service_name: string;
+  start_at: string;
+  duration_minutes: number;
+  price_cents: number;
+  status: BarberBooking["status"];
+  notes?: string | null;
+}
+
+interface NewTransactionInput {
+  customer_id?: string | null;
+  booking_id?: string | null;
+  type: BarberTransaction["type"];
+  amount_cents: number;
+  payment_method: BarberTransaction["payment_method"];
+  description: string;
+}
+
+interface NewCampaignInput {
+  name: string;
+  type: BarberCampaign["type"];
+  code: string;
+  discount_percent: number;
+  reward_cents: number;
+  starts_at: string;
+  ends_at: string;
+  enabled: boolean;
+}
 
 export interface BarberDashboardPayload {
   summary: BarberDashboardSummary;
