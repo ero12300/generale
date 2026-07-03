@@ -6,6 +6,8 @@ import { services } from "@/lib/demo-data";
 import { bookingRequestSchema } from "@/lib/validations";
 import { formatCurrencyFromCents } from "@/lib/format";
 
+const timeSlots = ["09:00", "09:30", "10:30", "11:30", "12:15", "15:00", "16:30", "18:00"];
+
 type Status =
   | { type: "idle"; message: string }
   | { type: "loading"; message: string }
@@ -118,11 +120,17 @@ export function BookingForm() {
           </label>
           <label className="grid gap-2 text-sm text-stone-300">
             Orario
-            <input
+            <select
               name="preferredTime"
-              type="time"
               className="rounded-2xl border border-stone-700 bg-stone-900/80 px-4 py-3 text-white"
-            />
+              defaultValue="10:30"
+            >
+              {timeSlots.map((slot) => (
+                <option key={slot} value={slot}>
+                  {slot}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
         <label className="grid gap-2 text-sm text-stone-300">
