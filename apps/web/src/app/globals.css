@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
+  --background: #050505;
   --foreground: #fafafa;
   --card: #18181b;
   --border: #27272a;
-  --primary: #d97706;
+  --primary: #f59e0b;
   --muted: #a1a1aa;
 }
 
@@ -22,7 +22,16 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: #fbbf24;
+  color: #09090b;
+}
+
 *:focus-visible {
-  outline: 2px solid #d97706;
+  outline: 2px solid #f59e0b;
   outline-offset: 2px;
 }
