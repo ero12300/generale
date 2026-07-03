@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ──────────────────────────────────────────
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isShopOwner(shopId) {
+      return isAuth() && get(/databases/$(database)/documents/barbershops/$(shopId)).data.ownerId == request.auth.uid;
+    }
+
+    // ── Barbershops ───────────────────────────────────────────────
+
+    match /barbershops/{shopId} {
+      allow read: if true;  // public — needed for booking page
+      allow create: if isAuth() && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if isShopOwner(shopId);
+
+      // ── Bookings ─────────────────────────────────────────────
+
+      match /bookings/{bookingId} {
+        allow read: if isShopOwner(shopId);
+        allow create: if true;  // public — customers can book
+        allow update, delete: if isShopOwner(shopId);
+      }
+
+      // ── Clients ──────────────────────────────────────────────
+
+      match /clients/{clientId} {
+        allow read, write: if isShopOwner(shopId);
+      }
+
+      // ── Revenue ──────────────────────────────────────────────
+
+      match /revenue/{recordId} {
+        allow read, write: if isShopOwner(shopId);
+      }
+
+      // ── Campaigns ────────────────────────────────────────────
+
+      match /campaigns/{campaignId} {
+        allow read: if true;  // public — needed for promo code validation
+        allow write: if isShopOwner(shopId);
+      }
+    }
+  }
+}

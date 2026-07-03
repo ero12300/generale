@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 10 10 10;
+    --foreground: 250 245 235;
+    --card: 18 18 18;
+    --card-foreground: 250 245 235;
+    --popover: 18 18 18;
+    --popover-foreground: 250 245 235;
+    --primary: 212 175 55;
+    --primary-foreground: 10 10 10;
+    --secondary: 28 28 28;
+    --secondary-foreground: 212 175 55;
+    --muted: 28 28 28;
+    --muted-foreground: 140 130 110;
+    --accent: 212 175 55;
+    --accent-foreground: 10 10 10;
+    --destructive: 220 38 38;
+    --destructive-foreground: 250 245 235;
+    --border: 40 38 34;
+    --input: 28 28 28;
+    --ring: 212 175 55;
+    --radius: 0.75rem;
+    --gold: 212 175 55;
+    --gold-light: 255 215 0;
+    --gold-dark: 184 148 40;
+  }
+}
+
+@layer base {
+  * {
+    border-color: rgb(var(--border));
+  }
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .gold-gradient {
+    background: linear-gradient(135deg, rgb(212 175 55), rgb(255 215 0), rgb(184 148 40));
+  }
+  .gold-text {
+    background: linear-gradient(135deg, rgb(212 175 55), rgb(255 215 0));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .card-glass {
+    background: rgba(18, 18, 18, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+  }
+  .card-glow {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.05), 0 4px 24px rgba(0,0,0,0.4);
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgb(10, 10, 10); }
+::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212, 175, 55, 0.5); }

@@ -9,7 +9,11 @@
     "test": "pnpm --filter @deal-desk/web test",
     "test:analytics": "cd services/analytics && python3 -m pytest -q",
     "provision": "node scripts/provision-production.mjs",
-    "provision:render": "node scripts/provision-render.mjs"
+    "provision:render": "node scripts/provision-render.mjs",
+    "barber:dev": "pnpm --filter @barber/web dev",
+    "barber:build": "pnpm --filter @barber/web build",
+    "barber:lint": "pnpm --filter @barber/web lint",
+    "barber:typecheck": "pnpm --filter @barber/web typecheck"
   },
   "engines": {
     "node": ">=20"
