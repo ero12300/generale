@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { calculateDoorBatch, createDoorInput } from "@/lib/doors/configurator";
 import { cn } from "@/lib/utils";
-import { doorBatchSchema } from "@/lib/validations/api";
+import { doorBatchSchema } from "@/lib/validations/door";
 
 const modelNotes: Record<DoorModel, string> = {
   hinged_single: "Riduce il foro per telaio e crea una anta battente singola.",
