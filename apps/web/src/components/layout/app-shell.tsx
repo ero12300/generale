@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Building2,
+  DoorClosed,
   LayoutDashboard,
   LineChart,
   LogOut,
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/deals", label: "Pipeline Deal", icon: Workflow },
+  { href: "/doors", label: "Configuratore Porte", icon: DoorClosed },
   { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
 ];
 
