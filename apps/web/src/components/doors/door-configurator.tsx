@@ -425,7 +425,16 @@ function DoorDiagram({ spec }: { spec: DoorProductionSpec }) {
   const totalLeafWidth = spec.leaves.reduce((sum, leaf) => sum + leaf.widthMm, 0) || 1;
   const hingeX = spec.handing.doorHand === "left" ? 62 : 258;
   const handleX = spec.handing.handleSide === "left" ? 78 : 242;
-  let currentX = 64;
+  const leafRects = spec.leaves.reduce<Array<{ leaf: DoorProductionSpec["leaves"][number]; x: number; width: number }>>(
+    (rects, leaf) => {
+      const previous = rects.at(-1);
+      const x = previous ? previous.x + previous.width : 64;
+      const width = Math.max(24, (leaf.widthMm / totalLeafWidth) * 192);
+
+      return [...rects, { leaf, x, width }];
+    },
+    []
+  );
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-3">
@@ -439,10 +448,7 @@ function DoorDiagram({ spec }: { spec: DoorProductionSpec }) {
           Luce passaggio {spec.clearPassage.widthMm} x {spec.clearPassage.heightMm} mm
         </text>
 
-        {spec.leaves.map((leaf) => {
-          const width = Math.max(24, (leaf.widthMm / totalLeafWidth) * 192);
-          const x = currentX;
-          currentX += width;
+        {leafRects.map(({ leaf, x, width }) => {
           const fill = leaf.role === "fixed" ? "#3f3f46" : "#78350f";
 
           return (
