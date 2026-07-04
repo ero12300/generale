@@ -4,6 +4,9 @@
   "scripts": {
     "dev": "pnpm --filter @deal-desk/web dev",
     "dev:barber": "pnpm --filter @barberpro/web dev",
+    "dev:porte": "pnpm --filter @porte/web dev",
+    "build:porte": "pnpm --filter @porte/web build",
+    "test:porte": "pnpm --filter @porte/web test",
     "build": "pnpm --filter @deal-desk/web build",
     "build:barber": "pnpm --filter @barberpro/web build",
     "lint": "pnpm --filter @deal-desk/web lint",
