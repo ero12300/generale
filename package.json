@@ -15,6 +15,7 @@
     "test:porte": "pnpm --filter @portepro/web test",
     "provision": "node scripts/provision-production.mjs",
     "provision:barber": "node scripts/provision-barber.mjs",
+    "provision:porte": "node scripts/provision-porte.mjs",
     "provision:render": "node scripts/provision-render.mjs"
   },
   "engines": {

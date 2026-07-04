@@ -28,11 +28,10 @@ import {
   OPENING_DIRECTION_LABELS,
   SYSTEM_LABELS,
 } from "@/lib/door-models";
+import { useAuth } from "@/components/auth-provider";
 import {
   createProjectId,
-  deleteProject,
-  loadProjects,
-  upsertProject,
+  projectStore,
 } from "@/lib/project-store";
 import { downloadProductionJson, downloadSchematicSvg } from "@/lib/schematic";
 import type {
@@ -62,7 +61,10 @@ const DEFAULT_OPENING: WallOpening = {
 const DEFAULT_DEAD_WORK: DeadWork = DEAD_WORK_PRESETS[0].deadWork;
 
 export function DoorWizardApp() {
+  const { userId, loading: authLoading, isDemoMode } = useAuth();
   const [projects, setProjects] = useState<DoorProject[]>([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [view, setView] = useState<"list" | "wizard">("list");
   const [step, setStep] = useState<StepId>("opening");
   const [projectId, setProjectId] = useState<string | null>(null);
@@ -74,10 +76,26 @@ export function DoorWizardApp() {
 
   const [mounted, setMounted] = useState(false);
 
+  const refreshProjects = useCallback(async () => {
+    if (!userId) return;
+    setProjectsLoading(true);
+    try {
+      const list = await projectStore.listProjects(userId);
+      setProjects(list);
+    } finally {
+      setProjectsLoading(false);
+    }
+  }, [userId]);
+
   useEffect(() => {
-    setProjects(loadProjects());
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!authLoading && userId) {
+      void refreshProjects();
+    }
+  }, [authLoading, userId, refreshProjects]);
 
   const model = getDoorModel(modelId);
   const validation = validateOpening(opening, deadWork);
@@ -89,9 +107,33 @@ export function DoorWizardApp() {
   const stepIndex = STEPS.findIndex((s) => s.id === step);
   const isFixedDoor = model?.system === "fissa";
 
-  const refreshProjects = useCallback(() => {
-    setProjects(loadProjects());
-  }, []);
+  const saveCurrent = async () => {
+    if (!projectId || !calculated || !userId) return;
+    setSaving(true);
+    try {
+      const now = new Date().toISOString();
+      const existing = projects.find((p) => p.id === projectId);
+      await projectStore.upsertProject(userId, {
+        id: projectId,
+        createdAt: existing?.createdAt ?? now,
+        updatedAt: now,
+        wallOpening: opening,
+        deadWork,
+        modelId,
+        openingDirection,
+        calculated,
+      });
+      await refreshProjects();
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!userId) return;
+    await projectStore.deleteProject(userId, id);
+    await refreshProjects();
+  };
 
   const startNew = () => {
     setProjectId(createProjectId());
@@ -113,27 +155,6 @@ export function DoorWizardApp() {
     setView("wizard");
   };
 
-  const saveCurrent = () => {
-    if (!projectId || !calculated) return;
-    const now = new Date().toISOString();
-    upsertProject({
-      id: projectId,
-      createdAt: now,
-      updatedAt: now,
-      wallOpening: opening,
-      deadWork,
-      modelId,
-      openingDirection,
-      calculated,
-    });
-    refreshProjects();
-  };
-
-  const handleDelete = (id: string) => {
-    deleteProject(id);
-    refreshProjects();
-  };
-
   const canNext = (): boolean => {
     switch (step) {
       case "opening":
@@ -153,15 +174,15 @@ export function DoorWizardApp() {
     }
   };
 
-  const goNext = () => {
+  const goNext = async () => {
     const next = STEPS[stepIndex + 1];
     if (!next) return;
     if (next.id === "direction" && isFixedDoor) {
       setStep("result");
-      saveCurrent();
+      await saveCurrent();
       return;
     }
-    if (next.id === "result") saveCurrent();
+    if (next.id === "result") await saveCurrent();
     setStep(next.id);
   };
 
@@ -178,7 +199,7 @@ export function DoorWizardApp() {
     setStep(prev.id);
   };
 
-  if (!mounted) {
+  if (!mounted || authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p className="text-cream/50">Caricamento...</p>
@@ -194,6 +215,15 @@ export function DoorWizardApp() {
           <p className="mt-1 text-sm text-cream/60">
             Calcolo porte da foro muro a schema produzione
           </p>
+          {isDemoMode ? (
+            <p className="mt-2 rounded-lg bg-amber-900/30 px-3 py-1.5 text-xs text-amber-200">
+              Modalità demo — dati salvati in locale. Configura Firebase per sync cloud.
+            </p>
+          ) : (
+            <p className="mt-2 rounded-lg bg-green-900/30 px-3 py-1.5 text-xs text-green-200">
+              Cloud attivo — progetti sincronizzati su Firebase
+            </p>
+          )}
         </header>
 
         <Button onClick={startNew} className="mb-6 w-full" size="lg">
@@ -201,7 +231,13 @@ export function DoorWizardApp() {
           Nuova porta
         </Button>
 
-        {projects.length === 0 ? (
+        {projectsLoading ? (
+          <Card>
+            <CardContent className="py-8 text-center text-cream/50">
+              Caricamento progetti...
+            </CardContent>
+          </Card>
+        ) : projects.length === 0 ? (
           <Card>
             <CardContent className="py-8 text-center text-cream/50">
               Nessun progetto salvato. Inizia inserendo le misure del foro muro.
@@ -231,7 +267,7 @@ export function DoorWizardApp() {
                     size="icon"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDelete(p.id);
+                      void handleDelete(p.id);
                     }}
                     aria-label="Elimina progetto"
                   >
@@ -539,8 +575,8 @@ export function DoorWizardApp() {
       <div className="safe-bottom fixed bottom-0 left-0 right-0 border-t border-wood/15 bg-charcoal/95 p-4 backdrop-blur-lg">
         <div className="mx-auto flex max-w-lg gap-3">
           {step !== "result" ? (
-            <Button onClick={goNext} disabled={!canNext()} className="flex-1" size="lg">
-              Avanti
+            <Button onClick={() => void goNext()} disabled={!canNext() || saving} className="flex-1" size="lg">
+              {saving ? "Salvataggio..." : "Avanti"}
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
