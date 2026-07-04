@@ -92,18 +92,36 @@ async function main() {
   const refreshed = await vercelFetch(`/v9/projects/${project.id}`);
   const alias = refreshed?.alias?.[0]?.domain || refreshed?.targets?.production?.alias?.[0];
   const url = alias ? `https://${alias}` : `https://${PROJECT_NAME}.vercel.app`;
-  try {
-    await vercelFetch(`/v10/projects/${project.id}/env`, {
-      method: "POST",
-      body: JSON.stringify({
-        key: "NEXT_PUBLIC_APP_URL",
-        value: url,
-        type: "plain",
-        target: ["production", "preview"],
-      }),
-    });
-  } catch {
-    /* env may already exist */
+  const envVars = [
+    { key: "NEXT_PUBLIC_APP_URL", value: url },
+    {
+      key: "NEXT_PUBLIC_SUPABASE_URL",
+      value: process.env.NEXT_PUBLIC_SUPABASE_URL || "https://gfrlpoqtqrxapmtexucx.supabase.co",
+    },
+    {
+      key: "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      value:
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+        "sb_publishable_XzIaA7eUXkGHKuhcK3fGyA_j6-1kEmP",
+    },
+  ];
+
+  for (const { key, value } of envVars) {
+    if (!value) continue;
+    try {
+      await vercelFetch(`/v10/projects/${project.id}/env`, {
+        method: "POST",
+        body: JSON.stringify({
+          key,
+          value,
+          type: "plain",
+          target: ["production", "preview"],
+        }),
+      });
+      console.log(`   ✓ Env ${key}`);
+    } catch {
+      console.log(`   · Env ${key} (già presente o aggiornare da dashboard)`);
+    }
   }
 
   console.log("\n✅ Deploy avviato!");

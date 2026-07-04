@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isFirebaseConfigured } from "@/lib/firebase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -25,12 +26,30 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
 
-    if (!isFirebaseConfigured()) {
+    if (!isSupabaseConfigured() && !isFirebaseConfigured()) {
       router.push("/dashboard");
       return;
     }
 
     try {
+      if (isSupabaseConfigured()) {
+        const { getSupabase } = await import("@/lib/supabase/client");
+        const { dataStore } = await import("@/lib/data-store");
+        const supabase = getSupabase();
+        if (!supabase) throw new Error("Supabase non configurato");
+        const { data, error } = await supabase.auth.signUp({ email: form.email, password: form.password });
+        if (error) throw error;
+        if (data.user) {
+          await dataStore.provisionShopForUser(
+            data.user.id,
+            form.shopName.trim() || "Il Mio Salone",
+            form.email.trim()
+          );
+        }
+        router.push("/dashboard");
+        return;
+      }
+
       const { createUserWithEmailAndPassword } = await import("firebase/auth");
       const { getFirebaseAuth } = await import("@/lib/firebase/client");
       const { dataStore } = await import("@/lib/data-store");

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isFirebaseConfigured } from "@/lib/firebase/client";
+import { isSupabaseConfigured } from "@/lib/supabase/client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,12 +23,22 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    if (!isFirebaseConfigured()) {
+    if (!isSupabaseConfigured() && !isFirebaseConfigured()) {
       router.push("/dashboard");
       return;
     }
 
     try {
+      if (isSupabaseConfigured()) {
+        const { getSupabase } = await import("@/lib/supabase/client");
+        const supabase = getSupabase();
+        if (!supabase) throw new Error("Supabase non configurato");
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        router.push("/dashboard");
+        return;
+      }
+
       const { signInWithEmailAndPassword } = await import("firebase/auth");
       const { getFirebaseAuth } = await import("@/lib/firebase/client");
       const auth = getFirebaseAuth();
@@ -52,7 +63,7 @@ export default function LoginPage() {
           </div>
           <CardTitle className="text-2xl">Accedi a BarberPro</CardTitle>
           <p className="text-sm text-cream/50 mt-2">
-            {!isFirebaseConfigured() && "Modalità demo — clicca Accedi per entrare"}
+            {!isSupabaseConfigured() && !isFirebaseConfigured() && "Modalità demo — clicca Accedi per entrare"}
           </p>
         </CardHeader>
         <CardContent>
