@@ -1,9 +1,11 @@
 .vercel/
 .pnpm-store/
+node_modules/
 .next/
 out/
 dist/
 build/
+*.tsbuildinfo
 *.pyc
 __pycache__/
 .pytest_cache/
