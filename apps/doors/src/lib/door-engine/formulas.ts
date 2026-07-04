@@ -120,7 +120,7 @@ export function calculateDoorPlan(input: DoorCalculationInput): DoorPlan {
       widthMm: deadWorkWidthMm,
       reason:
         deadWorkWidthMm > 0 && maxLeaf
-          ? `Anta massima ${maxLeaf} mm superata`
+          ? `Lavoro morto aggiunto per limite anta ${maxLeaf} mm`
           : "",
     },
     handing: {

@@ -42,7 +42,7 @@ describe("calculateDoorPlan", () => {
     expect(plan.deadWork).toEqual({
       side: "right",
       widthMm: 246,
-      reason: "Anta massima 920 mm superata",
+      reason: "Lavoro morto aggiunto per limite anta 920 mm",
     });
     expect(plan.handing.handleSide).toBe("right");
     expect(plan.handing.openingLabel).toBe("sinistra a spingere");
