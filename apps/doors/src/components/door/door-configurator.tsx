@@ -446,6 +446,9 @@ function downloadText(fileName: string, content: string, type: string) {
   const link = document.createElement("a");
   link.href = url;
   link.download = fileName;
+  link.style.display = "none";
+  document.body.appendChild(link);
   link.click();
-  URL.revokeObjectURL(url);
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
