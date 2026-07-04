@@ -1,6 +1,8 @@
+node_modules/
 .vercel/
 .pnpm-store/
 .next/
+apps/porte/tsconfig.tsbuildinfo
 out/
 dist/
 build/

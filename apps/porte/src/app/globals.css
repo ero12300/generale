@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Manrope", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: #f8fafc;
+    color: #0f172a;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: #0b1220;
+      color: #f1f5f9;
+    }
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  input, select, textarea, button {
+    font-size: 16px;
+  }
+
+  @media (min-width: 640px) {
+    input, select, textarea, button {
+      font-size: inherit;
+    }
+  }
+}
+
+@layer utilities {
+  .touch-manipulation { touch-action: manipulation; }
+  .safe-top { padding-top: env(safe-area-inset-top, 0px); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+}
+
+/* Ottimizzazioni stampa per la scheda tecnica */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html, body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-page {
+    padding: 0 !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  .print-page * {
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  .print-page svg {
+    max-height: 320px !important;
+  }
+
+  .print-break {
+    page-break-inside: avoid;
+  }
+}
