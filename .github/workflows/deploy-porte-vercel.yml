@@ -1,0 +1,65 @@
+name: Deploy Configuratore Porte (Vercel)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/porte/**"
+      - "pnpm-lock.yaml"
+      - "package.json"
+  workflow_dispatch:
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_PORTE }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.VERCEL_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+      - name: Create Vercel project if missing
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          PROJECT_NAME="configuratore-porte"
+          TEAM_ID="${{ secrets.VERCEL_ORG_ID }}"
+          EXISTING=$(curl -s -H "Authorization: Bearer $VERCEL_TOKEN" \
+            "https://api.vercel.com/v9/projects?teamId=$TEAM_ID" | \
+            node -e "const d=JSON.parse(require('fs').readFileSync(0,'utf8')); console.log((d.projects||[]).find(p=>p.name==='$PROJECT_NAME')?.id||'')")
+          if [ -z "$EXISTING" ]; then
+            echo "Creating project $PROJECT_NAME..."
+            EXISTING=$(curl -s -X POST -H "Authorization: Bearer $VERCEL_TOKEN" -H "Content-Type: application/json" \
+              "https://api.vercel.com/v11/projects?teamId=$TEAM_ID" \
+              -d '{"name":"configuratore-porte","framework":"nextjs","rootDirectory":"apps/porte","gitRepository":{"type":"github","repo":"ero12300/generale"}}' | \
+              node -e "const d=JSON.parse(require('fs').readFileSync(0,'utf8')); console.log(d.id||'')")
+          fi
+          echo "VERCEL_PROJECT_ID=$EXISTING" >> $GITHUB_ENV
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/porte
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
+      - name: Build Project
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/porte
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
+      - name: Deploy to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/porte
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ env.VERCEL_PROJECT_ID }}
