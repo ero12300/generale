@@ -3,5 +3,6 @@
   "framework": "nextjs",
   "regions": ["fra1"],
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm --filter @porte/web build"
+  "buildCommand": "cd ../.. && pnpm --filter @porte/web build",
+  "ignoreCommand": "bash -c 'git diff HEAD^ HEAD --name-only | grep -qE \"^apps/porte/|^packages/types/|^pnpm-lock.yaml$|^package.json$\"'"
 }

@@ -14,7 +14,7 @@ App mobile-first per configurare ordini porte da foro muro e export produzione.
 
 | Ambiente | URL |
 |----------|-----|
-| Produzione | https://configuratore-porte.vercel.app |
+| **Produzione** | https://configuratore-porte.vercel.app |
 
 ## Sviluppo locale
 
