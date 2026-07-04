@@ -18,3 +18,8 @@ venv/
 coverage/
 playwright-report/
 test-results/
+
+# dependencies
+node_modules/
+.pnp
+.pnp.*
