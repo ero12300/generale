@@ -137,6 +137,10 @@ export default function App() {
     setCommesse(archivio.lista());
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [vista]);
+
   const modello = MODELLI[input.modello];
   const esito = useMemo(() => calcolaPorta(input), [input]);
 
