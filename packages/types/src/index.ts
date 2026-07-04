@@ -37,6 +37,83 @@ export type WorkStatus = "planned" | "in_progress" | "done" | "cancelled";
 
 export type OrgRole = "owner" | "admin" | "analyst" | "viewer";
 
+export type DoorModel =
+  | "hinged_single"
+  | "hinged_with_fixed_panel"
+  | "sliding_pocket"
+  | "sliding_external"
+  | "folding_compass";
+
+export type DoorOpeningDirection = "right" | "left";
+
+export type DoorHandleSide = "right" | "left" | "center";
+
+export interface DoorWallOpening {
+  widthTopMm: number;
+  widthMiddleMm: number;
+  widthBottomMm: number;
+  heightLeftMm: number;
+  heightRightMm: number;
+  wallDepthMm: number;
+  finishedFloor: boolean;
+}
+
+export interface DoorAccessories {
+  hasDisplay: boolean;
+  hasOvalWindow: boolean;
+  hasFixedPanel: boolean;
+}
+
+export interface DoorConfigurationInput {
+  roomName: string;
+  model: DoorModel;
+  openingDirection: DoorOpeningDirection;
+  wallOpening: DoorWallOpening;
+  accessories: DoorAccessories;
+}
+
+export interface DoorBatchInput {
+  projectName: string;
+  doors: DoorConfigurationInput[];
+}
+
+export interface DoorBatchResult {
+  projectName: string;
+  doors: DoorConfigurationResult[];
+  exportLines: string[];
+}
+
+export interface DoorConfigurationResult {
+  input: DoorConfigurationInput;
+  modelLabel: string;
+  clearOpening: {
+    widthMm: number;
+    heightMm: number;
+    wallDepthMm: number;
+  };
+  frame: {
+    outsideWidthMm: number;
+    outsideHeightMm: number;
+    passageWidthMm: number;
+    passageHeightMm: number;
+  };
+  leaf: {
+    widthMm: number;
+    heightMm: number;
+    quantity: number;
+  };
+  fixedPanel: {
+    widthMm: number;
+    heightMm: number;
+    side: DoorHandleSide;
+  } | null;
+  openingDirection: DoorOpeningDirection;
+  handleSide: DoorHandleSide;
+  hardwareNotes: string[];
+  productionWarnings: string[];
+  schemeLines: string[];
+}
+
 export interface Organization {
   id: string;
   name: string;
@@ -246,4 +323,32 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "furnishing", label: "Arredi" },
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
+];
+
+export const DOOR_MODELS: { value: DoorModel; label: string; description: string }[] = [
+  {
+    value: "hinged_single",
+    label: "Battente singola",
+    description: "Telaio tradizionale con una anta apribile.",
+  },
+  {
+    value: "hinged_with_fixed_panel",
+    label: "Battente con fisso",
+    description: "Anta attiva piu opera morta/fisso laterale.",
+  },
+  {
+    value: "sliding_pocket",
+    label: "Scorrevole interno muro",
+    description: "Anta per controtelaio a scomparsa.",
+  },
+  {
+    value: "sliding_external",
+    label: "Scorrevole esterno muro",
+    description: "Anta esterna con sormonto laterale sul foro.",
+  },
+  {
+    value: "folding_compass",
+    label: "Libro / compasso",
+    description: "Sistema pieghevole per spazi con ingombro ridotto.",
+  },
 ];
