@@ -59,7 +59,7 @@ export function ClientForm() {
           id="client-referral"
           name="referredByCode"
           className={inputClass}
-          placeholder="Es. MARC-A2B3"
+          placeholder="Codice del cliente che lo ha invitato"
         />
       </div>
       <div>
