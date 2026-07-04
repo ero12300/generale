@@ -37,6 +37,78 @@ export type WorkStatus = "planned" | "in_progress" | "done" | "cancelled";
 
 export type OrgRole = "owner" | "admin" | "analyst" | "viewer";
 
+export type DoorModel = "hinged" | "sliding" | "pocket" | "compass";
+
+export type DoorOpeningDirection = "push" | "pull" | "slide";
+
+export type DoorSide = "left" | "right";
+
+export interface DoorWallOpening {
+  widthTopMm: number;
+  widthMiddleMm: number;
+  widthBottomMm: number;
+  heightLeftMm: number;
+  heightRightMm: number;
+  wallThicknessMm: number;
+}
+
+export interface DoorOptions {
+  hasFixedPanel: boolean;
+  hasCompassLeaf: boolean;
+  hasDisplay: boolean;
+  hasOval: boolean;
+}
+
+export interface DoorAllowances {
+  installGapSideMm: number;
+  installGapTopMm: number;
+  undercutMm: number;
+  frameFaceMm: number;
+  deadWorkDepthMm: number;
+}
+
+export interface DoorConfiguratorInput {
+  projectName: string;
+  roomName: string;
+  model: DoorModel;
+  openingDirection: DoorOpeningDirection;
+  hingeSide: DoorSide;
+  wallOpening: DoorWallOpening;
+  options: DoorOptions;
+  allowances: DoorAllowances;
+}
+
+export interface DoorSpecification {
+  projectName: string;
+  roomName: string;
+  model: DoorModel;
+  clearOpening: {
+    widthMm: number;
+    heightMm: number;
+    wallThicknessMm: number;
+  };
+  production: {
+    frameOuterWidthMm: number;
+    frameOuterHeightMm: number;
+    leafWidthMm: number;
+    leafHeightMm: number;
+    deadWork: {
+      widthMm: number;
+      heightMm: number;
+      depthMm: number;
+    };
+  };
+  handing: {
+    hingeSide: DoorSide;
+    handleSide: DoorSide;
+    openingDirection: DoorOpeningDirection;
+    label: string;
+  };
+  options: DoorOptions;
+  hardware: string[];
+  warnings: string[];
+}
+
 export interface Organization {
   id: string;
   name: string;

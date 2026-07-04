@@ -52,6 +52,52 @@ export const workListSchema = z.object({
   include_bathrooms: z.number().int().min(0).max(10).optional(),
 });
 
+export const doorConfiguratorSchema = z
+  .object({
+    projectName: z.string().trim().min(1, "Nome progetto obbligatorio").max(120),
+    roomName: z.string().trim().min(1, "Ambiente obbligatorio").max(120),
+    model: z.enum(["hinged", "sliding", "pocket", "compass"]),
+    openingDirection: z.enum(["push", "pull", "slide"]),
+    hingeSide: z.enum(["left", "right"]),
+    wallOpening: z.object({
+      widthTopMm: z.number().int().min(450).max(4000),
+      widthMiddleMm: z.number().int().min(450).max(4000),
+      widthBottomMm: z.number().int().min(450).max(4000),
+      heightLeftMm: z.number().int().min(1900).max(3200),
+      heightRightMm: z.number().int().min(1900).max(3200),
+      wallThicknessMm: z.number().int().min(70).max(500),
+    }),
+    options: z.object({
+      hasFixedPanel: z.boolean(),
+      hasCompassLeaf: z.boolean(),
+      hasDisplay: z.boolean(),
+      hasOval: z.boolean(),
+    }),
+    allowances: z.object({
+      installGapSideMm: z.number().int().min(0).max(50),
+      installGapTopMm: z.number().int().min(0).max(80),
+      undercutMm: z.number().int().min(0).max(40),
+      frameFaceMm: z.number().int().min(10).max(120),
+      deadWorkDepthMm: z.number().int().min(0).max(200),
+    }),
+  })
+  .superRefine((value, ctx) => {
+    if ((value.model === "pocket" || value.model === "sliding") && value.openingDirection !== "slide") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["openingDirection"],
+        message: "Le porte scorrevoli devono usare direzione scorrevole",
+      });
+    }
+    if (value.model !== "pocket" && value.openingDirection === "slide" && value.model !== "sliding") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["openingDirection"],
+        message: "Direzione scorrevole ammessa solo per porte scorrevoli",
+      });
+    }
+  });
+
 export const updateDealSchema = z
   .object({
     title: z.string().trim().min(1).max(200).optional(),

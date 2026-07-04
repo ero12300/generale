@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Building2,
+  DoorOpen,
   LayoutDashboard,
   LineChart,
   LogOut,
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/deals", label: "Pipeline Deal", icon: Workflow },
+  { href: "/doors", label: "Porte", icon: DoorOpen },
   { href: "/freedom", label: "Libertà Finanziaria", icon: LineChart },
 ];
 
@@ -102,6 +104,26 @@ export function AppShell({ children, mode, orgName, email }: AppShellProps) {
             + Nuovo deal
           </Link>
         </header>
+        <nav
+          className="md:hidden flex gap-2 overflow-x-auto border-b border-zinc-800 bg-zinc-950 px-4 py-2"
+          aria-label="Navigazione mobile"
+        >
+          {nav.map(({ href, label, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                "flex shrink-0 items-center gap-2 rounded-full px-3 py-2 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50",
+                pathname.startsWith(href)
+                  ? "bg-amber-600/15 text-amber-300"
+                  : "border border-zinc-800 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" aria-hidden />
+              {label}
+            </Link>
+          ))}
+        </nav>
         <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>
       </div>
     </div>
