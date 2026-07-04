@@ -247,3 +247,81 @@ export const WORK_CATEGORIES: { value: WorkCategory; label: string }[] = [
   { value: "disposal", label: "Smaltimenti" },
   { value: "inspection", label: "Collaudi" },
 ];
+
+export type DoorModel = "swing" | "flush_swing" | "pocket_sliding" | "external_sliding";
+export type DoorOpeningDirection = "push" | "pull";
+export type DoorSide = "left" | "right";
+
+export interface DoorModelSpec {
+  model: DoorModel;
+  label: string;
+  description: string;
+  frameDeductionWidthMm: number;
+  frameDeductionHeightMm: number;
+  leafOverlapWidthMm: number;
+  leafOverlapHeightMm: number;
+  roughOpeningFormula: string;
+}
+
+export interface DoorConfiguration {
+  id: string;
+  organization_id: string;
+  name: string;
+  model: DoorModel;
+  opening_direction: DoorOpeningDirection;
+  hinge_side: DoorSide;
+  handle_side: DoorSide;
+  opening_hand: "left" | "right" | "left_reverse" | "right_reverse";
+  clear_width_mm: number;
+  clear_height_mm: number;
+  wall_thickness_mm: number;
+  dead_work_clearance_mm: number;
+  has_fixed_leaf: boolean;
+  has_display_glass: boolean;
+  has_oval_vision_panel: boolean;
+  notes: string | null;
+  created_at: string;
+}
+
+export const DOOR_MODELS: DoorModelSpec[] = [
+  {
+    model: "swing",
+    label: "Battente tradizionale",
+    description: "Porta a battente con telaio standard e coprifili.",
+    frameDeductionWidthMm: 100,
+    frameDeductionHeightMm: 50,
+    leafOverlapWidthMm: 0,
+    leafOverlapHeightMm: 0,
+    roughOpeningFormula: "Luce vano = anta + 100 mm (L) / +50 mm (H)",
+  },
+  {
+    model: "flush_swing",
+    label: "Battente filo muro",
+    description: "Porta battente filo muro con telaio tecnico.",
+    frameDeductionWidthMm: 120,
+    frameDeductionHeightMm: 60,
+    leafOverlapWidthMm: 0,
+    leafOverlapHeightMm: 0,
+    roughOpeningFormula: "Luce vano = anta + 120 mm (L) / +60 mm (H)",
+  },
+  {
+    model: "pocket_sliding",
+    label: "Scorrevole a scomparsa",
+    description: "Porta che scorre nel controtelaio interno parete.",
+    frameDeductionWidthMm: 0,
+    frameDeductionHeightMm: 0,
+    leafOverlapWidthMm: 50,
+    leafOverlapHeightMm: 0,
+    roughOpeningFormula: "Ingombro controtelaio ≈ 2L + 110 mm; H + 90 mm",
+  },
+  {
+    model: "external_sliding",
+    label: "Scorrevole esterno muro",
+    description: "Porta scorrevole su binario esterno a vista.",
+    frameDeductionWidthMm: 0,
+    frameDeductionHeightMm: 0,
+    leafOverlapWidthMm: 80,
+    leafOverlapHeightMm: 40,
+    roughOpeningFormula: "Anta consigliata = luce + sovrapposizione laterale/alta",
+  },
+];
