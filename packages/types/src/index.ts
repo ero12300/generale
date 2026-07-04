@@ -64,12 +64,21 @@ export interface DoorAccessories {
   hasFixedPanel: boolean;
 }
 
+/** Quote manuali per battente con opera morta/fisso laterale */
+export interface DoorFixedPanelSpec {
+  /** Larghezza opera morta in mm; null = calcolo automatico dal foro */
+  manualWidthMm: number | null;
+  /** Aria (gioco) tra anta attiva e opera morta in mm */
+  leafGapMm: number;
+}
+
 export interface DoorConfigurationInput {
   roomName: string;
   model: DoorModel;
   openingDirection: DoorOpeningDirection;
   wallOpening: DoorWallOpening;
   accessories: DoorAccessories;
+  fixedPanelSpec: DoorFixedPanelSpec;
 }
 
 export interface DoorBatchInput {
@@ -106,12 +115,14 @@ export interface DoorConfigurationResult {
     widthMm: number;
     heightMm: number;
     side: DoorHandleSide;
+    leafGapMm: number;
   } | null;
   openingDirection: DoorOpeningDirection;
   handleSide: DoorHandleSide;
   hardwareNotes: string[];
   productionWarnings: string[];
   schemeLines: string[];
+  schemaSvg: string;
 }
 
 export interface Organization {

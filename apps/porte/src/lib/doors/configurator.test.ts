@@ -19,6 +19,10 @@ const baseInput = {
     hasOvalWindow: false,
     hasFixedPanel: false,
   },
+  fixedPanelSpec: {
+    manualWidthMm: null,
+    leafGapMm: 0,
+  },
 } as const;
 
 describe("calculateDoorConfiguration", () => {
@@ -49,11 +53,43 @@ describe("calculateDoorConfiguration", () => {
         ...baseInput.accessories,
         hasFixedPanel: true,
       },
+      fixedPanelSpec: {
+        manualWidthMm: null,
+        leafGapMm: 0,
+      },
     });
 
     expect(result.leaf.widthMm).toBe(900);
     expect(result.fixedPanel?.widthMm).toBe(277);
     expect(result.fixedPanel?.side).toBe("left");
+    expect(result.fixedPanel?.leafGapMm).toBe(0);
+  });
+
+  it("rispetta opera morta manuale e aria tra anta e fisso", () => {
+    const result = calculateDoorConfiguration({
+      ...baseInput,
+      model: "hinged_with_fixed_panel",
+      wallOpening: {
+        ...baseInput.wallOpening,
+        widthTopMm: 1280,
+        widthMiddleMm: 1278,
+        widthBottomMm: 1276,
+      },
+      accessories: {
+        ...baseInput.accessories,
+        hasFixedPanel: true,
+      },
+      fixedPanelSpec: {
+        manualWidthMm: 900,
+        leafGapMm: 10,
+      },
+    });
+
+    expect(result.fixedPanel?.widthMm).toBe(900);
+    expect(result.fixedPanel?.leafGapMm).toBe(10);
+    expect(result.leaf.widthMm).toBe(267);
+    expect(result.schemeLines).toContain("Aria anta/opera morta: 10 mm");
+    expect(result.schemaSvg).toContain("aria 10");
   });
 
   it("calcola anta scorrevole esterno muro con sormonto sul foro e maniglia a conchiglia", () => {

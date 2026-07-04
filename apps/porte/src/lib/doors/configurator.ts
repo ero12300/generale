@@ -6,6 +6,7 @@ import type {
   DoorHandleSide,
   DoorModel,
 } from "@deal-desk/types";
+import { buildDoorSchemaSvg } from "@/lib/doors/schema-svg";
 
 interface DoorModelPreset {
   label: string;
@@ -14,6 +15,7 @@ interface DoorModelPreset {
   leafDeltaFromPassageWidthMm: number;
   leafDeltaFromPassageHeightMm: number;
   maxLeafWidthMm: number;
+  minLeafWidthMm: number;
   needsShellHandle: boolean;
 }
 
@@ -25,6 +27,7 @@ const PRESETS: Record<DoorModel, DoorModelPreset> = {
     leafDeltaFromPassageWidthMm: 0,
     leafDeltaFromPassageHeightMm: 0,
     maxLeafWidthMm: 900,
+    minLeafWidthMm: 400,
     needsShellHandle: false,
   },
   hinged_with_fixed_panel: {
@@ -34,6 +37,7 @@ const PRESETS: Record<DoorModel, DoorModelPreset> = {
     leafDeltaFromPassageWidthMm: 0,
     leafDeltaFromPassageHeightMm: 0,
     maxLeafWidthMm: 900,
+    minLeafWidthMm: 400,
     needsShellHandle: false,
   },
   sliding_pocket: {
@@ -43,6 +47,7 @@ const PRESETS: Record<DoorModel, DoorModelPreset> = {
     leafDeltaFromPassageWidthMm: 25,
     leafDeltaFromPassageHeightMm: -4,
     maxLeafWidthMm: 1025,
+    minLeafWidthMm: 400,
     needsShellHandle: true,
   },
   sliding_external: {
@@ -52,6 +57,7 @@ const PRESETS: Record<DoorModel, DoorModelPreset> = {
     leafDeltaFromPassageWidthMm: 100,
     leafDeltaFromPassageHeightMm: 0,
     maxLeafWidthMm: 1200,
+    minLeafWidthMm: 400,
     needsShellHandle: true,
   },
   folding_compass: {
@@ -61,6 +67,7 @@ const PRESETS: Record<DoorModel, DoorModelPreset> = {
     leafDeltaFromPassageWidthMm: 0,
     leafDeltaFromPassageHeightMm: 0,
     maxLeafWidthMm: 950,
+    minLeafWidthMm: 300,
     needsShellHandle: false,
   },
 };
@@ -83,6 +90,10 @@ export function createDoorInput(roomName: string): DoorConfigurationInput {
       hasDisplay: false,
       hasOvalWindow: false,
       hasFixedPanel: false,
+    },
+    fixedPanelSpec: {
+      manualWidthMm: null,
+      leafGapMm: 0,
     },
   };
 }
@@ -118,17 +129,40 @@ export function calculateDoorConfiguration(
   const clearHeightMm = Math.min(input.wallOpening.heightLeftMm, input.wallOpening.heightRightMm);
   const passageWidthMm = Math.max(0, clearWidthMm - preset.frameAllowanceWidthMm);
   const passageHeightMm = Math.max(0, clearHeightMm - preset.frameAllowanceHeightMm);
-  const rawLeafWidthMm = passageWidthMm + preset.leafDeltaFromPassageWidthMm;
   const leafQuantity = input.model === "folding_compass" ? 2 : 1;
-  const leafWidthMm = Math.min(
-    Math.floor(rawLeafWidthMm / leafQuantity),
-    preset.maxLeafWidthMm
-  );
+  const gapMm = Math.max(0, input.fixedPanelSpec.leafGapMm);
+
+  let leafWidthMm: number;
+  let fixedPanel: DoorConfigurationResult["fixedPanel"] = null;
+
+  if (input.model === "hinged_with_fixed_panel" && input.accessories.hasFixedPanel) {
+    const layout = resolveFixedPanelLayout(
+      input,
+      passageWidthMm,
+      clearHeightMm,
+      preset,
+      gapMm
+    );
+    leafWidthMm = layout.leafWidthMm;
+    fixedPanel = layout.fixedPanel;
+  } else {
+    const rawLeafWidthMm = passageWidthMm + preset.leafDeltaFromPassageWidthMm;
+    leafWidthMm = Math.min(
+      Math.floor(rawLeafWidthMm / leafQuantity),
+      preset.maxLeafWidthMm
+    );
+  }
+
   const leafHeightMm = passageHeightMm + preset.leafDeltaFromPassageHeightMm;
   const handleSide = getHandleSide(input.model, input.openingDirection);
-  const fixedPanel = buildFixedPanel(input, clearWidthMm, leafWidthMm, clearHeightMm);
   const hardwareNotes = buildHardwareNotes(input, handleSide, preset.needsShellHandle);
-  const productionWarnings = buildProductionWarnings(input, fixedPanel);
+  const productionWarnings = buildProductionWarnings(
+    input,
+    fixedPanel,
+    leafWidthMm,
+    preset
+  );
+
   const result: DoorConfigurationResult = {
     input,
     modelLabel: preset.label,
@@ -154,11 +188,51 @@ export function calculateDoorConfiguration(
     hardwareNotes,
     productionWarnings,
     schemeLines: [],
+    schemaSvg: "",
+  };
+
+  const withScheme = {
+    ...result,
+    schemeLines: buildSchemeLines(result),
   };
 
   return {
-    ...result,
-    schemeLines: buildSchemeLines(result),
+    ...withScheme,
+    schemaSvg: buildDoorSchemaSvg(withScheme),
+  };
+}
+
+function resolveFixedPanelLayout(
+  input: DoorConfigurationInput,
+  passageWidthMm: number,
+  clearHeightMm: number,
+  preset: DoorModelPreset,
+  gapMm: number
+): { leafWidthMm: number; fixedPanel: NonNullable<DoorConfigurationResult["fixedPanel"]> } {
+  const fixedSide: DoorHandleSide =
+    input.openingDirection === "right" ? "left" : "right";
+  const fixedHeightMm = clearHeightMm - preset.frameAllowanceHeightMm;
+  const manualFixed = input.fixedPanelSpec.manualWidthMm;
+
+  let fixedWidthMm: number;
+  let leafWidthMm: number;
+
+  if (manualFixed != null) {
+    fixedWidthMm = manualFixed;
+    leafWidthMm = passageWidthMm - fixedWidthMm - gapMm;
+  } else {
+    leafWidthMm = Math.min(preset.maxLeafWidthMm, passageWidthMm - gapMm);
+    fixedWidthMm = passageWidthMm - leafWidthMm - gapMm;
+  }
+
+  return {
+    leafWidthMm: Math.max(0, Math.floor(leafWidthMm)),
+    fixedPanel: {
+      widthMm: Math.max(0, Math.floor(fixedWidthMm)),
+      heightMm: fixedHeightMm,
+      side: fixedSide,
+      leafGapMm: gapMm,
+    },
   };
 }
 
@@ -167,28 +241,6 @@ function getHandleSide(model: DoorModel, openingDirection: "right" | "left"): Do
     return openingDirection;
   }
   return openingDirection === "right" ? "left" : "right";
-}
-
-function buildFixedPanel(
-  input: DoorConfigurationInput,
-  clearWidthMm: number,
-  leafWidthMm: number,
-  clearHeightMm: number
-): DoorConfigurationResult["fixedPanel"] {
-  if (!input.accessories.hasFixedPanel) return null;
-  if (input.model !== "hinged_with_fixed_panel") return null;
-
-  const preset = PRESETS[input.model];
-  const fixedWidthMm = Math.max(
-    0,
-    clearWidthMm - preset.frameAllowanceWidthMm - leafWidthMm
-  );
-
-  return {
-    widthMm: fixedWidthMm,
-    heightMm: clearHeightMm - preset.frameAllowanceHeightMm,
-    side: input.openingDirection === "right" ? "left" : "right",
-  };
 }
 
 function buildHardwareNotes(
@@ -216,7 +268,9 @@ function buildHardwareNotes(
 
 function buildProductionWarnings(
   input: DoorConfigurationInput,
-  fixedPanel: DoorConfigurationResult["fixedPanel"]
+  fixedPanel: DoorConfigurationResult["fixedPanel"],
+  leafWidthMm: number,
+  preset: DoorModelPreset
 ): string[] {
   const warnings = [
     "Rilevare sempre tre larghezze e due altezze: il calcolo usa la quota piu piccola.",
@@ -227,6 +281,14 @@ function buildProductionWarnings(
   }
   if (fixedPanel && fixedPanel.widthMm < 120) {
     warnings.push("Fisso laterale sotto 120 mm: verificare fattibilita con il produttore.");
+  }
+  if (leafWidthMm < preset.minLeafWidthMm) {
+    warnings.push(
+      `Anta ${leafWidthMm} mm sotto il minimo consigliato (${preset.minLeafWidthMm} mm): verificare opera morta e aria.`
+    );
+  }
+  if (leafWidthMm > preset.maxLeafWidthMm) {
+    warnings.push(`Anta ${leafWidthMm} mm oltre il massimo standard (${preset.maxLeafWidthMm} mm).`);
   }
 
   return warnings;
@@ -239,19 +301,31 @@ function buildSchemeLines(result: DoorConfigurationResult): string[] {
       )}`
     : "no";
 
-  return [
+  const lines = [
     `Ambiente: ${result.input.roomName}`,
     `Modello: ${result.modelLabel}`,
     `Foro muro netto: ${result.clearOpening.widthMm} x ${result.clearOpening.heightMm} x ${result.clearOpening.wallDepthMm} mm`,
     `Luce passaggio telaio: ${result.frame.passageWidthMm} x ${result.frame.passageHeightMm} mm`,
     `Anta produzione: ${result.leaf.quantity} x ${result.leaf.widthMm} x ${result.leaf.heightMm} mm`,
     `Opera morta / fisso: ${fixedPanelLine}`,
+  ];
+
+  if (result.fixedPanel) {
+    lines.push(`Aria anta/opera morta: ${result.fixedPanel.leafGapMm} mm`);
+    if (result.input.fixedPanelSpec.manualWidthMm != null) {
+      lines.push(`Opera morta manuale: ${result.input.fixedPanelSpec.manualWidthMm} mm`);
+    }
+  }
+
+  lines.push(
     `Apertura: ${translateDirection(result.openingDirection)}`,
     `Maniglia: ${translateDirection(result.handleSide)}`,
     `Display: ${result.input.accessories.hasDisplay ? "si" : "no"}`,
     `Ovale: ${result.input.accessories.hasOvalWindow ? "si" : "no"}`,
-    `Finitura pavimento: ${result.input.wallOpening.finishedFloor ? "finito" : "da verificare"}`,
-  ];
+    `Finitura pavimento: ${result.input.wallOpening.finishedFloor ? "finito" : "da verificare"}`
+  );
+
+  return lines;
 }
 
 function translateSide(side: DoorHandleSide | "right" | "left"): string {

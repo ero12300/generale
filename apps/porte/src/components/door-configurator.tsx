@@ -24,6 +24,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { calculateDoorBatch, createDoorInput } from "@/lib/doors/configurator";
+import { buildBatchSchemaSvg } from "@/lib/doors/schema-svg";
 import { cn } from "@/lib/utils";
 import { doorBatchSchema } from "@/lib/validations/door";
 
@@ -93,6 +94,23 @@ export function DoorConfigurator() {
         ...door.accessories,
         hasFixedPanel: model === "hinged_with_fixed_panel",
       },
+      fixedPanelSpec:
+        model === "hinged_with_fixed_panel"
+          ? door.fixedPanelSpec
+          : { manualWidthMm: null, leafGapMm: 0 },
+    }));
+  }
+
+  function updateFixedPanelSpec(
+    key: keyof DoorConfigurationInput["fixedPanelSpec"],
+    value: number | null
+  ) {
+    updateActiveDoor((door) => ({
+      ...door,
+      fixedPanelSpec: {
+        ...door.fixedPanelSpec,
+        [key]: value,
+      },
     }));
   }
 
@@ -161,9 +179,29 @@ export function DoorConfigurator() {
       link.download = `${projectName.toLowerCase().replace(/\s+/g, "-")}-ordine-porte.json`;
       link.click();
       URL.revokeObjectURL(url);
-      setSuccess(`Export JSON generato: ${order.doors.length} porte.`);
+      setSuccess(`Export JSON generato: ${order.doors.length} porte (con disegni SVG).`);
     } catch {
       setError("Impossibile generare l'export JSON. Verifica il browser e riprova.");
+      setSuccess(null);
+    }
+  }
+
+  function downloadSvg() {
+    const order = validateBatch();
+    if (!order) return;
+
+    try {
+      const svg = buildBatchSchemaSvg(order.projectName, order.doors);
+      const blob = new Blob([svg], { type: "image/svg+xml" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${projectName.toLowerCase().replace(/\s+/g, "-")}-disegni-porte.svg`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setSuccess(`Disegni SVG scaricati: ${order.doors.length} porte con quote.`);
+    } catch {
+      setError("Impossibile generare i disegni SVG.");
       setSuccess(null);
     }
   }
@@ -395,11 +433,42 @@ export function DoorConfigurator() {
                 checked={input.wallOpening.finishedFloor}
                 onChange={(value) => updateMeasure("finishedFloor", value)}
               />
+              {input.model === "hinged_with_fixed_panel" && (
+                <>
+                  <OptionalMeasureField
+                    label="Larghezza opera morta (mm)"
+                    placeholder="Automatica"
+                    value={input.fixedPanelSpec.manualWidthMm}
+                    onChange={(value) => updateFixedPanelSpec("manualWidthMm", value)}
+                  />
+                  <MeasureField
+                    label="Aria anta / opera morta (mm)"
+                    value={input.fixedPanelSpec.leafGapMm}
+                    onChange={(value) => updateFixedPanelSpec("leafGapMm", value)}
+                  />
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
 
         <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+          {result?.schemaSvg && (
+            <Card className="border-amber-500/20">
+              <CardHeader>
+                <CardTitle>Disegno quotato</CardTitle>
+                <CardDescription>Vista frontale con quote produzione.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className="overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-950 p-2"
+                  dangerouslySetInnerHTML={{ __html: result.schemaSvg }}
+                  aria-label={`Disegno tecnico ${input.roomName}`}
+                />
+              </CardContent>
+            </Card>
+          )}
+
           <Card className="border-amber-500/30">
             <CardHeader>
               <CardTitle>Schema porta attiva</CardTitle>
@@ -429,6 +498,9 @@ export function DoorConfigurator() {
                           : `${result.frame.passageWidthMm} x ${result.frame.passageHeightMm}`
                       }
                     />
+                    {result.fixedPanel && result.fixedPanel.leafGapMm > 0 && (
+                      <Metric label="Aria anta/fisso" value={`${result.fixedPanel.leafGapMm} mm`} />
+                    )}
                     <Metric label="Maniglia" value={translateSide(result.handleSide)} />
                     <Metric label="Apertura" value={translateSide(result.openingDirection)} />
                   </div>
@@ -495,6 +567,10 @@ export function DoorConfigurator() {
                   <Download className="h-4 w-4" />
                   Export JSON
                 </Button>
+                <Button type="button" onClick={downloadSvg} variant="secondary" className="sm:col-span-2">
+                  <Download className="h-4 w-4" />
+                  Scarica disegni SVG quotati
+                </Button>
               </div>
               {success && (
                 <p role="status" className="text-center text-sm font-medium text-emerald-300">
@@ -554,6 +630,39 @@ function MeasureField({
         inputMode="numeric"
         value={value}
         onChange={(event) => onChange(Number(event.target.value))}
+        className="h-12 text-base"
+      />
+    </div>
+  );
+}
+
+function OptionalMeasureField({
+  label,
+  placeholder,
+  value,
+  onChange,
+}: {
+  label: string;
+  placeholder: string;
+  value: number | null;
+  onChange: (value: number | null) => void;
+}) {
+  const id = useId();
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <Input
+        id={id}
+        type="number"
+        min={100}
+        inputMode="numeric"
+        placeholder={placeholder}
+        value={value ?? ""}
+        onChange={(event) => {
+          const raw = event.target.value.trim();
+          onChange(raw === "" ? null : Number(raw));
+        }}
         className="h-12 text-base"
       />
     </div>
