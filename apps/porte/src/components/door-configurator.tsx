@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { calculateDoorBatch, createDoorInput } from "@/lib/doors/configurator";
 import { buildBatchSchemaSvg } from "@/lib/doors/schema-svg";
+import { DoorVisualSimulator } from "@/components/door-visual-simulator";
 import { cn } from "@/lib/utils";
 import { doorBatchSchema } from "@/lib/validations/door";
 
@@ -453,11 +454,25 @@ export function DoorConfigurator() {
         </div>
 
         <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+          {result && (
+            <Card className="border-amber-500/40">
+              <CardHeader>
+                <CardTitle>Simulatore visivo</CardTitle>
+                <CardDescription>
+                  Anteprima colorata di anta, aria e opera morta per {input.roomName}.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <DoorVisualSimulator result={result} />
+              </CardContent>
+            </Card>
+          )}
+
           {result?.schemaSvg && (
             <Card className="border-amber-500/20">
               <CardHeader>
                 <CardTitle>Disegno quotato</CardTitle>
-                <CardDescription>Vista frontale con quote produzione.</CardDescription>
+                <CardDescription>Vista tecnica con quote per produzione ed export.</CardDescription>
               </CardHeader>
               <CardContent>
                 <div
