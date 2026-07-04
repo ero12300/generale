@@ -16,6 +16,21 @@ export const barberCollections = {
   campaigns: "barber_campaigns",
 } as const;
 
+function normalizePreferredTime(value: unknown) {
+  const raw = String(value ?? "").trim();
+  const match = raw.match(/^(\d{1,2}):([0-5]\d)\s*([AP]M)$/i);
+
+  if (!match) return raw;
+
+  const hour = Number(match[1]);
+  const minute = match[2];
+  const period = match[3].toUpperCase();
+  const normalizedHour =
+    period === "PM" && hour < 12 ? hour + 12 : period === "AM" && hour === 12 ? 0 : hour;
+
+  return `${String(normalizedHour).padStart(2, "0")}:${minute}`;
+}
+
 export const bookingLeadSchema = z.object({
   customerName: z.string().trim().min(2, "Inserisci nome e cognome"),
   phone: z
@@ -30,9 +45,10 @@ export const bookingLeadSchema = z.object({
     .trim()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Usa formato YYYY-MM-DD"),
   preferredTime: z
-    .string()
-    .trim()
-    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Usa formato HH:mm"),
+    .preprocess(
+      normalizePreferredTime,
+      z.string().trim().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Usa formato HH:mm")
+    ),
   referralCode: z.string().trim().max(24).optional().or(z.literal("")),
 });
 

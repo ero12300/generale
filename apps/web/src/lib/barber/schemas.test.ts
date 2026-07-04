@@ -16,6 +16,21 @@ describe("bookingLeadSchema", () => {
     expect(result.success).toBe(true);
   });
 
+  it("normalizza orari browser in formato AM/PM", () => {
+    const result = bookingLeadSchema.safeParse({
+      customerName: "Mario Rossi",
+      phone: "+39 333 000 0000",
+      email: "mario@example.com",
+      service: "combo-signature",
+      preferredDate: "2026-07-04",
+      preferredTime: "10:30 AM",
+      referralCode: "FRIEND20",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.preferredTime).toBe("10:30");
+  });
+
   it("rifiuta telefono e servizio non validi", () => {
     const result = bookingLeadSchema.safeParse({
       customerName: "M",
