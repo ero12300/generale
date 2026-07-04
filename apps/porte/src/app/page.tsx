@@ -306,7 +306,7 @@ export default function Home() {
             )}
           </div>
 
-          <div className="no-print mt-3 flex gap-3">
+          <div className="no-print mt-3 flex flex-col gap-3 sm:flex-row">
             <button type="button" onClick={() => window.print()} className={btnPrimary}>
               Esporta / Stampa PDF
             </button>
