@@ -1,0 +1,18 @@
+{
+  "name": "PortePro",
+  "short_name": "PortePro",
+  "description": "Configuratore mobile per porte interne: dal foro muro alla scheda di produzione.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

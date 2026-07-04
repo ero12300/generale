@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd ../.. && pnpm install --frozen-lockfile=false && pnpm --filter @portepro/web build",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile=false",
+  "outputDirectory": ".next",
+  "framework": "nextjs"
+}
