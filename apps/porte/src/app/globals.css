@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-charcoal: #1a1a2e;
+  --color-surface: #16213e;
+  --color-surface-light: #1f2b4d;
+  --color-cream: #f5f0e8;
+  --color-wood: #8b5a2b;
+  --color-wood-light: #c4956a;
+  --color-wood-dark: #5c3d1e;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-wood/10;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-charcoal text-cream antialiased;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  input, select, textarea, button {
+    font-size: 16px;
+  }
+
+  @media (min-width: 640px) {
+    input, select, textarea, button {
+      font-size: inherit;
+    }
+  }
+}
+
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+}
