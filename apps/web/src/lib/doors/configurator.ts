@@ -149,12 +149,12 @@ function buildHardwareNotes(
   needsShellHandle: boolean
 ): string[] {
   const notes = [
-    `Maniglia lato ${translateSide(handleSide)}`,
-    `Apertura ${translateSide(input.openingDirection)}`,
+    `Maniglia lato ${translateLatoSide(handleSide)}`,
+    `Apertura ${translateDirection(input.openingDirection)}`,
   ];
 
   if (needsShellHandle) {
-    notes.push(`Maniglia a conchiglia lato ${translateSide(handleSide)}`);
+    notes.push(`Maniglia a conchiglia lato ${translateLatoSide(handleSide)}`);
   }
   if (input.accessories.hasDisplay) {
     notes.push("Predisporre display/visore sull'anta secondo distinta ferramenta");
@@ -198,8 +198,8 @@ function buildSchemeLines(result: DoorConfigurationResult): string[] {
     `Luce passaggio telaio: ${result.frame.passageWidthMm} x ${result.frame.passageHeightMm} mm`,
     `Anta produzione: ${result.leaf.quantity} x ${result.leaf.widthMm} x ${result.leaf.heightMm} mm`,
     `Opera morta / fisso: ${fixedPanelLine}`,
-    `Apertura: ${translateSide(result.openingDirection)}`,
-    `Maniglia: ${translateSide(result.handleSide)}`,
+    `Apertura: ${translateDirection(result.openingDirection)}`,
+    `Maniglia: ${translateDirection(result.handleSide)}`,
     `Display: ${result.input.accessories.hasDisplay ? "si" : "no"}`,
     `Ovale: ${result.input.accessories.hasOvalWindow ? "si" : "no"}`,
     `Finitura pavimento: ${result.input.wallOpening.finishedFloor ? "finito" : "da verificare"}`,
@@ -208,4 +208,12 @@ function buildSchemeLines(result: DoorConfigurationResult): string[] {
 
 function translateSide(side: DoorHandleSide | "right" | "left"): string {
   return side === "right" ? "destro" : side === "left" ? "sinistro" : "centrale";
+}
+
+function translateLatoSide(side: DoorHandleSide | "right" | "left"): string {
+  return translateSide(side);
+}
+
+function translateDirection(side: DoorHandleSide | "right" | "left"): string {
+  return side === "right" ? "destra" : side === "left" ? "sinistra" : "centro";
 }

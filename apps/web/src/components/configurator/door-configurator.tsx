@@ -146,7 +146,7 @@ export function DoorConfigurator() {
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
             <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">Metodo rilievo</p>
             <p className="mt-2 text-sm text-zinc-300">
-              Il calcolo usa la larghezza minore tra alto/centro/basso e l'altezza minore tra
+              Il calcolo usa la larghezza minore tra alto/centro/basso e l&apos;altezza minore tra
               sinistra/destra, come da prassi di rilievo tecnico.
             </p>
           </div>
@@ -285,16 +285,18 @@ export function DoorConfigurator() {
                   {error}
                 </div>
               )}
-              {success && (
-                <div role="status" className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-emerald-200">
-                  {success}
-                </div>
-              )}
               {result ? (
                 <>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Metric label="Anta" value={`${result.leaf.widthMm} x ${result.leaf.heightMm}`} />
-                    <Metric label="Passaggio" value={`${result.frame.passageWidthMm} x ${result.frame.passageHeightMm}`} />
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Metric label="Anta attiva" value={`${result.leaf.widthMm} x ${result.leaf.heightMm}`} />
+                    <Metric
+                      label={result.fixedPanel ? "Fisso laterale" : "Luce passaggio"}
+                      value={
+                        result.fixedPanel
+                          ? `${result.fixedPanel.widthMm} x ${result.fixedPanel.heightMm}`
+                          : `${result.frame.passageWidthMm} x ${result.frame.passageHeightMm}`
+                      }
+                    />
                     <Metric label="Maniglia" value={translateSide(result.handleSide)} />
                     <Metric label="Apertura" value={translateSide(result.openingDirection)} />
                   </div>
@@ -317,7 +319,7 @@ export function DoorConfigurator() {
                     </ul>
                   </div>
                   <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4">
-                    <p className="text-sm font-medium text-amber-100">Controlli prima dell'ordine</p>
+                    <p className="text-sm font-medium text-amber-100">Controlli prima dell&apos;ordine</p>
                     <ul className="mt-2 space-y-1 text-xs leading-5 text-amber-100/80">
                       {result.productionWarnings.map((warning) => (
                         <li key={warning}>- {warning}</li>
@@ -338,6 +340,11 @@ export function DoorConfigurator() {
                   Export
                 </Button>
               </div>
+              {success && (
+                <p role="status" className="text-center text-sm font-medium text-emerald-300">
+                  {success}
+                </p>
+              )}
             </CardContent>
           </Card>
         </aside>
