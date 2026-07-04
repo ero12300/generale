@@ -70,28 +70,11 @@ async function main() {
     console.log(`   ✓ Progetto esistente: ${project.id}`);
   }
 
-  console.log("🚀 Avvio deploy produzione (CLI)...");
-  const { execSync } = await import("node:child_process");
-  const { mkdirSync, writeFileSync } = await import("node:fs");
-  const { resolve, dirname } = await import("node:path");
-  const { fileURLToPath } = await import("node:url");
-
-  const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-  mkdirSync(resolve(root, ".vercel"), { recursive: true });
-  writeFileSync(
-    resolve(root, ".vercel/project.json"),
-    JSON.stringify({ orgId: VERCEL_TEAM_ID, projectId: project.id })
-  );
-
-  execSync("pnpm dlx vercel@latest deploy --prod --yes", {
-    cwd: root,
-    stdio: "inherit",
-    env: { ...process.env, VERCEL_TOKEN },
-  });
-
   const refreshed = await vercelFetch(`/v9/projects/${project.id}`);
   const alias = refreshed?.alias?.[0]?.domain || refreshed?.targets?.production?.alias?.[0];
   const url = alias ? `https://${alias}` : `https://${PROJECT_NAME}.vercel.app`;
+
+  console.log("⚙️  Configurazione variabili ambiente...");
   const envVars = [
     { key: "NEXT_PUBLIC_APP_URL", value: url },
     {
@@ -124,7 +107,26 @@ async function main() {
     }
   }
 
-  console.log("\n✅ Deploy avviato!");
+  console.log("🚀 Avvio deploy produzione (CLI)...");
+  const { execSync } = await import("node:child_process");
+  const { mkdirSync, writeFileSync } = await import("node:fs");
+  const { resolve, dirname } = await import("node:path");
+  const { fileURLToPath } = await import("node:url");
+
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  mkdirSync(resolve(root, ".vercel"), { recursive: true });
+  writeFileSync(
+    resolve(root, ".vercel/project.json"),
+    JSON.stringify({ orgId: VERCEL_TEAM_ID, projectId: project.id })
+  );
+
+  execSync("pnpm dlx vercel@latest deploy --prod --yes", {
+    cwd: root,
+    stdio: "inherit",
+    env: { ...process.env, VERCEL_TOKEN },
+  });
+
+  console.log("\n✅ Deploy completato!");
   console.log(`   URL:        ${url}`);
   console.log(`   Dashboard:  ${url}/dashboard`);
   console.log(`   Prenotazioni: ${url}/book/fade-studio`);
