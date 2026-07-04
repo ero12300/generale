@@ -1,7 +1,8 @@
 "use client";
 
 import { Download, FileJson, RotateCw, Sparkles } from "lucide-react";
-import { FormEvent, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import { DoorSchemaPreview } from "./door-schema-preview";
 import { calculateDoorPlan } from "@/lib/door-engine/formulas";
 import { createDoorExport } from "@/lib/door-engine/schema-export";
@@ -61,6 +62,7 @@ export function DoorConfigurator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState("Schema iniziale pronto");
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const exported = useMemo(() => createDoorExport(plan), [plan]);
 
@@ -108,6 +110,9 @@ export function DoorConfigurator() {
       setPlan(nextPlan);
       setSuccess("Schema porta generato e pronto per export");
       setLoading(false);
+      window.requestAnimationFrame(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     }, 120);
   }
 
@@ -262,7 +267,12 @@ export function DoorConfigurator() {
           </form>
         </div>
 
-        <ResultCards plan={plan} />
+        <div ref={resultsRef} className="scroll-mt-20 space-y-3">
+          <h2 className="text-lg font-semibold text-zinc-50">
+            Risultato produzione
+          </h2>
+          <ResultCards plan={plan} />
+        </div>
       </section>
 
       <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
