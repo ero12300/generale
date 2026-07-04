@@ -75,5 +75,6 @@ Senza variabili Supabase, l'app usa `demoStore` in-memory per dimostrare UI e fl
 | Servizio | Porta | Note |
 |----------|-------|------|
 | Web | 3000 | `pnpm dev` |
+| PortaLab (configuratore porte) | 3002 | `pnpm dev:porte`, test `pnpm test:porte` |
 | Analytics | 8000 | Richiesto per simulatore |
 | Intake | 8001 | Opzionale, fallback manuale |
