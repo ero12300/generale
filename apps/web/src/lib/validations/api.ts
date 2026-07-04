@@ -97,6 +97,11 @@ export const doorConfigurationSchema = z
     }
   );
 
+export const doorBatchSchema = z.object({
+  projectName: z.string().trim().min(1, "Nome commessa obbligatorio").max(120),
+  doors: z.array(doorConfigurationSchema).min(1, "Aggiungi almeno una porta").max(50),
+});
+
 export const updateDealSchema = z
   .object({
     title: z.string().trim().min(1).max(200).optional(),

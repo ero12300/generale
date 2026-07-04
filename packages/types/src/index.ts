@@ -72,6 +72,17 @@ export interface DoorConfigurationInput {
   accessories: DoorAccessories;
 }
 
+export interface DoorBatchInput {
+  projectName: string;
+  doors: DoorConfigurationInput[];
+}
+
+export interface DoorBatchResult {
+  projectName: string;
+  doors: DoorConfigurationResult[];
+  exportLines: string[];
+}
+
 export interface DoorConfigurationResult {
   input: DoorConfigurationInput;
   modelLabel: string;

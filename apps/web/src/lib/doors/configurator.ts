@@ -1,4 +1,6 @@
 import type {
+  DoorBatchInput,
+  DoorBatchResult,
   DoorConfigurationInput,
   DoorConfigurationResult,
   DoorHandleSide,
@@ -62,6 +64,47 @@ const PRESETS: Record<DoorModel, DoorModelPreset> = {
     needsShellHandle: false,
   },
 };
+
+export function createDoorInput(roomName: string): DoorConfigurationInput {
+  return {
+    roomName,
+    model: "hinged_single",
+    openingDirection: "right",
+    wallOpening: {
+      widthTopMm: 900,
+      widthMiddleMm: 900,
+      widthBottomMm: 898,
+      heightLeftMm: 2150,
+      heightRightMm: 2150,
+      wallDepthMm: 110,
+      finishedFloor: true,
+    },
+    accessories: {
+      hasDisplay: false,
+      hasOvalWindow: false,
+      hasFixedPanel: false,
+    },
+  };
+}
+
+export function calculateDoorBatch(input: DoorBatchInput): DoorBatchResult {
+  const doors = input.doors.map((door) => calculateDoorConfiguration(door));
+  const exportLines = [
+    `Commessa: ${input.projectName}`,
+    ...doors.flatMap((door, index) => [
+      `--- Porta ${index + 1}: ${door.input.roomName} ---`,
+      ...door.schemeLines,
+      "",
+    ]),
+    `Totale porte: ${doors.length}`,
+  ];
+
+  return {
+    projectName: input.projectName,
+    doors,
+    exportLines,
+  };
+}
 
 export function calculateDoorConfiguration(
   input: DoorConfigurationInput

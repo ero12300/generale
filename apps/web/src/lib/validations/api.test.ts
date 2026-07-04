@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createDealSchema,
+  doorBatchSchema,
   doorConfigurationSchema,
   updateDealSchema,
 } from "@/lib/validations/api";
@@ -78,6 +79,24 @@ describe("doorConfigurationSchema", () => {
         ...validInput.accessories,
         hasFixedPanel: false,
       },
+    });
+
+    expect(result.success).toBe(false);
+  });
+
+  it("accetta un ordine con piu porte", () => {
+    const result = doorBatchSchema.safeParse({
+      projectName: "Cantiere Milano",
+      doors: [validInput, { ...validInput, roomName: "Camera 2" }],
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("rifiuta ordini senza porte", () => {
+    const result = doorBatchSchema.safeParse({
+      projectName: "Cantiere Milano",
+      doors: [],
     });
 
     expect(result.success).toBe(false);

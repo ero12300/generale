@@ -1,7 +1,17 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import { Check, Clipboard, Download, DoorOpen, Ruler, TriangleAlert } from "lucide-react";
+import {
+  Check,
+  Clipboard,
+  Copy,
+  Download,
+  DoorOpen,
+  Plus,
+  Ruler,
+  Trash2,
+  TriangleAlert,
+} from "lucide-react";
 import {
   DOOR_MODELS,
   type DoorConfigurationInput,
@@ -13,9 +23,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { calculateDoorConfiguration } from "@/lib/doors/configurator";
+import { calculateDoorBatch, createDoorInput } from "@/lib/doors/configurator";
 import { cn } from "@/lib/utils";
-import { doorConfigurationSchema } from "@/lib/validations/api";
+import { doorBatchSchema } from "@/lib/validations/api";
 
 const modelNotes: Record<DoorModel, string> = {
   hinged_single: "Riduce il foro per telaio e crea una anta battente singola.",
@@ -25,92 +35,113 @@ const modelNotes: Record<DoorModel, string> = {
   folding_compass: "Divide il sistema in due pacchetti anta per apertura a libro/compasso.",
 };
 
-const initialInput: DoorConfigurationInput = {
-  roomName: "Porta bagno",
-  model: "hinged_single",
-  openingDirection: "right",
-  wallOpening: {
-    widthTopMm: 900,
-    widthMiddleMm: 900,
-    widthBottomMm: 898,
-    heightLeftMm: 2150,
-    heightRightMm: 2150,
-    wallDepthMm: 110,
-    finishedFloor: true,
-  },
-  accessories: {
-    hasDisplay: false,
-    hasOvalWindow: false,
-    hasFixedPanel: false,
-  },
-};
-
 export function DoorConfigurator() {
-  const [input, setInput] = useState<DoorConfigurationInput>(initialInput);
+  const [projectName, setProjectName] = useState("Commessa porte");
+  const [doors, setDoors] = useState<DoorConfigurationInput[]>([createDoorInput("Porta 1")]);
+  const [activeDoorIndex, setActiveDoorIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const result = useMemo(() => {
-    const parsed = doorConfigurationSchema.safeParse(input);
+  const input = doors[activeDoorIndex] ?? doors[0]!;
+
+  const batch = useMemo(() => {
+    const parsed = doorBatchSchema.safeParse({ projectName, doors });
     if (!parsed.success) return null;
-    return calculateDoorConfiguration(parsed.data);
-  }, [input]);
+    return calculateDoorBatch(parsed.data);
+  }, [projectName, doors]);
+
+  const result = batch?.doors[activeDoorIndex] ?? null;
+  const validationError = useMemo(() => {
+    const parsed = doorBatchSchema.safeParse({ projectName, doors });
+    if (parsed.success) return null;
+    return parsed.error.issues.map((issue) => issue.message).join("; ");
+  }, [projectName, doors]);
+
+  function updateActiveDoor(updater: (door: DoorConfigurationInput) => DoorConfigurationInput) {
+    setDoors((current) =>
+      current.map((door, index) => (index === activeDoorIndex ? updater(door) : door))
+    );
+    setError(null);
+    setSuccess(null);
+  }
 
   function updateMeasure(key: keyof DoorConfigurationInput["wallOpening"], value: number | boolean) {
-    setInput((current) => ({
-      ...current,
+    updateActiveDoor((door) => ({
+      ...door,
       wallOpening: {
-        ...current.wallOpening,
+        ...door.wallOpening,
         [key]: value,
       },
     }));
-    setError(null);
-    setSuccess(null);
   }
 
   function updateAccessory(key: keyof DoorConfigurationInput["accessories"], value: boolean) {
-    setInput((current) => ({
-      ...current,
+    updateActiveDoor((door) => ({
+      ...door,
       accessories: {
-        ...current.accessories,
+        ...door.accessories,
         [key]: value,
       },
     }));
-    setError(null);
-    setSuccess(null);
   }
 
   function selectModel(model: DoorModel) {
-    setInput((current) => ({
-      ...current,
+    updateActiveDoor((door) => ({
+      ...door,
       model,
       accessories: {
-        ...current.accessories,
+        ...door.accessories,
         hasFixedPanel: model === "hinged_with_fixed_panel",
       },
     }));
+  }
+
+  function addDoor() {
+    const nextIndex = doors.length + 1;
+    setDoors((current) => [...current, createDoorInput(`Porta ${nextIndex}`)]);
+    setActiveDoorIndex(doors.length);
     setError(null);
     setSuccess(null);
   }
 
-  function validateCurrentInput() {
-    const parsed = doorConfigurationSchema.safeParse(input);
+  function duplicateDoor() {
+    const copyName = `${input.roomName} copia`;
+    setDoors((current) => [...current, { ...input, roomName: copyName }]);
+    setActiveDoorIndex(doors.length);
+    setError(null);
+    setSuccess(null);
+  }
+
+  function removeDoor(index: number) {
+    if (doors.length === 1) return;
+    setDoors((current) => current.filter((_, doorIndex) => doorIndex !== index));
+    setActiveDoorIndex((current) => {
+      if (index < current) return current - 1;
+      if (index === current) return Math.max(0, current - 1);
+      return current;
+    });
+    setError(null);
+    setSuccess(null);
+  }
+
+  function validateBatch() {
+    const parsed = doorBatchSchema.safeParse({ projectName, doors });
     if (!parsed.success) {
       setError(parsed.error.issues.map((issue) => issue.message).join("; "));
       setSuccess(null);
       return null;
     }
     setError(null);
-    return calculateDoorConfiguration(parsed.data);
+    return calculateDoorBatch(parsed.data);
   }
 
   async function copyScheme() {
-    const configuration = validateCurrentInput();
-    if (!configuration) return;
+    const order = validateBatch();
+    if (!order) return;
 
     try {
-      await navigator.clipboard.writeText(configuration.schemeLines.join("\n"));
-      setSuccess("Schema copiato negli appunti.");
+      await navigator.clipboard.writeText(order.exportLines.join("\n"));
+      setSuccess(`Ordine copiato: ${order.doors.length} porte.`);
     } catch {
       setError("Impossibile copiare: autorizza gli appunti o usa Export.");
       setSuccess(null);
@@ -118,19 +149,19 @@ export function DoorConfigurator() {
   }
 
   function downloadScheme() {
-    const configuration = validateCurrentInput();
-    if (!configuration) return;
+    const order = validateBatch();
+    if (!order) return;
 
     try {
-      const payload = JSON.stringify(configuration, null, 2);
+      const payload = JSON.stringify(order, null, 2);
       const blob = new Blob([payload], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${input.roomName.toLowerCase().replace(/\s+/g, "-")}-schema-porta.json`;
+      link.download = `${projectName.toLowerCase().replace(/\s+/g, "-")}-ordine-porte.json`;
       link.click();
       URL.revokeObjectURL(url);
-      setSuccess("Export JSON generato.");
+      setSuccess(`Export JSON generato: ${order.doors.length} porte.`);
     } catch {
       setError("Impossibile generare l'export JSON. Verifica il browser e riprova.");
       setSuccess(null);
@@ -146,22 +177,107 @@ export function DoorConfigurator() {
         <div className="grid gap-5 md:grid-cols-[1.1fr_0.9fr] md:items-end">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight text-zinc-50 md:text-5xl">
-              Porta pronta da foro muro
+              Ordine porte da foro muro
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-300 md:text-base">
-              Inserisci le quote del vano, scegli il sistema porta e ottieni anta, telaio,
-              opera morta, apertura e maniglia in uno schema esportabile.
+              Crea piu porte nella stessa commessa: ogni ambiente ha misure, modello e
+              accessori propri. Alla fine esporti tutto insieme per la produzione.
             </p>
           </div>
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">Metodo rilievo</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">Multi-porta</p>
             <p className="mt-2 text-sm text-zinc-300">
-              Il calcolo usa la larghezza minore tra alto/centro/basso e l&apos;altezza minore tra
-              sinistra/destra, come da prassi di rilievo tecnico.
+              Usa i tab in alto per passare tra le porte, duplicare una configurazione
+              simile o aggiungerne una nuova.
             </p>
           </div>
         </div>
       </section>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Commessa</CardTitle>
+          <CardDescription>Nome dell&apos;ordine o del cantiere.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <TextField
+            label="Nome commessa"
+            value={projectName}
+            onChange={(value) => {
+              setProjectName(value);
+              setError(null);
+              setSuccess(null);
+            }}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className="gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <CardTitle>Porte in ordine</CardTitle>
+              <CardDescription>
+                {doors.length} {doors.length === 1 ? "porta" : "porte"} configurate
+              </CardDescription>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" size="sm" variant="secondary" onClick={duplicateDoor}>
+                <Copy className="h-4 w-4" />
+                Duplica
+              </Button>
+              <Button type="button" size="sm" onClick={addDoor}>
+                <Plus className="h-4 w-4" />
+                Aggiungi porta
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div
+            role="tablist"
+            aria-label="Porte in ordine"
+            className="flex gap-2 overflow-x-auto pb-1"
+          >
+            {doors.map((door, index) => (
+              <div
+                key={`${door.roomName}-${index}`}
+                className={cn(
+                  "flex min-w-[9rem] shrink-0 items-stretch overflow-hidden rounded-2xl border",
+                  index === activeDoorIndex
+                    ? "border-amber-500 bg-amber-500/10"
+                    : "border-zinc-800 bg-zinc-950"
+                )}
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={index === activeDoorIndex}
+                  onClick={() => {
+                    setActiveDoorIndex(index);
+                    setError(null);
+                    setSuccess(null);
+                  }}
+                  className="flex flex-1 flex-col px-4 py-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50"
+                >
+                  <span className="text-xs text-zinc-500">Porta {index + 1}</span>
+                  <span className="text-sm font-medium text-zinc-100">{door.roomName}</span>
+                </button>
+                {doors.length > 1 && (
+                  <button
+                    type="button"
+                    aria-label={`Rimuovi ${door.roomName}`}
+                    onClick={() => removeDoor(index)}
+                    className="border-l border-zinc-800 px-3 text-zinc-500 hover:bg-zinc-900 hover:text-red-300"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px]">
         <div className="space-y-5">
@@ -171,7 +287,7 @@ export function DoorConfigurator() {
                 <DoorOpen className="h-5 w-5 text-amber-400" />
                 1. Modello porta
               </CardTitle>
-              <CardDescription>Scegli il sistema; i preset restano modificabili nel tempo.</CardDescription>
+              <CardDescription>Scegli il sistema per {input.roomName}.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 sm:grid-cols-2">
               {DOOR_MODELS.map((model) => (
@@ -205,18 +321,18 @@ export function DoorConfigurator() {
                 <Ruler className="h-5 w-5 text-amber-400" />
                 2. Foro muro e verso
               </CardTitle>
-              <CardDescription>Quote in millimetri, gia comprensive dello stato reale del cantiere.</CardDescription>
+              <CardDescription>Quote in millimetri per {input.roomName}.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <TextField
                 label="Ambiente"
                 value={input.roomName}
-                onChange={(value) => setInput((current) => ({ ...current, roomName: value }))}
+                onChange={(value) => updateActiveDoor((door) => ({ ...door, roomName: value }))}
               />
               <SegmentedDirection
                 value={input.openingDirection}
                 onChange={(value) =>
-                  setInput((current) => ({ ...current, openingDirection: value }))
+                  updateActiveDoor((door) => ({ ...door, openingDirection: value }))
                 }
               />
               <MeasureField
@@ -255,7 +371,7 @@ export function DoorConfigurator() {
           <Card>
             <CardHeader>
               <CardTitle>3. Accessori e produzione</CardTitle>
-              <CardDescription>Seleziona display, ovale e stato del pavimento.</CardDescription>
+              <CardDescription>Opzioni specifiche per {input.roomName}.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 sm:grid-cols-2">
               <ToggleCard
@@ -286,14 +402,19 @@ export function DoorConfigurator() {
         <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
           <Card className="border-amber-500/30">
             <CardHeader>
-              <CardTitle>Schema porta</CardTitle>
-              <CardDescription>Output pronto per distinta o richiesta produzione.</CardDescription>
+              <CardTitle>Schema porta attiva</CardTitle>
+              <CardDescription>
+                {input.roomName} · porta {activeDoorIndex + 1} di {doors.length}
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {error && (
-                <div role="alert" className="rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200">
+              {(error || validationError) && (
+                <div
+                  role="alert"
+                  className="rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200"
+                >
                   <TriangleAlert className="mr-2 inline h-4 w-4" />
-                  {error}
+                  {error ?? validationError}
                 </div>
               )}
               {result ? (
@@ -321,34 +442,58 @@ export function DoorConfigurator() {
                       ))}
                     </ul>
                   </div>
-                  <div className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4">
-                    <p className="text-sm font-medium text-zinc-100">Note ferramenta</p>
-                    <ul className="mt-2 space-y-1 text-xs leading-5 text-zinc-400">
-                      {result.hardwareNotes.map((note) => (
-                        <li key={note}>- {note}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4">
-                    <p className="text-sm font-medium text-amber-100">Controlli prima dell&apos;ordine</p>
-                    <ul className="mt-2 space-y-1 text-xs leading-5 text-amber-100/80">
-                      {result.productionWarnings.map((warning) => (
-                        <li key={warning}>- {warning}</li>
-                      ))}
-                    </ul>
-                  </div>
                 </>
               ) : (
                 <p className="text-sm text-zinc-400">Completa misure e modello per generare lo schema.</p>
               )}
+            </CardContent>
+          </Card>
+
+          {batch && batch.doors.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Riepilogo ordine</CardTitle>
+                <CardDescription>Tutte le porte della commessa.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {batch.doors.map((door, index) => (
+                  <button
+                    key={`${door.input.roomName}-${index}`}
+                    type="button"
+                    onClick={() => setActiveDoorIndex(index)}
+                    className={cn(
+                      "w-full rounded-2xl border p-3 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50",
+                      index === activeDoorIndex
+                        ? "border-amber-500/50 bg-amber-500/10"
+                        : "border-zinc-800 bg-zinc-950 hover:border-zinc-700"
+                    )}
+                  >
+                    <p className="text-sm font-medium text-zinc-100">
+                      {index + 1}. {door.input.roomName}
+                    </p>
+                    <p className="mt-1 text-xs text-zinc-400">
+                      {door.modelLabel} · anta {door.leaf.widthMm} x {door.leaf.heightMm} mm
+                    </p>
+                  </button>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="border-amber-500/30">
+            <CardHeader>
+              <CardTitle>Export ordine completo</CardTitle>
+              <CardDescription>Copia o scarica tutte le porte insieme.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
               <div className="grid gap-3 sm:grid-cols-2">
                 <Button type="button" onClick={copyScheme} variant="secondary">
                   <Clipboard className="h-4 w-4" />
-                  Copia
+                  Copia ordine
                 </Button>
                 <Button type="button" onClick={downloadScheme}>
                   <Download className="h-4 w-4" />
-                  Export
+                  Export JSON
                 </Button>
               </div>
               {success && (

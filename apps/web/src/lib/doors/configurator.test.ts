@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { calculateDoorConfiguration } from "@/lib/doors/configurator";
+import { calculateDoorBatch, calculateDoorConfiguration } from "@/lib/doors/configurator";
 
 const baseInput = {
   roomName: "Bagno ospiti",
@@ -96,5 +96,29 @@ describe("calculateDoorConfiguration", () => {
     expect(result.leaf.quantity).toBe(2);
     expect(result.leaf.widthMm).toBe(415);
     expect(result.schemeLines).toContain("Anta produzione: 2 x 415 x 2105 mm");
+  });
+});
+
+describe("calculateDoorBatch", () => {
+  it("calcola piu porte contemporaneamente e prepara un export unico", () => {
+    const batch = calculateDoorBatch({
+      projectName: "Appartamento via Roma",
+      doors: [
+        baseInput,
+        {
+          ...baseInput,
+          roomName: "Camera 1",
+          openingDirection: "left",
+        },
+      ],
+    });
+
+    expect(batch.doors).toHaveLength(2);
+    expect(batch.doors[0]?.input.roomName).toBe("Bagno ospiti");
+    expect(batch.doors[1]?.openingDirection).toBe("left");
+    expect(batch.exportLines[0]).toBe("Commessa: Appartamento via Roma");
+    expect(batch.exportLines).toContain("--- Porta 1: Bagno ospiti ---");
+    expect(batch.exportLines).toContain("--- Porta 2: Camera 1 ---");
+    expect(batch.exportLines.at(-1)).toBe("Totale porte: 2");
   });
 });
