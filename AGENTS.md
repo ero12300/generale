@@ -22,7 +22,9 @@ Gestionale web premium B2B per investimenti immobiliari in SRL: intake annunci d
 ## Struttura monorepo
 
 ```
-apps/web/              → Next.js 15 frontend
+apps/web/              → Next.js 15 frontend (Deal Desk Immobiliare)
+apps/barber/           → BarberPro (gestione barbershop)
+apps/porte/            → PortePro (configuratore porte interne, mobile-first)
 services/analytics/    → FastAPI motore analisi
 services/intake/       → Playwright parser URL
 packages/types/        → Tipi TypeScript condivisi
@@ -74,6 +76,8 @@ Senza variabili Supabase, l'app usa `demoStore` in-memory per dimostrare UI e fl
 
 | Servizio | Porta | Note |
 |----------|-------|------|
-| Web | 3000 | `pnpm dev` |
+| Web (Deal Desk) | 3000 | `pnpm dev` |
+| Barber | 3001 | `pnpm dev:barber` |
+| Porte | 3002 | `pnpm dev:porte` |
 | Analytics | 8000 | Richiesto per simulatore |
 | Intake | 8001 | Opzionale, fallback manuale |
