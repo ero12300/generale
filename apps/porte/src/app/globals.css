@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0f14;
+  --surface: #131a22;
+  --surface-2: #1b2530;
+  --border: #263241;
+  --foreground: #eef2f6;
+  --muted: #93a1b1;
+  --primary: #2f9e6b;
+  --primary-strong: #38c07f;
+  --accent: #f2a33c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  margin: 0;
+  min-height: 100dvh;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary-strong);
+  outline-offset: 2px;
+}
+
+/* Stampa: mostra solo la scheda di produzione */
+@media print {
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    display: block !important;
+    color: #000000;
+  }
+  .print-area * {
+    color: #000000 !important;
+  }
+}
