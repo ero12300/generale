@@ -232,6 +232,20 @@ export function DoorConfigurator() {
               Esporta schema porta
             </Button>
           </div>
+          {(error || success) && (
+            <div
+              role="status"
+              aria-live="polite"
+              className={cn(
+                "rounded-lg border p-3 text-sm",
+                error
+                  ? "border-red-900/50 bg-red-950/30 text-red-300"
+                  : "border-emerald-900/50 bg-emerald-950/30 text-emerald-300"
+              )}
+            >
+              {error ?? success}
+            </div>
+          )}
         </div>
 
         <aside className="space-y-4 xl:sticky xl:top-8 self-start">
