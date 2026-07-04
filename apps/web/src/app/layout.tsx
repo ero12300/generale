@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Deal Desk Immobiliare",
-  description: "Deal desk operativo per investimenti immobiliari in SRL",
+  title: "Configuratore Porte",
+  description: "Calcolo porte da vano muro a scheda produzione",
 };
 
 export default function RootLayout({
