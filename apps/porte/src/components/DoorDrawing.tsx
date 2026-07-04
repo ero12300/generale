@@ -24,9 +24,7 @@ export function DoorDrawing({ scheda, id }: Props) {
 
   // Scala: tutto in mm dentro il viewBox, con margini per quote e pianta.
   const MARGIN = 320;
-  const PIANTA_H = 700;
   const W = vano.larghezza + MARGIN * 2;
-  const H = vano.altezza + MARGIN * 1.6 + PIANTA_H;
   const ox = MARGIN; // origine X del vano
   const oy = MARGIN * 0.6; // origine Y del vano (alto)
   const fondo = oy + vano.altezza; // pavimento
@@ -45,6 +43,12 @@ export function DoorDrawing({ scheda, id }: Props) {
 
   const strokeQ = 6;
   const fontQ = 110;
+
+  /** Riduce il font finché il testo sta nella larghezza disponibile (stima 0.55·em per carattere). */
+  function fitFont(testo: string, maxWidth: number, base: number) {
+    const stimata = testo.length * base * 0.55;
+    return stimata <= maxWidth ? base : Math.max(60, Math.floor(maxWidth / (testo.length * 0.55)));
+  }
 
   function quotaOrizzontale(x1: number, x2: number, y: number, testo: string) {
     return (
@@ -138,15 +142,21 @@ export function DoorDrawing({ scheda, id }: Props) {
   const vetroH = (antaBottom - antaH) * 0.62;
 
   // ── Pianta ───────────────────────────────────────────────────────
-  const piantaY = fondo + 520;
   const muroTh = 140;
   const hingeX = cerniereADestra ? anteX + anteW - gap : anteX + gap;
   const freeX = cerniereADestra ? anteX + gap : anteX + anteW - gap;
   const raggio = Math.abs(freeX - hingeX);
   // "Spingere": l'anta si allontana dall'osservatore (in alto nella pianta).
   const spingere = config.verso === "spingere";
+  // Spazio riservato sopra/sotto la pianta per l'arco di apertura.
+  const spazioSopra = !isScorrevole && spingere ? raggio + 200 : 200;
+  const spazioSotto = !isScorrevole && !spingere ? raggio + 200 : isScorrevole ? 450 : 200;
+  const piantaTitoloY = fondo + 480;
+  const piantaY = piantaTitoloY + spazioSopra;
   const arcoEndY = spingere ? piantaY + muroTh / 2 - raggio : piantaY + muroTh / 2 + raggio;
   const sweep = spingere ? (cerniereADestra ? 1 : 0) : cerniereADestra ? 0 : 1;
+  const footerY = piantaY + muroTh + spazioSotto + 150;
+  const H = footerY + 120;
 
   return (
     <svg
@@ -261,8 +271,8 @@ export function DoorDrawing({ scheda, id }: Props) {
             strokeLinecap="round"
           />
           <text
-            x={latoManX + (cerniereADestra ? 180 : -180)}
-            y={manigliaY - 70}
+            x={latoManX}
+            y={manigliaY + 180}
             textAnchor={cerniereADestra ? "start" : "end"}
             fontSize={fontQ * 0.85}
             fill={ACCENT}
@@ -308,7 +318,14 @@ export function DoorDrawing({ scheda, id }: Props) {
 
       {/* Pianta */}
       <g>
-        <text x={ox} y={piantaY - 90} fontSize={fontQ} fill={INK} fontFamily="system-ui" fontWeight={700}>
+        <text
+          x={ox - 200}
+          y={piantaTitoloY}
+          fontSize={fitFont(`Pianta — ${scheda.aperturaDescrizione}`, vano.larghezza + 400, fontQ)}
+          fill={INK}
+          fontFamily="system-ui"
+          fontWeight={700}
+        >
           Pianta — {scheda.aperturaDescrizione}
         </text>
         {/* Muri laterali */}
@@ -371,19 +388,29 @@ export function DoorDrawing({ scheda, id }: Props) {
             <line x1={hingeX} y1={piantaY + muroTh / 2} x2={hingeX} y2={arcoEndY} stroke={INK} strokeWidth={30} strokeLinecap="round" />
             <circle cx={hingeX} cy={piantaY + muroTh / 2} r={35} fill={ACCENT} />
             <text
-              x={hingeX + (cerniereADestra ? 60 : -60)}
+              x={hingeX + (cerniereADestra ? -60 : 60)}
               y={piantaY + muroTh / 2 + (spingere ? -raggio / 2 : raggio / 2)}
               fontSize={fontQ * 0.85}
               fill={ACCENT}
               fontFamily="system-ui"
               fontWeight={700}
-              textAnchor={cerniereADestra ? "start" : "end"}
+              textAnchor={cerniereADestra ? "end" : "start"}
             >
               {config.verso === "spingere" ? "spinge" : "tira"}
             </text>
           </g>
         )}
-        <text x={ox} y={piantaY + muroTh + 420} fontSize={fontQ * 0.8} fill={MUTED} fontFamily="system-ui">
+        <text
+          x={ox - 200}
+          y={footerY}
+          fontSize={fitFont(
+            `Luce passaggio ${lucePassaggio.larghezza} × ${lucePassaggio.altezza} mm — vista dal lato di rilievo`,
+            vano.larghezza + 400,
+            fontQ * 0.8
+          )}
+          fill={MUTED}
+          fontFamily="system-ui"
+        >
           Luce passaggio {lucePassaggio.larghezza} × {lucePassaggio.altezza} mm — vista dal lato di rilievo
         </text>
       </g>
