@@ -80,4 +80,21 @@ describe("calculateDoorConfiguration", () => {
     expect(result.schemeLines).toContain("Display: si");
     expect(result.schemeLines).toContain("Ovale: si");
   });
+
+  it("divide la porta libro/compasso in due pacchetti anta", () => {
+    const result = calculateDoorConfiguration({
+      ...baseInput,
+      model: "folding_compass",
+      wallOpening: {
+        ...baseInput.wallOpening,
+        widthTopMm: 900,
+        widthMiddleMm: 900,
+        widthBottomMm: 900,
+      },
+    });
+
+    expect(result.leaf.quantity).toBe(2);
+    expect(result.leaf.widthMm).toBe(415);
+    expect(result.schemeLines).toContain("Anta produzione: 2 x 415 x 2105 mm");
+  });
 });

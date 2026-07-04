@@ -76,7 +76,11 @@ export function calculateDoorConfiguration(
   const passageWidthMm = Math.max(0, clearWidthMm - preset.frameAllowanceWidthMm);
   const passageHeightMm = Math.max(0, clearHeightMm - preset.frameAllowanceHeightMm);
   const rawLeafWidthMm = passageWidthMm + preset.leafDeltaFromPassageWidthMm;
-  const leafWidthMm = Math.min(rawLeafWidthMm, preset.maxLeafWidthMm);
+  const leafQuantity = input.model === "folding_compass" ? 2 : 1;
+  const leafWidthMm = Math.min(
+    Math.floor(rawLeafWidthMm / leafQuantity),
+    preset.maxLeafWidthMm
+  );
   const leafHeightMm = passageHeightMm + preset.leafDeltaFromPassageHeightMm;
   const handleSide = getHandleSide(input.model, input.openingDirection);
   const fixedPanel = buildFixedPanel(input, clearWidthMm, leafWidthMm, clearHeightMm);
@@ -99,7 +103,7 @@ export function calculateDoorConfiguration(
     leaf: {
       widthMm: leafWidthMm,
       heightMm: leafHeightMm,
-      quantity: input.model === "folding_compass" ? 2 : 1,
+      quantity: leafQuantity,
     },
     fixedPanel,
     openingDirection: input.openingDirection,
@@ -129,6 +133,7 @@ function buildFixedPanel(
   clearHeightMm: number
 ): DoorConfigurationResult["fixedPanel"] {
   if (!input.accessories.hasFixedPanel) return null;
+  if (input.model !== "hinged_with_fixed_panel") return null;
 
   const preset = PRESETS[input.model];
   const fixedWidthMm = Math.max(

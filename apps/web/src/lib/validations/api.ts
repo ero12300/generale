@@ -88,6 +88,13 @@ export const doorConfigurationSchema = z
       message: "Il modello con opera morta richiede il fisso laterale",
       path: ["accessories", "hasFixedPanel"],
     }
+  )
+  .refine(
+    (data) => data.model === "hinged_with_fixed_panel" || !data.accessories.hasFixedPanel,
+    {
+      message: "Il fisso laterale e disponibile solo sul modello Battente con fisso",
+      path: ["accessories", "hasFixedPanel"],
+    }
   );
 
 export const updateDealSchema = z

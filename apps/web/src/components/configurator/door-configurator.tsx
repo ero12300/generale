@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Check, Clipboard, Download, DoorOpen, Ruler, TriangleAlert } from "lucide-react";
 import {
   DOOR_MODELS,
@@ -108,23 +108,33 @@ export function DoorConfigurator() {
     const configuration = validateCurrentInput();
     if (!configuration) return;
 
-    await navigator.clipboard.writeText(configuration.schemeLines.join("\n"));
-    setSuccess("Schema copiato negli appunti.");
+    try {
+      await navigator.clipboard.writeText(configuration.schemeLines.join("\n"));
+      setSuccess("Schema copiato negli appunti.");
+    } catch {
+      setError("Impossibile copiare: autorizza gli appunti o usa Export.");
+      setSuccess(null);
+    }
   }
 
   function downloadScheme() {
     const configuration = validateCurrentInput();
     if (!configuration) return;
 
-    const payload = JSON.stringify(configuration, null, 2);
-    const blob = new Blob([payload], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${input.roomName.toLowerCase().replace(/\s+/g, "-")}-schema-porta.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-    setSuccess("Export JSON generato.");
+    try {
+      const payload = JSON.stringify(configuration, null, 2);
+      const blob = new Blob([payload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${input.roomName.toLowerCase().replace(/\s+/g, "-")}-schema-porta.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      setSuccess("Export JSON generato.");
+    } catch {
+      setError("Impossibile generare l'export JSON. Verifica il browser e riprova.");
+      setSuccess(null);
+    }
   }
 
   return (
@@ -168,6 +178,7 @@ export function DoorConfigurator() {
                 <button
                   key={model.value}
                   type="button"
+                  aria-pressed={input.model === model.value}
                   onClick={() => selectModel(model.value)}
                   className={cn(
                     "rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50",
@@ -259,8 +270,8 @@ export function DoorConfigurator() {
               />
               <ToggleCard
                 label="Opera morta / fisso"
-                checked={input.accessories.hasFixedPanel}
-                disabled={input.model === "hinged_with_fixed_panel"}
+                checked={input.model === "hinged_with_fixed_panel"}
+                disabled
                 onChange={(value) => updateAccessory("hasFixedPanel", value)}
               />
               <ToggleCard
@@ -362,10 +373,17 @@ function TextField({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const id = useId();
+
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Input value={value} onChange={(event) => onChange(event.target.value)} className="h-12 text-base" />
+      <Label htmlFor={id}>{label}</Label>
+      <Input
+        id={id}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-12 text-base"
+      />
     </div>
   );
 }
@@ -379,10 +397,13 @@ function MeasureField({
   value: number;
   onChange: (value: number) => void;
 }) {
+  const id = useId();
+
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <Input
+        id={id}
         type="number"
         min={0}
         inputMode="numeric"
@@ -404,11 +425,16 @@ function SegmentedDirection({
   return (
     <div className="space-y-2">
       <Label>Verso apertura</Label>
-      <div className="grid grid-cols-2 rounded-xl border border-zinc-800 bg-zinc-950 p-1">
+      <div
+        role="group"
+        aria-label="Verso apertura"
+        className="grid grid-cols-2 rounded-xl border border-zinc-800 bg-zinc-950 p-1"
+      >
         {(["right", "left"] as DoorOpeningDirection[]).map((direction) => (
           <button
             key={direction}
             type="button"
+            aria-pressed={value === direction}
             onClick={() => onChange(direction)}
             className={cn(
               "h-10 rounded-lg text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50",
@@ -437,6 +463,8 @@ function ToggleCard({
   return (
     <button
       type="button"
+      role="switch"
+      aria-checked={checked}
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(

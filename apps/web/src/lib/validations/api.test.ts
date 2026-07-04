@@ -82,4 +82,17 @@ describe("doorConfigurationSchema", () => {
 
     expect(result.success).toBe(false);
   });
+
+  it("rifiuta il fisso laterale su modelli non dedicati", () => {
+    const result = doorConfigurationSchema.safeParse({
+      ...validInput,
+      model: "sliding_external",
+      accessories: {
+        ...validInput.accessories,
+        hasFixedPanel: true,
+      },
+    });
+
+    expect(result.success).toBe(false);
+  });
 });
