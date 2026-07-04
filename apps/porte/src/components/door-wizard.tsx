@@ -33,6 +33,7 @@ import {
   createProjectId,
   projectStore,
 } from "@/lib/project-store";
+import { downloadDoorDxf, downloadAllFormats } from "@/lib/dxf-export";
 import { downloadProductionJson, downloadSchematicSvg } from "@/lib/schematic";
 import type {
   DeadWork,
@@ -550,24 +551,54 @@ export function DoorWizardApp() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-2 gap-3">
-            <Button
-              variant="secondary"
-              onClick={() => downloadSchematicSvg(calculated)}
-              className="w-full"
-            >
-              <Download className="h-4 w-4" />
-              SVG
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => downloadProductionJson(calculated)}
-              className="w-full"
-            >
-              <FileJson className="h-4 w-4" />
-              JSON
-            </Button>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Export produzione</CardTitle>
+              <CardDescription>
+                SVG per anteprima, DXF per AutoCAD, JSON per dati tecnici
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  variant="secondary"
+                  onClick={() => downloadSchematicSvg(calculated)}
+                  className="w-full"
+                >
+                  <Download className="h-4 w-4" />
+                  SVG
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => downloadDoorDxf(calculated)}
+                  className="w-full"
+                >
+                  <Download className="h-4 w-4" />
+                  DXF AutoCAD
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => downloadProductionJson(calculated)}
+                  className="w-full"
+                >
+                  <FileJson className="h-4 w-4" />
+                  JSON
+                </Button>
+                <Button
+                  onClick={() =>
+                    downloadAllFormats(calculated, {
+                      svg: () => downloadSchematicSvg(calculated),
+                      json: () => downloadProductionJson(calculated),
+                    })
+                  }
+                  className="w-full"
+                >
+                  <Download className="h-4 w-4" />
+                  Scarica tutto
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
 

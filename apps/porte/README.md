@@ -10,7 +10,7 @@ App mobile-first per calcolare porte interne partendo dal foro muro e generare s
 2. **Lavoro morto** — margini configurabili (standard -10 cm larghezza, -5 cm altezza)
 3. **Modelli porta** — battente, bussola, fissa, scorrevole; con/senza display, oblò ovale, anta fissa
 4. **Senso apertura** — destra/sinistra, tirare/spingere; calcolo automatico posizione maniglia e cerniere
-5. **Export produzione** — schema SVG con quote + JSON tecnico
+5. **Export produzione** — schema SVG, file **DXF (AutoCAD)**, JSON tecnico
 6. **Persistenza cloud** — progetti salvati su Firebase (auth anonima), fallback localStorage in demo
 
 ## Sviluppo locale
