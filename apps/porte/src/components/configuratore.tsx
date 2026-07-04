@@ -321,8 +321,17 @@ export function Configuratore() {
                     quote={false}
                   />
                 ) : (
-                  <div className="flex h-64 items-center justify-center text-sm text-steel/50">
-                    Completa le misure per vedere l&apos;anteprima
+                  <div className="flex h-64 flex-col items-center justify-center gap-2 px-6 text-center">
+                    <p className="text-sm font-medium text-steel/60">
+                      Correggi per vedere l&apos;anteprima:
+                    </p>
+                    <ul className="space-y-1">
+                      {Object.values(errori).map((msg) => (
+                        <li key={msg} className="text-xs font-medium text-err">
+                          ⛔ {msg}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
               </div>
