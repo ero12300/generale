@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #101418;
+  --color-steel: #1d242c;
+  --color-paper: #f4f2ec;
+  --color-sand: #e7e2d6;
+  --color-brass: #b8863b;
+  --color-brass-light: #d9a856;
+  --color-ok: #2e7d4f;
+  --color-warn: #b45309;
+  --color-err: #b3261e;
+  --font-display: "Sora", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-paper text-ink antialiased;
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+
+  input, select, textarea, button {
+    font-size: 16px; /* evita lo zoom automatico su iOS */
+  }
+
+  @media (min-width: 640px) {
+    input, select, textarea, button {
+      font-size: inherit;
+    }
+  }
+}
+
+@layer utilities {
+  .field-label {
+    @apply block text-[11px] font-semibold uppercase tracking-wider text-steel/60 mb-1;
+  }
+
+  .field-input {
+    @apply w-full rounded-xl border border-steel/15 bg-white px-3 py-2.5 text-ink shadow-sm outline-none transition focus:border-brass focus:ring-2 focus:ring-brass/25;
+  }
+
+  .card {
+    @apply rounded-2xl border border-steel/10 bg-white shadow-sm;
+  }
+
+  .seg-btn {
+    @apply flex-1 rounded-lg px-2 py-2 text-center text-sm font-medium transition select-none;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
