@@ -1,6 +1,7 @@
 .vercel/
 .pnpm-store/
 node_modules/
+*.tsbuildinfo
 .next/
 out/
 dist/

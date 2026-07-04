@@ -2,7 +2,7 @@ name: Deploy Configuratore Porte (Vercel)
 
 on:
   push:
-    branches: [main]
+    branches: [main, cursor/porte-standalone-5bd5]
     paths:
       - "apps/porte/**"
       - "pnpm-lock.yaml"
@@ -16,7 +16,6 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ secrets.VERCEL_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
