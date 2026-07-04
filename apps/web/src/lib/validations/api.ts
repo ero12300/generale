@@ -10,6 +10,16 @@ const dealStageSchema = z.enum([
   "exit",
   "archived",
 ]);
+const doorModelSchema = z.enum([
+  "hinged_single",
+  "hinged_with_fixed_panel",
+  "sliding_pocket",
+  "sliding_external",
+  "folding_compass",
+]);
+const doorOpeningDirectionSchema = z.enum(["right", "left"]);
+
+const doorMeasureSchema = z.number().int().min(400).max(3200);
 
 export const createDealSchema = z.object({
   title: z.string().trim().min(1, "Titolo obbligatorio").max(200),
@@ -51,6 +61,34 @@ export const workListSchema = z.object({
   include_kitchen: z.boolean().optional(),
   include_bathrooms: z.number().int().min(0).max(10).optional(),
 });
+
+export const doorConfigurationSchema = z
+  .object({
+    roomName: z.string().trim().min(1, "Nome ambiente obbligatorio").max(120),
+    model: doorModelSchema,
+    openingDirection: doorOpeningDirectionSchema,
+    wallOpening: z.object({
+      widthTopMm: doorMeasureSchema,
+      widthMiddleMm: doorMeasureSchema,
+      widthBottomMm: doorMeasureSchema,
+      heightLeftMm: doorMeasureSchema,
+      heightRightMm: doorMeasureSchema,
+      wallDepthMm: z.number().int().min(70).max(500),
+      finishedFloor: z.boolean(),
+    }),
+    accessories: z.object({
+      hasDisplay: z.boolean(),
+      hasOvalWindow: z.boolean(),
+      hasFixedPanel: z.boolean(),
+    }),
+  })
+  .refine(
+    (data) => data.model !== "hinged_with_fixed_panel" || data.accessories.hasFixedPanel,
+    {
+      message: "Il modello con opera morta richiede il fisso laterale",
+      path: ["accessories", "hasFixedPanel"],
+    }
+  );
 
 export const updateDealSchema = z
   .object({
