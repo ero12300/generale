@@ -37,7 +37,7 @@
       index = Math.min(Math.max(i, 0), steps.length - 1);
       steps.forEach((s, n) => {
         s.classList.toggle('active', n === index);
-        s.disabled = n !== index;
+        s.disabled = false;
       });
       back.disabled = index === 0;
       next.hidden = index === steps.length - 1;
