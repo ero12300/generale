@@ -1,0 +1,1 @@
+export default function handler(req,res){res.setHeader('Cache-Control','no-store');res.status(200).json({name:'ABITAURA',status:'ok',version:'1.0.0',chat:'guided',leads:'supabase'})}
