@@ -26,7 +26,7 @@ export default async function handler(req,res){
    message:info.slice(0,3000),website:clean(body.website,100),
    privacy_accepted:true,marketing_consent:false
   };
-  return leadsHandler({...req,body:lead},res);
+  return leadsHandler({method:req.method,headers:req.headers || {},body:lead},res);
  }catch{
   return res.status(400).json({error:'Richiesta non valida'});
  }
