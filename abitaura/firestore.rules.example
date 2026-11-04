@@ -1,0 +1,12 @@
+// SNIPPET to merge into the canonical Boncordo Group ruleset.
+// Do NOT deploy this as a replacement for other brand rules.
+// Firebase Admin SDK server writes bypass client Security Rules.
+// If broader overlapping rules exist, their allowances can still apply.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /crmOutbox/{eventId} {
+      allow read, write: if false;
+    }
+  }
+}
