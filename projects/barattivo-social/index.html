@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Barattivo è la comunità del baratto: scambia oggetti, tempo, competenze e servizi. Il valore non è solo denaro." />
+  <meta name="theme-color" content="#fffaf1" />
+  <title>Barattivo · Il valore non è solo denaro</title>
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles.css" />
+  <script defer src="/config.js"></script>
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#annunci">Salta agli annunci</a>
+  <div class="notice" id="modeBanner" role="status">Anteprima dimostrativa: dati di esempio, nessuno scambio reale.</div>
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="#home" aria-label="Barattivo, torna all'inizio"><img src="/assets/icon.svg" alt="" /><span>barattivo<span class="brand-dot">.</span></span></a>
+      <nav class="desktop-nav" aria-label="Navigazione principale">
+        <a href="#annunci" class="nav-active">Esplora</a><a href="#community">Community</a><a href="#come-funziona">Come funziona</a><a href="#missione">Il nostro impegno</a>
+      </nav>
+      <div class="header-actions"><button class="btn-icon" id="openSearch" aria-label="Cerca"><span class="i-search"></span></button><button class="btn-icon" id="openInbox" aria-label="Messaggi">✉</button><button id="authButton" class="btn btn-quiet">Accedi</button><button id="headerPublish" class="btn btn-primary"><span class="plus-symbol">＋</span> Pubblica</button></div>
+    </div>
+  </header>
+  <main id="home">
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-main">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> UN PROGETTO PER LE PERSONE</div>
+        <h1 id="hero-title">Prima dei soldi,<br />c'era lo <span class="hero-underline">scambio.</span></h1>
+        <p class="hero-lead">Il valore non è solo denaro. Scambia ciò che hai o sai fare con ciò che ti serve, e crea nuove connessioni.</p>
+        <div class="hero-ctas"><button id="heroExplore" class="btn btn-primary btn-large">Scopri gli scambi <span aria-hidden="true">↗</span></button><button class="btn btn-white btn-large" id="heroPublish">+ Pubblica gratis</button></div>
+        <div class="hero-badges"><span>♡ Gratis per tutti</span><span>♻ Meno sprechi</span><span>✦ Più possibilità</span></div>
+      </div>
+      <div class="hero-art"><img src="/assets/hero_persone.webp" alt="Persone diverse che partecipano alla comunità dello scambio"/><div class="art-stone art-stone-one">Uno scambio<br /><b>alla volta!</b></div><div class="art-stone art-stone-two" aria-hidden="true">↔</div><img class="art-mascot" src="/assets/mascot.svg" alt="Mascotte originale di Barattivo, una pietra sorridente che porta due oggetti da scambiare" /></div>
+    </section>
+    <section class="mission-strip" aria-label="La nostra filosofia"><div class="container mission-strip-inner"><span class="stone-sparkle">✳</span><p><strong>Il baratto è un gesto antico. La sua forza è più attuale che mai.</strong> Un posto dove il valore di ciascuno conta.</p><a href="#missione">Scopri il progetto sociale <span>→</span></a></div></section>
+    <section class="categories container" aria-labelledby="categories-title"><div class="section-title-row"><h2 id="categories-title">Cosa vuoi scambiare?</h2><p>Ogni cosa può avere una seconda storia.</p></div><div class="category-grid" id="categoryGrid"></div></section>
+    <section class="market container" id="annunci" aria-labelledby="market-title">
+      <div class="section-title-row market-title-row"><div><span class="section-kicker">LA PIAZZA DEGLI SCAMBI</span><h2 id="market-title">Scopri qualcosa di bello.</h2></div><button class="btn btn-outline" id="marketPublish">+ Inserisci il tuo annuncio</button></div>
+      <div class="filters"><label class="searchbar"><span class="i-search" aria-hidden="true"></span><input id="searchInput" type="search" placeholder="Bici, divano, fotografia, lezioni..." autocomplete="off" aria-label="Cerca negli annunci" /></label><label class="select-wrap"><span>Tipo</span><select id="typeFilter" aria-label="Tipo di annuncio"><option value="all">Tutti gli annunci</option><option value="object">Oggetti</option><option value="service">Servizi</option><option value="time">Tempo e aiuto</option></select></label><label class="select-wrap"><span>Luogo</span><select id="locationFilter" aria-label="Luogo"><option value="all">Tutta Italia</option><option value="messina">Messina</option><option value="catania">Catania</option><option value="palermo">Palermo</option><option value="milano">Milano</option><option value="roma">Roma</option><option value="remoto">A distanza</option></select></label></div>
+      <div class="market-tabs" role="tablist" aria-label="Filtra gli annunci"><button class="pill active" data-filter="all" role="tab" aria-selected="true">Tutti</button><button class="pill" data-filter="object" role="tab" aria-selected="false">📦 Oggetti</button><button class="pill" data-filter="service" role="tab" aria-selected="false">🛠 Servizi</button><button class="pill" data-filter="time" role="tab" aria-selected="false">⏱ Tempo e aiuto</button></div>
+      <div class="listings-grid" id="listingGrid" aria-live="polite"></div><p id="emptyMessage" class="empty-state" hidden>Nessun annuncio in questa ricerca. Prova un filtro diverso o pubblica ciò che vuoi scambiare.</p><div class="market-foot"><small id="marketCount">Scopri i primi annunci della community</small><button class="btn btn-outline" id="moreListings">Mostra altri annunci ↓</button></div>
+    </section>
+    <section class="social-feature container" id="community"><div class="social-main"><span class="section-kicker">BARATTIVO È ANCHE UNA COMMUNITY</span><h2>Prima si parla.<br />Poi si <em>scambia.</em></h2><p>Conosci persone, condividi idee, fai domande e trova chi può aiutarti. Ogni scambio nasce da una conversazione.</p><div class="social-actions"><button class="btn btn-primary" id="communityOpen">Entra nella community <span>↗</span></button><button class="btn btn-outline" id="socialOpenInbox">Apri le chat</button></div><div class="social-bullet"><span>✓ Gruppi di quartiere</span><span>✓ Conversazioni rispettose</span><span>✓ Proposte tracciate</span></div></div><div class="social-phone"><div class="phone-top"><span class="phone-logo">↔</span><strong>La piazza di Barattivo</strong><span>●</span></div><div class="phone-chat"><div class="chat-row"><span class="avatar-chat">👩🏽</span><div><b>Sara</b><p>Qualcuno ha una bici da scambiare? 🚲</p><small>Messina · 8 min fa</small></div></div><div class="chat-row"><span class="avatar-chat">👨🏻</span><div><b>Marco</b><p>Io! Cerco una mano con le foto 📸</p><small>Messina · 5 min fa</small></div></div><div class="chat-row"><span class="avatar-chat">🧑🏾‍🦱</span><div><b>Elisa</b><p>Bello! Ho già fatto uno scambio simile 💚</p><small>Milano · 2 min fa</small></div></div></div><div class="phone-bottom">Scrivi qualcosa alla community... <span>➤</span></div></div></section>
+    <section class="how container" id="come-funziona"><div class="center-heading"><span class="section-kicker">FACILE COME DARE UNA MANO</span><h2>Tre passi. Tante possibilità.</h2><p>Non serve avere un'azienda, né spendere denaro per iniziare.</p></div><div class="steps"><article><span class="step-number">01</span><div class="step-icon">📸</div><h3>Pubblica qualcosa</h3><p>Una fotografia, una descrizione e ciò che ti piacerebbe ricevere in cambio.</p></article><article><span class="step-number">02</span><div class="step-icon">💬</div><h3>Parlate e proponete</h3><p>Conoscetevi in chat e concordate uno scambio adatto a entrambi.</p></article><article><span class="step-number">03</span><div class="step-icon">🤝</div><h3>Scambiate con fiducia</h3><p>Confermate gli accordi, completate lo scambio e lasciate una recensione autentica.</p></article></div></section>
+    <section class="impact container" id="missione"><div class="impact-illustration"><img src="/assets/mascot.svg" alt="La mascotte originale Barattivo con due oggetti da scambiare"/><div class="hand-drawn">Il valore<br/>si condivide! ♡</div></div><div class="impact-text"><span class="section-kicker">UN PROGETTO A IMPATTO SOCIALE</span><h2>Se hai qualcosa da dare,<br /><em>hai qualcosa che vale.</em></h2><p>Viviamo in un mondo in cui le possibilità non sono distribuite in modo uguale. Barattivo nasce per aprire nuove occasioni di accesso a beni, servizi e relazioni attraverso lo scambio volontario.</p><p>Vogliamo ridurre gli sprechi, incoraggiare l'aiuto reciproco e creare comunità più solidali, senza sostituire gli aiuti sociali o promettere che tutto possa essere ottenuto tramite baratto.</p><div class="impact-tags"><span>Accesso gratuito</span><span>Economia circolare</span><span>Inclusione</span><span>Rispetto</span></div></div></section>
+    <section class="community-feed container" id="piazza"><div class="section-title-row"><div><span class="section-kicker">VOCI DALLA PIAZZA</span><h2>Le conversazioni contano.</h2></div><button class="btn btn-outline" id="writePost">+ Scrivi un post</button></div><div id="postFeed" class="post-feed"></div></section>
+    <section class="business container"><div><span class="section-kicker">UNA PIATTAFORMA CHE SI SOSTIENE</span><h2>Il baratto resta gratuito.<br />La sostenibilità cresce insieme a noi.</h2></div><div class="business-grid"><article><b>♻</b><h3>Gratis per la comunità</h3><p>Pubblicare, cercare, parlare e scambiare rimangono gratuiti.</p></article><article><b>✦</b><h3>Servizi facoltativi</h3><p>Opzioni premium e visibilità aggiuntiva, mai necessarie per scambiare.</p></article><article><b>◎</b><h3>Partner a impatto</h3><p>Collaborazioni trasparenti con imprese, enti e reti territoriali.</p></article></div></section>
+  </main>
+  <footer class="footer"><div class="container footer-inner"><a class="brand" href="#home"><img src="/assets/icon.svg" alt=""/><span>barattivo<span class="brand-dot">.</span></span></a><p>Il valore non è solo denaro. <br/><small>Un progetto digitale di FLUSSIVO.</small></p><nav aria-label="Navigazione a piè di pagina"><a href="#missione">Missione</a><a href="#come-funziona">Come funziona</a><a href="#community">Community</a><a href="mailto:info@barattivo.it" id="footerEmail">Contatti</a></nav></div><div class="container footer-legal">Prototipo di prodotto — il baratto tra imprese e professionisti può avere obblighi fiscali; la piattaforma non sostituisce assistenza fiscale o legale.</div></footer>
+  <nav class="mobile-bottom" aria-label="Navigazione mobile"><a href="#home" aria-label="Home">⌂<span>Home</span></a><a href="#annunci" aria-label="Esplora">⌕<span>Esplora</span></a><button id="mobilePublish" aria-label="Pubblica"><span>＋</span><small>Pubblica</small></button><button id="mobileInbox" aria-label="Messaggi">✉<small>Chat</small></button><button id="mobileProfile" aria-label="Profilo">♙<small>Profilo</small></button></nav>
+  <dialog id="appDialog" class="app-dialog" aria-labelledby="dialogTitle"><div class="dialog-bar"><h2 id="dialogTitle"></h2><button id="closeDialog" aria-label="Chiudi" class="dialog-close">×</button></div><div id="dialogBody"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

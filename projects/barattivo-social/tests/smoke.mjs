@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const html=fs.readFileSync('index.html','utf8');
+const main=fs.readFileSync('src/main.js','utf8');
+const rules=fs.readFileSync('firestore.rules','utf8');
+const doc=fs.readFileSync('docs/STRATEGIA_E_MODELLO.md','utf8');
+for(const q of ['Il valore non è solo denaro','Cosa vuoi scambiare','id="listingGrid"','id="appDialog"','id="postFeed"'])assert(html.includes(q),`HTML missing ${q}`);
+for(const q of ['getListings','startChat','createProposal','reportListing','createPost','getFavorites'])assert(main.includes(q),`UI missing ${q}`);
+for(const q of ['match /listings/','match /chats/','match /messages/','match /proposals/','match /reports/'])assert(rules.includes(q),`Rules missing ${q}`);
+assert(doc.includes('0 €')&&doc.includes('impatto sociale'));
+console.log('Smoke checks passed: frontend, social mission, chat, proposals, security rule paths.');
