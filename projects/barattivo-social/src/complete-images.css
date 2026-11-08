@@ -1,0 +1,106 @@
+/* Full-frame editorial illustrations, Barattivo · 2026-11-08.
+   Preserve every edge of the original 1448x1086 assets on all screens.
+   These assets are separate art, not crops of a website screenshot. */
+.hero {align-items: stretch;}
+.hero-art {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  margin: 16px 16px 16px 0;
+  overflow: visible;
+  background: transparent;
+  border-radius: 20px;
+}
+.hero-art > img.hero-hd-image {
+  display: block;
+  position: static;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 20px;
+  mask-image: none;
+  box-shadow: 0 12px 30px #103d3117;
+}
+/* CTA stays outside the artwork: no UI element obscures the stone sign. */
+.hero-mascot-note {
+  position: static;
+  transform: none;
+  align-self: flex-end;
+  margin-top: 10px;
+  padding: 4px 13px 4px 4px;
+  box-shadow: 0 3px 14px #103d3113;
+}
+.hero-photo-tint, .hero-floating-note {display: none;}
+.impact-illustration {
+  display: block;
+  position: relative;
+  min-height: 0;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: visible;
+  border-radius: 20px;
+  background: transparent;
+}
+.impact-illustration > img.manifesto-hd-image {
+  display: block;
+  position: static;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 20px;
+}
+.impact-illustration .impact-pattern,
+.impact-illustration .hand-drawn {display: none;}
+@media (max-width: 1100px) {
+  .hero-art {min-height: 0;}
+}
+@media (max-width: 740px) {
+  .hero-art {
+    margin: 0 12px 12px;
+    min-height: 0;
+    max-height: none;
+    border-radius: 16px;
+  }
+  .hero-art > img.hero-hd-image {
+    height: auto;
+    max-height: none;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+  }
+  .hero-mascot-note {
+    position: static;
+    align-self: flex-end;
+    margin: 10px 0 0;
+    padding: 5px 10px 5px 4px;
+  }
+  .hero-mascot-note div {display: block;}
+  .hero-mascot-note strong,.hero-mascot-note span {font-size: 11px;}
+  .impact-illustration {
+    min-height: 0;
+    height: auto;
+    padding: 0;
+    aspect-ratio: 4 / 3;
+  }
+  .impact-illustration > img.manifesto-hd-image {
+    position: static;
+    height: auto;
+    width: 100%;
+    max-height: none;
+    object-fit: contain;
+  }
+}

@@ -1,3 +1,7 @@
+## Aggiornamento immagini complete — 08/11/2026
+
+La hero e il manifesto usano nuove illustrazioni **intere**, esportate in WebP ad alta qualità e risoluzione originale 1448 × 1086 px. Asset: `assets/barto-hero-hd.webp`, `assets/cave-social-hd.webp`. CSS non distruttivo: `src/complete-images.css`, caricato dopo `fiducia.css`. `object-fit: contain`, proporzioni 4:3, senza `max-height` mobile, con sovrapposizioni eliminate. La scritta decorativa è già integrata nell'illustrazione ed è descritta anche nei testi alternativi; nessuna grafica è un ritaglio della schermata del sito. Barto resta cliccabile attraverso un bottone distinto sotto la foto.
+
 # Barattivo — Il valore non è solo denaro
 
 **Versione:** Barattivo Exchange 2.0 (Origins + Barto) · demo-first · 08/11/2026
