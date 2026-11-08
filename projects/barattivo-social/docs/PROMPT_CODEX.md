@@ -26,3 +26,14 @@ AZIONI:
 8. Aggiorna Notion con commit, preview URL, decisioni, costi e roadmap.
 
 OUTPUT ATTESO: PR ordinata, demo verificabile, backend verificato in test, documentazione completa e nessuna credenziale esposta.
+
+## Ordine aggiuntivo: fiducia, anti-frode e identità verificabile
+
+L'ultimo redesign del sito aggiunge `src/trust.mjs`, `src/fiducia.css`, `docs/FIDUCIA_E_IDENTITA.md` e media originali di Barto. Prima di considerare il lancio:
+
+1. Attiva Auth Email Verification e testala su Firebase TEST. Verifica davvero il claim `email_verified` nelle Rules, non solo nel frontend.
+2. Implementa in modo non falsificabile la verifica d'identità con provider adeguato o eID; conserva solo l'attestazione necessaria server-side, non le foto dei documenti. Senza provider il badge resta DISATTIVATO.
+3. Testa e potenzia blocco profili, report di impersonificazione, moderazione staff, rate limit anti-spam e ricorsi; assicurati che un utente bloccato non possa creare nuovi messaggi e che i terzi non vedano chat private.
+4. Consenti link social facoltativi, ma segnali soltanto **dichiarati**; supporta login Google come collegamento del provider Auth senza confonderlo con «identità verificata».
+5. Elimina i rating finti, segna gli annunci demo e crea recensioni solo da scambi realmente conclusi e con conferma bilaterale.
+6. Verifica i test `node --test tests/*.test.mjs` (inclusi `tests/trust.test.mjs`), `node tests/smoke.mjs`, Firebase Emulator Suite, E2E browser, controllo mobile e QA visuale prima del GO pubblico.

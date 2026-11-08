@@ -1,0 +1,83 @@
+/* BARATTIVO · Origins + Fiducia. The photographical marketplace remains primary. */
+:root{--orange:#f57808;--green:#006b66;--dark:#07272d}
+body{background:linear-gradient(180deg,#fff 0%,#fff 66%,#f7faf7 100%)}
+.site-header{box-shadow:0 4px 17px #082e2c0b}
+.brand-lockup>span{font-weight:900;letter-spacing:-1.8px;color:#092c30}
+.brand-lockup small{font-size:9px;letter-spacing:.15px;color:#253f41}
+.brand-dot{color:var(--orange)}
+.site-header .btn-primary,.hero .btn-primary{background:linear-gradient(180deg,#ff8814,#ea6500);border-color:#f77804;border-radius:100px;color:#fff;box-shadow:0 8px 20px #e9660024}
+.site-header .btn-primary:hover,.hero .btn-primary:hover{background:#e36200}
+.hero{background:linear-gradient(102deg,#fff 2%,#f8fcfa 54%,#e4f3ec);border:0;border-radius:0;min-height:500px;margin-top:0;grid-template-columns:46% 54%;overflow:visible}
+.hero-main{padding:53px 14px 30px 25px;position:relative;z-index:2}
+.eyebrow{color:#17645e;font-size:10px;letter-spacing:.3px;background:#effaf5;border-color:#def3e9}
+.hero h1{font-size:clamp(43px,4.6vw,69px);letter-spacing:-2.8px;line-height:1.07;color:#0a2730;margin:20px 0 20px}
+.hero-underline{color:#ef6c05;white-space:nowrap}
+.hero-underline:after{height:7px;background:#ffad62;bottom:1px;opacity:.85}
+.hero-lead{color:#364d53;font-size:17px;max-width:510px;line-height:1.56}
+.hero .btn-large{border-radius:100px}
+.hero-badges{margin-top:19px;flex-wrap:wrap;gap:10px}
+.hero-badges span{border:1px solid #d9eee4;padding:7px 9px;border-radius:100px;background:#fff;color:#315c56;font-weight:700}
+.hero-story{margin-top:auto;padding-top:18px}
+.hero-art{margin:7px 0 7px 0;min-height:482px;background:#e6f2ea;border-radius:22px;box-shadow:none}
+.hero-art>img:first-child{object-fit:cover;object-position:50% 44%;border-radius:22px}
+.hero-photo-tint{background:linear-gradient(180deg,transparent 67%,#133a322d)}
+.hero-floating-note{bottom:16px;left:13px;border-radius:14px;padding:9px 12px}
+.hero-mascot-note{top:13px;right:12px;background:#fffdfa;border:1px solid #fff;transform:none}
+.hero-mascot-note img{object-fit:cover;object-position:center top;border-radius:50%;background:#efe0c7;width:52px;height:52px}
+.category .emoji{background:#eaf5ef}
+.trust-bar{border:0;background:linear-gradient(130deg,#f3faf6,#fff);padding:32px;border-radius:22px;display:grid;grid-template-columns:1fr 1.85fr;gap:22px;align-items:stretch}
+.trust-heading p{font-size:13px;line-height:1.65;color:#536e67;max-width:330px}
+.trust-heading h2 em{color:#00766c;font-style:normal}
+.trust-heading .btn{padding:10px 12px;margin-top:12px;font-size:11px}
+.trust-grid{gap:12px;align-items:stretch}
+.trust-grid article{display:flex;flex-direction:column;gap:14px;background:#fff;padding:16px;border:1px solid #e4eee8;border-radius:17px}
+.trust-grid .trust-icon{background:#e8f6ef;color:#006c66;width:43px;height:43px;font-size:21px}
+.trust-grid h3{color:#123c3a;font-size:14px}
+.trust-grid p{font-size:11px;color:#60766f;line-height:1.65}
+.barto-panel{border:4px solid #f4f7f5;border-radius:25px;box-shadow:0 22px 64px #042f292e}
+.barto-panel-header{background:linear-gradient(125deg,#006965,#004944);padding:15px}
+.barto-panel-header img,.barto-launch img{object-fit:cover;object-position:center 25%;background:#eed9b8}
+.barto-header-text strong{font-size:24px;letter-spacing:-.6px}
+.barto-launch{border-color:#cbebe2}
+.barto-compose button{background:#006965;border-radius:50%}
+.profile-trust-status{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}
+.trust-chip{padding:7px 10px;border-radius:100px;background:#f3f5f5;border:1px solid #dfe7e3;font-size:11px;font-weight:700;color:#45635c}
+.trust-chip.is-verified{background:#e7f7ed;border-color:#b2dcc3;color:#075d47}
+.trust-chip.is-pending{background:#fff6e8;border-color:#f0d7b6;color:#8b5c24}
+.public-profile{background:linear-gradient(120deg,#f6fbf7,#fff);border:1px solid #e0eee5;padding:16px;border-radius:15px;margin:15px 0}
+.public-profile .profile-intro{margin:0 0 12px}
+.public-profile h3{margin:0 0 5px}
+.public-profile p{margin:6px 0;color:#405c58;line-height:1.65}
+.social-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.social-links a{font-size:12px;font-weight:800;color:#006b66;background:#fff;border:1px solid #d3e7db;padding:8px 10px;border-radius:9px}
+.trust-note{background:#fff8ec;border:1px solid #f2dfbd;border-radius:11px;padding:10px 12px;color:#745a34;font-size:12px;line-height:1.6;margin:10px 0}
+.safety-list{padding-left:21px;display:grid;gap:11px;color:#415a55;font-size:13px;line-height:1.5}
+.profile-edit .social-editor{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.profile-edit .social-editor label{font-size:12px;min-width:0}
+.profile-edit .social-editor input{min-width:0}
+.profile-empty-avatar{border-radius:50%}
+.business{scroll-margin-top:92px}
+#fiducia{scroll-margin-top:96px}
+@media (max-width:1100px){.hero-main{padding:42px 16px 24px}.hero h1{font-size:clamp(38px,4.3vw,56px)}.hero-art{min-height:430px}.trust-bar{grid-template-columns:1fr}.trust-grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:740px){
+ .hero{grid-template-columns:1fr;min-height:auto;border-radius:0;gap:0;margin:0}
+ .hero-main{padding:28px 16px 22px;align-items:flex-start}
+ .hero h1{font-size:clamp(39px,10vw,53px);letter-spacing:-2px;margin:17px 0}
+ .hero-lead{font-size:15px;line-height:1.6}
+ .hero-art{margin:0 12px 12px;min-height:300px;max-height:360px;border-radius:18px}
+ .hero-floating-note{left:10px;bottom:10px}
+ .hero-floating-note .note-icon{width:33px;height:33px}
+ .hero-mascot-note{right:9px;top:9px;padding-right:6px}
+ .hero-mascot-note img{width:42px;height:42px}
+ .hero-mascot-note div{display:none}
+ .hero-story{display:none}
+ .hero-badges{gap:6px}
+ .hero-badges span{font-size:10px;padding:5px 8px}
+ .trust-bar{width:calc(100% - 24px);padding:20px;margin-bottom:35px}
+ .trust-grid{grid-template-columns:1fr;gap:10px}
+ .trust-grid article{flex-direction:row;align-items:flex-start;padding:12px}
+ .profile-edit .social-editor{grid-template-columns:1fr}
+ .barto-panel{border-width:2px}
+}
+
+.impact-illustration{background:#eaf2e5;min-height:320px}.impact-illustration>img{position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:cover;object-position:45% 48%;border-radius:22px}.impact-illustration .hand-drawn{position:absolute;z-index:2;bottom:13px;right:8px;background:#fff8e6db;border:1px solid #ffffffa6;padding:8px 10px;border-radius:9px}

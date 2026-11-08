@@ -4,17 +4,17 @@ service firebase.storage {
     match /users/{uid}/listings/{fileName} {
       // Listing photos are public (do not upload faces without consent or private documents).
       allow read: if true;
-      allow write: if request.auth != null && request.auth.uid == uid
+      allow write: if request.auth != null && request.auth.uid == uid && request.auth.token.email_verified == true
         && request.resource.size < 4 * 1024 * 1024
         && request.resource.contentType.matches('image/(jpeg|png|webp)');
     }
     match /users/{uid}/avatar/{fileName} {
       allow read: if true; // optional public user avatar; consent and report flow needed
-      allow create: if request.auth != null && request.auth.uid == uid
+      allow create: if request.auth != null && request.auth.uid == uid && request.auth.token.email_verified == true
         && request.resource.size < 2 * 1024 * 1024
         && request.resource.contentType.matches('image/(jpeg|png|webp)');
       allow update: if false;
-      allow delete: if request.auth != null && request.auth.uid == uid;
+      allow delete: if request.auth != null && request.auth.uid == uid && request.auth.token.email_verified == true;
     }
     match /{allPaths=**} { allow read, write: if false; }
   }

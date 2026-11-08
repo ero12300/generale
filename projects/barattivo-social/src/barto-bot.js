@@ -11,7 +11,7 @@ const DEFAULT_ACTIONS = [
 ];
 
 const steps = 'È semplice: 1) pubblichi un oggetto, un servizio o il tuo tempo; 2) cerchi una proposta interessante; 3) parlate in chat e definite cosa offrire e ricevere; 4) concordate tempi e modalità direttamente tra voi. Barattivo non organizza spedizioni né incassa denaro. Scambiare è sempre gratuito.';
-const safety = 'La fiducia nasce da accordi chiari. Guarda bene le foto, chiedi dettagli e concorda come e dove scambiare. Per gli incontri scegli luoghi pubblici. Non inviare documenti, password o denaro a sconosciuti. Se qualcosa non torna, usa “Segnala” nell’annuncio.';
+const safety = 'Prima di incontrarti guarda il profilo pubblico e parla in chat. Un link a Instagram o una email confermata non sono una verifica di identità. Per scambi di persona scegli luoghi pubblici, non inviare documenti o denaro e usa Blocca o Segnala se noti un comportamento sospetto.';
 const norm = text => text.toLocaleLowerCase('it').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 export function answerBarto(message) {

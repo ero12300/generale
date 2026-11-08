@@ -28,8 +28,10 @@ try:
       assert page.locator('#profileEditForm').count()==1
       page.locator('input[name="displayName"]').fill('Anna Tester')
       page.locator('input[name="skills"]').fill('Yoga e fitness')
+      page.locator('input[name="social_instagram"]').fill('https://instagram.com/anna.rossi/?utm_campaign=example')
       page.locator('#profileEditForm button[type="submit"]').click()
       assert page.locator('#profileEditForm input[name="displayName"]').input_value()=='Anna Tester'
+      assert page.locator('input[name="social_instagram"]').input_value()=='https://www.instagram.com/anna.rossi'
       page.locator('#closeDialog').click()
       page.locator('#heroPublish' if width>650 else '#mobilePublish').click()
       assert page.locator('#offerCategory option').count()>1
@@ -47,6 +49,9 @@ try:
       page.locator('[data-filter="service"]').click()
       page.locator('#modeFilter').select_option('remote')
       assert page.locator('[data-listing]').count()>=1
+      page.locator('#openSafety').click()
+      assert 'I link social' in page.locator('#dialogBody').inner_text()
+      page.locator('#closeDialog').click()
       page.locator('#exchangeWays').click()
       assert 'Banca del tempo e crediti' in page.locator('#dialogBody').inner_text()
       page.locator('#closeDialog').click()
