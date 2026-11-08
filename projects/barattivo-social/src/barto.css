@@ -1,0 +1,47 @@
+/* BARATTIVO · Barto, original stone mascot and a nonintrusive on-page guide */
+.barto-assistant {position:fixed;z-index:101;right:23px;bottom:22px;font-family:'DM Sans',system-ui,sans-serif; color:#123e3b;}
+.barto-assistant [hidden]{display:none!important}
+.barto-launch {display:flex;align-items:center;gap:10px;padding:7px 13px 7px 6px;background:#fff;border:1px solid #cfe5da;border-radius:48px;box-shadow:0 8px 26px rgba(11,68,58,.17);color:#155a54;font:800 13px 'DM Sans',sans-serif;cursor:pointer;transition:transform .16s,box-shadow .16s;}
+.barto-launch:hover,.barto-launch:focus-visible {transform:translateY(-2px);box-shadow:0 12px 29px #184c4838}
+.barto-launch img{width:46px;height:46px;display:block;border-radius:50%;background:#f6e9d2;}
+.barto-launch span{white-space:nowrap;}
+.barto-launch .barto-dot {width:8px;height:8px;border-radius:50%;background:#28aa79;box-shadow:0 0 0 3px #e6f5eb;}
+.barto-assistant.is-open .barto-launch {display:none}
+.barto-panel {display:flex;flex-direction:column;overflow:hidden;width:min(390px,calc(100vw - 24px));height:min(575px,calc(100dvh - 115px));background:#fff;border:1px solid #d9e9e3;border-radius:23px;box-shadow:0 22px 70px rgba(9,45,40,.24)}
+.barto-panel-header {display:flex;align-items:center;gap:11px;padding:13px 15px;background:#0a716d;color:#fff;flex:0 0 auto;}
+.barto-panel-header img {width:47px;height:47px;background:#f6e7c9;border:2px solid #ffffffab;border-radius:50%;}
+.barto-header-text {display:flex;flex-direction:column;gap:3px;flex:1}
+.barto-header-text strong {font:900 17px/1.15 Nunito,system-ui,sans-serif}
+.barto-header-text small {font:500 11px/1.4 'DM Sans',system-ui,sans-serif;color:#e0f5ed}
+.barto-close {border:0;background:#ffffff24;color:white;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;font-size:23px;cursor:pointer}
+.barto-close:hover {background:#ffffff40}
+.barto-meta {font:600 10px/1.5 'DM Sans',sans-serif;padding:8px 14px;background:#eef8f3;color:#50756e;text-align:center;border-bottom:1px solid #e0efe7}
+.barto-history {display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:0;flex:1;padding:20px 15px 14px;background:linear-gradient(135deg,#f8fbf9,#fff)}
+.barto-message {display:flex;align-items:flex-start;gap:8px;max-width:95%}
+.barto-message p {margin:0;padding:12px 14px;font:500 13px/1.55 'DM Sans',sans-serif;background:white;border:1px solid #dfebe4;border-radius:16px 16px 16px 3px;box-shadow:0 2px 7px #244b3909;white-space:pre-line;overflow-wrap:anywhere}
+.barto-message.mine {align-self:flex-end;justify-content:flex-end}
+.barto-message.mine p {background:#0a7772;border-color:#0a7772;color:#fff;border-radius:16px 16px 3px 16px;}
+.barto-suggestions{padding:6px 14px 13px;max-height:145px;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start;gap:7px;background:#fff;}
+.barto-suggestion{font:700 11px/1.4 'DM Sans',sans-serif;color:#0c6660;background:#f2faf6;border:1px solid #bfddd1;border-radius:9px;padding:8px 10px;cursor:pointer;text-align:left;}
+.barto-suggestion:hover,.barto-suggestion:focus-visible{background:#def1e8;border-color:#64ab99}
+.barto-compose {display:flex;gap:7px;padding:11px 12px 13px;border-top:1px solid #e0ebe7;background:white;flex-shrink:0;}
+.barto-compose input {flex:1;min-width:0;border:1px solid #d8e5dd;padding:11px 12px;border-radius:11px;background:#fafdfb;color:#173e39;font:500 12px 'DM Sans',sans-serif;outline:0;}
+.barto-compose input:focus {border-color:#0a7772;box-shadow:0 0 0 3px #d0ebe2}
+.barto-compose button {width:43px;border:0;border-radius:11px;background:#0a7772;color:white;font-size:19px;cursor:pointer;}
+.barto-compose button:hover{background:#055e59}
+.barto-privacy {margin:0;padding:0 14px 13px;color:#7b8e88;font-size:9px;line-height:1.4;text-align:center;background:white;}
+.hero-mascot-note {cursor:pointer;font-family:inherit;color:inherit;text-align:left}
+.hero-mascot-note:focus-visible{outline:3px solid #ffcd8b;outline-offset:2px}
+@media(max-width:740px){
+ .barto-assistant {bottom:84px;right:12px;}
+ .barto-launch {padding:4px;box-shadow:0 7px 22px #0a474433;border:2px solid #d0e8dc;}
+ .barto-launch img {width:49px;height:49px}
+ .barto-launch>span {display:none;}
+ .barto-launch .barto-dot{position:absolute;right:3px;top:3px}
+ .barto-panel {height:min(500px,calc(100dvh - 146px));width:calc(100vw - 24px);border-radius:18px;}
+ .barto-assistant.is-open {right:12px;bottom:82px;}
+ .barto-panel-header {padding:10px 12px;}
+ .barto-history {padding:12px;}
+}
+@media(max-width:390px){.barto-panel{height:calc(100dvh - 135px)}.barto-assistant {bottom:75px}.barto-assistant.is-open {bottom:75px}}
+@media(prefers-reduced-motion:reduce){.barto-launch{transition:none}.barto-launch:hover {transform:none}}
