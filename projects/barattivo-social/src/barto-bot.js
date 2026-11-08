@@ -10,7 +10,7 @@ const DEFAULT_ACTIONS = [
   { label: '♡ Scambi sicuri', id: 'safety' },
 ];
 
-const steps = 'È semplice: 1) pubblichi un oggetto, un servizio o il tuo tempo; 2) cerchi una proposta interessante; 3) parlate in chat e definite cosa offrire e ricevere; 4) concordate consegna e condizioni. Il baratto di base è gratuito.';
+const steps = 'È semplice: 1) pubblichi un oggetto, un servizio o il tuo tempo; 2) cerchi una proposta interessante; 3) parlate in chat e definite cosa offrire e ricevere; 4) concordate tempi e modalità direttamente tra voi. Barattivo non organizza spedizioni né incassa denaro. Scambiare è sempre gratuito.';
 const safety = 'La fiducia nasce da accordi chiari. Guarda bene le foto, chiedi dettagli e concorda come e dove scambiare. Per gli incontri scegli luoghi pubblici. Non inviare documenti, password o denaro a sconosciuti. Se qualcosa non torna, usa “Segnala” nell’annuncio.';
 const norm = text => text.toLocaleLowerCase('it').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
@@ -19,6 +19,18 @@ export function answerBarto(message) {
   const msg = norm(original);
   const has = (...words) => words.some(x => msg.includes(x));
   if (!msg) return { text: 'Puoi scrivermi una domanda oppure scegliere una delle opzioni qui sotto.', actions: DEFAULT_ACTIONS };
+  if (has('token','credit','borsellino','wallet','saldo')) {
+    return {text:'La banca dei crediti è una proposta futura, non è attiva: oggi su Barattivo scambi direttamente con altre persone, senza usare euro o token. Prima di attivare crediti riutilizzabili dobbiamo verificare aspetti fiscali, antifrode e normativi.',actions:[{label:'Scopri gli scambi',id:'find'},{label:'Come funziona',id:'how'}]};
+  }
+  if (has('yoga','fitness','personal trainer','consulenza allenamento','remoto','online')) {
+    return {text:'Puoi scambiare anche servizi: per esempio una consulenza fitness in cambio di una sessione di yoga, in presenza o online. Apri Servizi → Sport e benessere, oppure cerca un annuncio.',actions:[{label:'Cerca servizi',id:'find',query:'yoga'},{label:'Pubblica un servizio',id:'publish'}]};
+  }
+  if (has('categoria','categorie','sottocategoria','oggett','serviz')) {
+    return {text:'Abbiamo tre mondi: Oggetti, Servizi e Tempo e aiuto. Scegli il mondo, poi categoria, sottocategoria e modalità. Puoi scambiare un oggetto con un servizio: basta proporlo nella chat.',actions:[{label:'Esplora le categorie',id:'find'},{label:'Pubblica gratis',id:'publish'}]};
+  }
+  if (has('spediz','corriere','trasport')) {
+    return {text:'Barattivo non vende oggetti, non organizza spedizioni, non incassa né gestisce la consegna. Mettiamo in contatto le persone: per gli oggetti concordate privatamente un passaggio sicuro. Per i servizi potete anche scegliere il remoto.',actions:[{label:'Esplora annunci',id:'find'}]};
+  }
   if (has('truff', 'sicur', 'fiduc', 'pericol', 'segnal', 'privacy', 'verific', 'document')) {
     return { text: safety, actions: [{label:'Esplora gli annunci',id:'find'},{label:'Come funziona?',id:'how'}] };
   }
@@ -26,7 +38,7 @@ export function answerBarto(message) {
     return { text: 'Cercare, pubblicare, chattare e proporre uno scambio sono gratuiti. I servizi aggiuntivi per professionisti sono facoltativi. Attenzione: gli scambi professionali possono avere obblighi fiscali.', actions: [{label:'Il progetto sociale',id:'mission'},{label:'Come funziona?',id:'how'}] };
   }
   if (has('pubblic','inserisc','crea annunc','vend','metti annunc','offrire')) {
-    return { text: 'Ottima idea! Servono solo un titolo, una descrizione sincera, la località, una foto e ciò che vorresti ricevere. Ti accompagno al modulo gratuito.', actions: [{label:'Apri pubblicazione',id:'publish'}] };
+    return { text: 'Ottima idea! Servono un titolo, una descrizione sincera, categoria, modalità e ciò che vorresti ricevere. La foto è facoltativa. Ti accompagno al modulo gratuito.', actions: [{label:'Apri pubblicazione',id:'publish'}] };
   }
   if (has('accord','contropropost','propost','consegn','spediz','scambiare con')) {
     return { text: 'Per proporre uno scambio apri un annuncio e premi “Scrivi e proponi uno scambio”. Nella chat potrai creare una proposta chiara con ciò che offri, ciò che ricevi, luogo e tempi. Non è una garanzia o una firma digitale qualificata.', actions: [{label:'Trova un annuncio',id:'find'},{label:'Le mie conversazioni',id:'inbox'}] };

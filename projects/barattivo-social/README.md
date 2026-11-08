@@ -1,8 +1,19 @@
 # Barattivo — Il valore non è solo denaro
 
-**Versione:** Barattivo Origins con Barto · social marketplace MVP · demo-first · 08/11/2026
+**Versione:** Barattivo Exchange 2.0 (Origins + Barto) · demo-first · 08/11/2026
 
-Barattivo è un progetto digitale **a impatto sociale** di FLUSSIVO. Il baratto rimane gratuito: le persone possono offrire oggetti, competenze, tempo e servizi e proporre scambi tramite una conversazione.
+Barattivo è un progetto digitale **a impatto sociale** di FLUSSIVO. Il nome `barattivo.com` risulta disponibile nella verifica Vercel dell’8/11/2026, ma non è stato acquistato/riservato. Il baratto rimane gratuito: le persone possono offrire oggetti, competenze, tempo e servizi e proporre scambi tramite una conversazione.
+
+## Novità Exchange 2.0
+
+- Tre percorsi **Oggetti / Servizi / Tempo e aiuto**, 20 categorie e sottocategorie specifiche: `src/taxonomy.mjs`.
+- Form di annuncio con categoria/sottocategoria e modalità **in presenza / remoto / entrambe** (oggetti solo passaggio concordato tra persone). Ricerca e filtri per modalità.
+- Profilo social con nome pubblico, tipo utente, città, biografia, competenze, desideri e **foto facoltativa**, in demo o Firebase. Nessun dato email pubblico.
+- Esempi di scambio **consulenza fitness ↔ sessione yoga online**. Dialogo sui diversi modelli di scambio, crediti chiaramente indicati come *non attivi*.
+- Firebase adapter, regole e Storage aggiornati per schema nuovi annunci/profili; saldo crediti negato a tutte le scritture client.
+- **Scambio gratuito per tutti:** nessun pagamento nemmeno per le aziende quando utilizzano le funzioni essenziali; servizi professionali aziendali e sponsorizzazioni distinti e facoltativi.
+- Il prodotto **non gestisce spedizioni, consegne, trasporti, incassi e wallet/token**.
+- Documento categorie: `docs/CATEGORIE_E_SCAMBI.md`; DB: `docs/SCHEMA_FIRESTORE.md`; business: `docs/BUSINESS_SOCIALE.md`.
 
 ## Avvio immediato senza dipendenze
 

@@ -12,18 +12,33 @@ service cloud.firestore {
         me() in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
     }
     function nameValid(s) { return s is string && s.size() >= 2 && s.size() <= 80; }
+    function taxonomyMatch(k,c) {
+      return (k == 'object' && c in ['casa','moda','tech','sport','libri','infanzia','hobby','attrezzi','piante'])
+        || (k == 'service' && c in ['benessere','formazione','digitale','manutenzione','consulenze','artigianato','esperienze','supporto'])
+        || (k == 'time' && c in ['aiuto','tempo','solidarieta']);
+    }
+
     match /profiles/{uid} {
       allow get, list: if true; // Only public display info; NEVER store emails/phones/secrets here.
       allow create: if owner(uid)
-        && request.resource.data.keys().hasOnly(['displayName','type','city','avatarUrl','verified','createdAt'])
+        && request.resource.data.keys().hasOnly(['displayName','type','city','avatarUrl','bio','skills','interests','verified','createdAt'])
         && nameValid(request.resource.data.displayName)
         && request.resource.data.verified == false
         && request.resource.data.type in ['person','professional','company']
-        && request.resource.data.city is string && request.resource.data.avatarUrl is string;
+        && request.resource.data.city is string && request.resource.data.city.size() <= 100
+        && request.resource.data.avatarUrl is string && request.resource.data.avatarUrl.size() <= 1400
+        && request.resource.data.bio is string && request.resource.data.bio.size() <= 500
+        && request.resource.data.skills is string && request.resource.data.skills.size() <= 250
+        && request.resource.data.interests is string && request.resource.data.interests.size() <= 250;
       allow update: if owner(uid)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName','type','city','avatarUrl'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName','type','city','avatarUrl','bio','skills','interests'])
         && nameValid(request.resource.data.displayName)
-        && request.resource.data.type in ['person','professional','company'];
+        && request.resource.data.type in ['person','professional','company']
+        && request.resource.data.city is string && request.resource.data.city.size() <= 100
+        && request.resource.data.bio is string && request.resource.data.bio.size() <= 500
+        && request.resource.data.skills is string && request.resource.data.skills.size() <= 250
+        && request.resource.data.interests is string && request.resource.data.interests.size() <= 250
+        && request.resource.data.avatarUrl is string && request.resource.data.avatarUrl.size() <= 1400;
       allow delete: if false;
       match /favorites/{listingId} {
         allow get, list: if owner(uid);
@@ -35,7 +50,7 @@ service cloud.firestore {
     match /listings/{listingId} {
       allow get, list: if resource.data.status == 'published' || owner(resource.data.ownerId) || admin();
       allow create: if signedIn()
-        && request.resource.data.keys().hasOnly(['title','description','category','type','want','city','image','ownerId','ownerName','ownerAvatar','status','createdAt'])
+        && request.resource.data.keys().hasOnly(['title','description','category','subcategory','deliveryMode','type','want','city','image','ownerId','ownerName','ownerAvatar','status','createdAt'])
         && request.resource.data.ownerId == me()
         && request.resource.data.status == 'published'
         && nameValid(request.resource.data.title)
@@ -43,15 +58,22 @@ service cloud.firestore {
         && request.resource.data.description is string && request.resource.data.description.size() >= 10 && request.resource.data.description.size() <= 2000
         && request.resource.data.want is string && request.resource.data.want.size() >= 4 && request.resource.data.want.size() <= 500
         && request.resource.data.type in ['object','service','time']
-        && request.resource.data.category in ['casa','moda','tech','sport','servizi','tempo','formazione']
+        && taxonomyMatch(request.resource.data.type, request.resource.data.category)
+        && request.resource.data.subcategory is string && request.resource.data.subcategory.size() <= 80
+        && request.resource.data.deliveryMode in ['in_person','remote','either']
+        && (request.resource.data.type != 'object' || request.resource.data.deliveryMode == 'in_person')
         && request.resource.data.city is string && request.resource.data.city.size() <= 100
         && request.resource.data.image is string && request.resource.data.image.size() <= 1200
         && request.resource.data.ownerName is string && request.resource.data.ownerName.size() <= 80;
       allow update: if owner(resource.data.ownerId)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title','description','category','type','want','city','image','status'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title','description','category','subcategory','deliveryMode','type','want','city','image','status'])
         && request.resource.data.status in ['published','archived']
         && request.resource.data.title is string && request.resource.data.title.size() <= 120
-        && request.resource.data.description is string && request.resource.data.description.size() <= 2000;
+        && request.resource.data.description is string && request.resource.data.description.size() <= 2000
+        && taxonomyMatch(request.resource.data.type,request.resource.data.category)
+        && request.resource.data.subcategory is string && request.resource.data.subcategory.size() <= 80
+        && request.resource.data.deliveryMode in ['in_person','remote','either']
+        && (request.resource.data.type != 'object' || request.resource.data.deliveryMode == 'in_person');
       allow delete: if owner(resource.data.ownerId) || admin();
     }
     match /posts/{postId} {
@@ -115,6 +137,20 @@ service cloud.firestore {
       allow update: if admin();
       allow delete: if false;
     }
+    // Credits are NOT enabled. Any future ledger movement must be controlled by verified
+    // server-side Cloud Functions with an auditable double-entry ledger and legal review.
+    // The browser cannot mint, transfer, or redeem credits.
+    match /credit_accounts/{uid} {
+      allow get: if owner(uid) || admin();
+      allow list: if false;
+      allow write: if false;
+    }
+    match /credit_ledger/{entryId} {
+      allow get: if signedIn() && (resource.data.fromUid == me() || resource.data.toUid == me() || admin());
+      allow list: if false;
+      allow write: if false;
+    }
+    // Social follows / interests must be moderated before broad public release.
     match /{document=**} { allow read, write: if false; }
   }
 }

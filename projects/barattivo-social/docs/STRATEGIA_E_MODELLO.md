@@ -1,3 +1,5 @@
+> **08/11/2026 — Direzione aggiornata e prevalente:** Barattivo è SEMPRE gratuito per il baratto tra persone e imprese. Solo servizi distinti B2B, consulenza aggiuntiva, partner etici e sponsorizzazioni potranno generare ricavi. Crediti/token NON attivi, niente spedizioni. Per i dettagli consultare [`CATEGORIE_E_SCAMBI.md`](CATEGORIE_E_SCAMBI.md), [`SCHEMA_FIRESTORE.md`](SCHEMA_FIRESTORE.md), [`BUSINESS_SOCIALE.md`](BUSINESS_SOCIALE.md). Gli importi e abbonamenti consumer indicati qui sotto erano ipotesi storiche superate, non piani del prodotto attuale.
+
 # BARATTIVO · Strategia, sostenibilità e impatto sociale
 
 **Visione:** il baratto è una forma antica di reciprocità che oggi può aiutare le persone ad accedere a opportunità, dare nuova vita agli oggetti e creare relazioni in un contesto di disuguaglianze.

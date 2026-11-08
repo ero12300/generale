@@ -1,17 +1,20 @@
 import {seedListings,seedPosts} from './demo.js';
 const DEMO_KEY='barattivo.preview.v4';
 function loadLocal(){try{return JSON.parse(sessionStorage.getItem(DEMO_KEY))||{listings:[],posts:[],chats:{},favorites:[],user:null}}catch{return {listings:[],posts:[],chats:{},favorites:[],user:null}}}
-let local=loadLocal();
+let local=loadLocal(); local.profile ||= {displayName:local.user?.displayName||'Ospite demo',type:'person',city:'',bio:'',skills:'',interests:'',avatarUrl:''};
 const save=()=>sessionStorage.setItem(DEMO_KEY,JSON.stringify(local));
 const generateId=()=>globalThis.crypto?.randomUUID?.()||String(Date.now())+Math.random().toString(36).slice(2);
 const demo={
  mode:'demo',
  onAuth(fn){fn(local.user);return ()=>{}},
- async login(){local.user={uid:'demo-visitor',displayName:'Ospite demo',email:'demo@barattivo.example'};save();return local.user},
- async register(name){local.user={uid:'demo-visitor',displayName:name||'Ospite demo',email:'demo@barattivo.example'};save();return local.user},
+ async login(){local.user={uid:'demo-visitor',displayName:local.profile.displayName||'Ospite demo',email:'demo@barattivo.example'};save();return local.user},
+ async register(name){local.user={uid:'demo-visitor',displayName:name||'Ospite demo',email:'demo@barattivo.example'};local.profile.displayName=local.user.displayName;save();return local.user},
  async logout(){local.user=null;save()},
+ async getMyProfile(){if(!local.user)throw new Error('Accedi prima.');return {...local.profile}},
+ async saveMyProfile(changes){if(!local.user)throw new Error('Accedi prima.');local.profile={...local.profile,...changes};local.user.displayName=local.profile.displayName;save();return {...local.profile}},
+ async uploadAvatar(file){if(!local.user)throw new Error('Accedi prima.');if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>2*1024*1024)throw new Error('Scegli JPG, PNG o WEBP fino a 2 MB.');return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Foto non leggibile.'));reader.readAsDataURL(file)})},
  async getListings(){return [...local.listings,...seedListings].sort((a,b)=>b.createdAt-a.createdAt)},
- async createListing(data){if(!local.user)throw new Error('Accedi prima di pubblicare.');const l={...data,id:generateId(),ownerId:local.user.uid,ownerName:local.user.displayName,ownerAvatar:'🙂',city:data.city||'Italia',status:'published',createdAt:Date.now()};local.listings.unshift(l);save();return l},
+ async createListing(data){if(!local.user)throw new Error('Accedi prima di pubblicare.');const l={...data,id:generateId(),ownerId:local.user.uid,ownerName:local.user.displayName,ownerAvatar:'🙂',city:data.city||'Italia',subcategory:data.subcategory||'',deliveryMode:data.deliveryMode||'in_person',status:'published',createdAt:Date.now()};local.listings.unshift(l);save();return l},
  async uploadImage(file){if(!file)return null;if(file.size>4*1024*1024)throw new Error('La foto deve essere inferiore a 4 MB.');return new Promise((ok,fail)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>fail(new Error('Foto non leggibile'));r.readAsDataURL(file)})},
  async getPosts(){return [...local.posts,...seedPosts].sort((a,b)=>b.createdAt-a.createdAt)},
  async createPost(text){if(!local.user)throw new Error('Accedi prima di scrivere.');const p={id:generateId(),authorId:local.user.uid,authorName:local.user.displayName,avatar:'🙂',text,tag:'Community',createdAt:Date.now()};local.posts.unshift(p);save();return p},
