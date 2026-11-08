@@ -14,6 +14,7 @@ REGOLE NON NEGOZIABILI:
 - Verifica le prestazioni, l'accessibilità, la moderazione, i contenuti vietati, la gestione GDPR e gli obblighi fiscali prima della produzione.
 
 AZIONI:
+0. Mantieni e integra Barto (`src/barto-bot.js`): chat di orientamento, search e pubblicazione, nessuna lettura di chat private o simulazione di AI. Testa con `node --test tests/barto.test.mjs`.
 1. Inventario repository, stack, dipendenze, database, env, deploy Vercel e domini.
 2. Diagramma architettura as-is → to-be, feature parity checklist e rischi.
 3. Copia la nuova UI consumer, la community e l'adapter in feature branch; risolvi incongruenze senza perdere backend esistente.

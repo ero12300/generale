@@ -1,6 +1,6 @@
 # Barattivo — Il valore non è solo denaro
 
-**Versione:** social marketplace MVP · demo-first · 08/11/2026
+**Versione:** Barattivo Origins con Barto · social marketplace MVP · demo-first · 08/11/2026
 
 Barattivo è un progetto digitale **a impatto sociale** di FLUSSIVO. Il baratto rimane gratuito: le persone possono offrire oggetti, competenze, tempo e servizi e proporre scambi tramite una conversazione.
 
@@ -19,6 +19,15 @@ Per un build statico di produzione:
 node scripts/build.mjs
 # la cartella dist/ è pronta per Vercel
 ```
+
+## Barto, la guida contestuale con mascotte originale
+
+- **Dove appare:** pulsante discreto in basso a destra (sopra la navigazione mobile), e pulsante-mascotte nella foto della homepage.
+- **Come aiuta:** orientamento contestuale nelle sezioni mercato/community/azienda, domande rapide, assistenza alla ricerca, apertura pubblicazione annunci, accesso chat personali, spiegazione accordi e sicurezza.
+- **Come funziona oggi:** FAQ e routing locale (`src/barto-bot.js`) **senza intelligenza artificiale generativa**. La ricerca opera sugli annunci realmente disponibili nel contesto corrente; non inventa persone o scambi.
+- **Privacy:** le domande non sono inviate al backend, né salvate in Firestore/Storage, Analytics o nella cronologia del browser. La chat con Barto è separata dalle chat private tra utenti. Nessun dato privato viene letto dall'assistente.
+- **UX:** apertura manuale, nessun popup automatico, suggerimenti contestuali, chiusura con Esc, testo adattabile, focus esplicito e opzione rispetta-movimento-ridotto.
+- **Fase AI futura (non inclusa):** Cloud Functions/Run con API lato server, autenticazione e App Check, controlli antiabuso e limite di spesa, autorizzazione esplicita per inviare dati; ricerca su contenuti pubblici; escalation umana. Mai passare messaggi privati all'AI senza consenso e base giuridica.
 
 ## Configurazione backend Firebase
 
@@ -52,8 +61,10 @@ node scripts/build.mjs
 - `src/service.js`: facade tra demo e Firebase.
 - `src/firebase-adapter.js`: SDK modulare Firebase, auth/Firestore/Storage.
 - `src/main.js`: UI e interazioni.
+- `src/barto-bot.js`, `src/barto.css`: assistente locale, avatar originale e navigazione contestuale.
+- `src/origins.css`, `assets/origins-symbol.svg`: identità 85% marketplace e 15% accenti illustrati originali.
 - `firestore.rules`, `storage.rules`: permessi per profili, inserzioni, chat, proposte, community, segnalazioni e immagini.
-- `docs/`: missione sociale, operatività, monetizzazione, criteri di integrazione con l'MVP precedente.
+- `docs/`: missione sociale, operatività, monetizzazione, criteri di integrazione con l'MVP precedente e guida dedicata a Barto (`docs/BARTO_ASSISTENTE.md`).
 
 ## Privacy e sicurezza: non negoziabili
 
