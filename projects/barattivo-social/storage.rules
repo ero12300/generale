@@ -8,6 +8,14 @@ service firebase.storage {
         && request.resource.size < 4 * 1024 * 1024
         && request.resource.contentType.matches('image/(jpeg|png|webp)');
     }
+    match /users/{uid}/avatar/{fileName} {
+      allow read: if true; // optional public user avatar; consent and report flow needed
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.size < 2 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp)');
+      allow update: if false;
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
     match /{allPaths=**} { allow read, write: if false; }
   }
 }

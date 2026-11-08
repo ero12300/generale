@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {TAXONOMY,categoriesFor,validListingCategory,normalizeCategory,getModes,EXCHANGE_FORMS} from '../src/taxonomy.mjs';
+test('Categorie uniche e separate per servizi, oggetti, tempo',()=>{const ids=TAXONOMY.map(c=>c.id);assert.equal(new Set(ids).size,ids.length);assert(TAXONOMY.some(x=>x.id==='benessere'&&x.sub.includes('Yoga')));assert(TAXONOMY.some(x=>x.id==='casa'&&x.kind==='object'));assert(TAXONOMY.some(x=>x.kind==='time'));});
+test('Yoga remoto e consulenza fitness appartengono a servizi',()=>{assert(validListingCategory('service','benessere','Yoga'));assert(validListingCategory('service','benessere','Personal training'));assert(!validListingCategory('object','benessere','Yoga'));assert.equal(getModes('service').length,3);});
+test('Oggetti solo scambio fra persone; nessuna spedizione integrata',()=>assert.deepEqual(getModes('object').map(x=>x.id),['in_person']));
+test('Vocaboli legacy trasposti alle nuove categorie',()=>{assert.equal(normalizeCategory('service','servizi'),'consulenze');assert.equal(normalizeCategory('time','formazione'),'tempo')});
+test('Modalità scambio crediti dichiarata futura, non operativa',()=>{assert(EXCHANGE_FORMS.find(x=>x.id==='credits')?.description.includes('revisione giuridica'));});
+test('Sottocategorie coerenti, nessun duplicato',()=>{for(const cat of categoriesFor().filter(x=>x.id!=='all'))assert.equal(cat.sub.length,new Set(cat.sub).size)});
