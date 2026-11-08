@@ -5,7 +5,7 @@ const main=fs.readFileSync('src/main.js','utf8');
 const rules=fs.readFileSync('firestore.rules','utf8');
 const doc=fs.readFileSync('docs/STRATEGIA_E_MODELLO.md','utf8');
 const css=fs.readFileSync('src/origins.css','utf8');
-for(const q of ['Il valore non è','DAL PRIMO SCAMBIO','id="listingGrid"','id="appDialog"','id="postFeed"','id="community"','id="business"','origins.css','origins-symbol.svg']) assert(html.includes(q),`HTML missing ${q}`);
+for(const q of ['Prima dei soldi','IL SOCIAL DOVE CI SI SCAMBIA OPPORTUNITÀ','id="listingGrid"','id="appDialog"','id="postFeed"','id="community"','id="business"','origins.css','origins-symbol.svg']) assert(html.includes(q),`HTML missing ${q}`);
 for(const q of ['getListings','startChat','createProposal','reportListing','createPost','getFavorites','categoryIcon']) assert(main.includes(q),`UI missing ${q}`);
 for(const q of ['match /listings/','match /chats/','match /messages/','match /proposals/','match /reports/']) assert(rules.includes(q),`Rules missing ${q}`);
 assert(html.includes('id="modeFilter"') && html.includes('id="subcategoryFilter"') && html.includes('id="exchangeWays"'));
@@ -16,3 +16,8 @@ assert(main.includes('initBartoBot') && fs.existsSync('src/barto-bot.js'));
 assert(doc.includes('0 €')&&doc.includes('impatto sociale'));
 assert(css.includes('@media (max-width: 740px)')&&css.includes('prefers-reduced-motion'));
 console.log('Smoke checks passed: Origins UI, social mission, chat, proposals, security rule paths and responsive styles.');
+
+assert(html.includes('id="fiducia"')&&html.includes('id="openSafety"')&&html.includes('barto-avatar.webp'));
+assert(main.includes('showPublicProfile')&&main.includes('reportProfile')&&main.includes('toggleBlock')&&main.includes('ensureVerifiedAccess'));
+assert(rules.includes('match /blocks/')&&rules.includes('match /profile_reports/')&&rules.includes('confirmedEmail()'));
+assert(fs.existsSync('src/trust.mjs')&&fs.existsSync('src/fiducia.css'));

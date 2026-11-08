@@ -89,3 +89,11 @@ node scripts/build.mjs
 ## Integrazione con il vecchio Barattivo
 
 Il progetto è un **nuovo frontend/backend di riferimento separato**: non sovrascrive l'MVP locale. Vedere `docs/INTEGRAZIONE_MVP.md` e `docs/PROMPT_CODEX.md` per audit, mapping e migrazione reversibile.
+
+## Identità e fiducia — Origins Fiducia 3.0
+
+Il sito include ora il nuovo design Barattivo con Barto illustrato e una sezione per **fiducia prima dell'incontro**. Il profilo mostra social facoltativi e dichiarati, biografia, città e informazioni generali; l'email resta privata. Nel frontend è presente la possibilità di bloccare e segnalare un profilo, e il backend Firebase è predisposto a gestire questi segnali con Security Rules.
+
+In Firebase **l'email deve essere confermata** per pubblicare, scrivere post, aprire nuove chat e proporre scambi. Un link Instagram o un accesso Google collegato non certificano l'identità. `verified` resta un campo non modificabile dal client: non esiste ancora una procedura completa di verifica documentale, né si devono attribuire badge a dati demo. Vedere `docs/FIDUCIA_E_IDENTITA.md`.
+
+**Stato:** demo deployabile su Vercel, ma non pronta a iscrizioni pubbliche senza Firebase TEST, Emulator Suite, moderazione, policy privacy/DSA, verifica anti-abuso e test browser. La parte social è gratuita, senza spedizioni né pagamenti.
